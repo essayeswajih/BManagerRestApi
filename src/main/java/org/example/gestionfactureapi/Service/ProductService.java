@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductsService {
+public class ProductService {
     private final ProductRepository productRepository;
     public Product findById(Integer id){
         return productRepository.findById(id).orElseThrow(

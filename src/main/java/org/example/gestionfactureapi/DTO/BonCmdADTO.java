@@ -7,7 +7,7 @@ import org.example.gestionfactureapi.Entity.Fournisseur;
 import org.example.gestionfactureapi.Entity.Item;
 import org.example.gestionfactureapi.Entity.Ste;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Data

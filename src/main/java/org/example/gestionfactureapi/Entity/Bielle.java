@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,11 +16,9 @@ public class Bielle {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idBielle;
 
-    @ManyToOne
-    @JoinColumn(name = "article_id")
-    private Article article;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Product> articles;
 
-    private Integer quantity;
     private Double unitPrice;
     private Double totalPrice;
 
