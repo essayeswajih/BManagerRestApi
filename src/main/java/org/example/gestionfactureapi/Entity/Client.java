@@ -1,9 +1,12 @@
 package org.example.gestionfactureapi.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +26,8 @@ public class Client {
     @ManyToOne
     @JoinColumn(name = "ste_id")
     private Ste ste;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    private List<Devis> devisList;
 }

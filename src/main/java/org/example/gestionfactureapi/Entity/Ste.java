@@ -48,7 +48,24 @@ public class Ste {
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Client> clients;
+
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonCmdA> bonCmdsA;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BonLivA> bonLivA;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FactureA> factures;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stock> stocks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Devis> devis;
 }

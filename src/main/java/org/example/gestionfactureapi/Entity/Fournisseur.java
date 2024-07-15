@@ -34,6 +34,7 @@ public class Fournisseur {
     @JsonIgnore
     @OneToMany(mappedBy = "fournisseur")
     private List<Article> articles;
+
     @JsonIgnore
     @OneToMany(mappedBy = "fournisseur")
     private List<BonCmdA> bonCmdAchat;

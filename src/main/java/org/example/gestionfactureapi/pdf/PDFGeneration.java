@@ -4,25 +4,57 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.BonCmdA;
+import org.example.gestionfactureapi.Entity.BonLivA;
+import org.example.gestionfactureapi.Entity.FactureA;
 import org.example.gestionfactureapi.Entity.Item;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 public class PDFGeneration {
+    private  int x;
     private BonCmdA bon;
+    private List<BonLivA> bonCmds;
     private double baseTVA;
     private double taux;
 
+    private String name;
+
+    private Date date;
+    private Integer numero;
+
     public PDFGeneration(BonCmdA bon) {
         this.bon = bon;
+        this.numero = bon.getId();
+        this.date = bon.getDateCreation();
+        this.name = "Bon de commande n°";
     }
+    public PDFGeneration(BonLivA bonLivA) {
+        this.bon = bonLivA.getBonCmdA();
+        this.numero = bon.getId();
+        this.date = bonLivA.getDateCreation();
+        this.name = "Bon de livraison n°";
+    }
+    public PDFGeneration(FactureA factureA) {
+        this.bonCmds = factureA.getBonLivAS();
+        List<Item> items =new ArrayList<>();
+        for(BonLivA bonx : factureA.getBonLivAS()){
+            items.addAll(bonx.getBonCmdA().getItems());
+        }
+        this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getBonCmdA().getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
+        this.date = factureA.getDateCreation();
+        this.name = "Facture n°";
+        this.numero = factureA.getId();
+        this.x=3;
+    }
+
 
     public byte[] run() throws DocumentException, IOException, URISyntaxException {
         Document doc = new Document();
@@ -50,6 +82,13 @@ public class PDFGeneration {
             this.baseTVA += i.getTotalNet();
             tva += i.getArticle().getTva();
         }
+        if(this.bon.getItems().size()<10){
+            int rows = 10-this.bon.getItems().size();
+            for(int xxx = 0; xxx< rows;xxx++){
+                addRow1(table);
+            }
+
+        }
         this.taux = tva / index;
         doc.add(table);
 
@@ -65,10 +104,11 @@ public class PDFGeneration {
         return byteArrayOutputStream.toByteArray();
     }
 
+
     private static void addCompanyLogo(Document doc) throws DocumentException, IOException {
-        Image img = Image.getInstance("src/main/resources/pdf/logo.png");  // Replace with the path to your logo image
-        img.scaleToFit(150, 100);  // Scale the image to fit the desired size
-        img.setAlignment(Element.ALIGN_LEFT);
+        Image img = Image.getInstance("src/main/resources/pdf/logo1.png");  // Replace with the path to your logo image
+        img.scaleToFit(460, 100);  // Scale the image to fit the desired size
+        img.setAlignment(Element.ALIGN_CENTER);
 
         PdfPTable logoTable = new PdfPTable(1);
         logoTable.setWidthPercentage(100);
@@ -92,16 +132,16 @@ public class PDFGeneration {
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
-        headerTable.setSpacingBefore(20);
+        headerTable.setSpacingBefore(0);
         headerTable.setWidths(new int[]{2, 2});
 
         PdfPCell companyCell = new PdfPCell();
-        companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
+        //companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
         companyCell.addElement(new Paragraph("MF :" + this.bon.getSte().getMatriculeFiscale(), normalFont));
         companyCell.addElement(new Paragraph("Adresse :" + this.bon.getSte().getAdresse(), normalFont));
         companyCell.addElement(new Paragraph("Tel :" + this.bon.getSte().getFax() + " / " + this.bon.getSte().getTel(), normalFont));
         companyCell.addElement(new Paragraph("Email :" + this.bon.getSte().getEmail(), normalFont));
-        companyCell.setBorderWidth(1);
+        companyCell.setBorder(Rectangle.NO_BORDER);
         companyCell.setPadding(10);
         companyCell.setPaddingTop(0);
 
@@ -123,8 +163,8 @@ public class PDFGeneration {
 
         // Additional information
         Paragraph additionalInfo = new Paragraph();
-        additionalInfo.add(new Chunk("\nBon de commande n° : " + this.bon.getId() + " \n", boldFont));
-        additionalInfo.add(new Chunk("Date : " + this.bon.getDateCreation() + "\n", boldFont));
+        additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLACK)));
+        additionalInfo.add(new Chunk("Date : " + this.date + "\n", boldFont));
         doc.add(additionalInfo);
     }
 
@@ -136,12 +176,25 @@ public class PDFGeneration {
                 .forEach(title -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(headerColor);
-                    header.setBorderWidth(1);
+                    header.setBorder(PdfPCell.BOX);
                     header.setPhrase(new Phrase(title, headerFont));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
                 });
     }
+    private void addRow1(PdfPTable table) {
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        for (int i1 = 0; i1 < 8; i1++) {
+            PdfPCell cell = new PdfPCell(new Phrase("", cellFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setPadding(10);
+            cell.setFixedHeight(40);
+            table.addCell(cell);
+        }
+        table.setTotalWidth(100);
+    }
+
 
     private static void addRow(PdfPTable table, Item i) {
         Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
@@ -162,26 +215,29 @@ public class PDFGeneration {
         for (int i1 = 0; i1 < 8; i1++) {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBorder(PdfPCell.BOX);
+            cell.setPadding(10);
             table.addCell(cell);
         }
+        table.setTotalWidth(100);
     }
 
     private void addCustomRow(PdfPTable table) {
         Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
 
         // Column 1: Base T.V.A.
-        PdfPCell cell = new PdfPCell(new Phrase("Base T.V.A: " + String.format("%.3f", (this.baseTVA)), boldFont));
-        cell.setColspan(2);
+        PdfPCell cell = new PdfPCell(new Phrase("Base T.V.A: \n " + String.format("%.3f", (this.baseTVA)), boldFont));
+        cell.setColspan(1);
         table.addCell(cell);
 
         // Column 2: Taux
-        cell = new PdfPCell(new Phrase("Taux:\n" + String.valueOf(this.taux), boldFont));
+        cell = new PdfPCell(new Phrase("Taux: " + String.valueOf(this.taux), boldFont));
         cell.setColspan(1);
         table.addCell(cell);
 
         // Column 3: Montant T.V.A.
-        cell = new PdfPCell(new Phrase("Mont T.V.A:" + String.format("%.3f", (this.baseTVA * (this.taux / 100))), boldFont));
-        cell.setColspan(1);
+        cell = new PdfPCell(new Phrase("Mont T.V.A:\n" + String.format("%.3f", (this.baseTVA * (this.taux / 100))), boldFont));
+        cell.setColspan(2);
         cell.setFixedHeight(70);
         table.addCell(cell);
 
@@ -205,5 +261,6 @@ public class PDFGeneration {
         cell.setColspan(2);
         cell.setFixedHeight(70);
         table.addCell(cell);
+        table.setSpacingBefore(20);
     }
 }

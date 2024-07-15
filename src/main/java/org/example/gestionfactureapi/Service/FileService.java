@@ -4,6 +4,8 @@ import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.BonCmdA;
+import org.example.gestionfactureapi.Entity.BonLivA;
+import org.example.gestionfactureapi.Entity.FactureA;
 import org.example.gestionfactureapi.Entity.File;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
@@ -22,14 +24,21 @@ public class FileService {
     private final PDFGeneration pdfGeneration;
 
     public void createAndSavePDF(BonCmdA bonCmdA) throws DocumentException, IOException, URISyntaxException {
-        // Generate PDF
         PDFGeneration pdfGeneration = new PDFGeneration(bonCmdA);
         byte[] pdfData = pdfGeneration.run();
-
-        // Create File entity
-        File file = new File(pdfData, "invoice"+bonCmdA.getId()+".pdf", "application/pdf");
-
-        // Save File entity to the database
+        File file = new File(pdfData, "bonCmdAchat"+bonCmdA.getId()+".pdf", "application/pdf");
+        fileRepository.save(file);
+    }
+    public void createAndSavePDF(BonLivA bonLivA) throws DocumentException, IOException, URISyntaxException {
+        PDFGeneration pdfGeneration = new PDFGeneration(bonLivA);
+        byte[] pdfData = pdfGeneration.run();
+        File file = new File(pdfData, "bonLivAchat"+bonLivA.getBonCmdA().getId()+".pdf", "application/pdf");
+        fileRepository.save(file);
+    }
+    public void createAndSavePDF(FactureA factureA) throws DocumentException, IOException, URISyntaxException {
+        PDFGeneration pdfGeneration = new PDFGeneration(factureA);
+        byte[] pdfData = pdfGeneration.run();
+        File file = new File(pdfData, "factureAchat"+factureA.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public File findByFileName(String fileName) {
