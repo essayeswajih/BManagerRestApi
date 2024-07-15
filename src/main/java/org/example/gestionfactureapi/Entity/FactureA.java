@@ -1,13 +1,10 @@
 package org.example.gestionfactureapi.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.gestionfactureapi.Entity.BonLivA;
-import org.example.gestionfactureapi.Entity.Ste;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;

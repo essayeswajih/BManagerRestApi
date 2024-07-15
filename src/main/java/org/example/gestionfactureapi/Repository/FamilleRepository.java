@@ -1,6 +1,5 @@
 package org.example.gestionfactureapi.Repository;
 
-import org.example.gestionfactureapi.Entity.Depot;
 import org.example.gestionfactureapi.Entity.Famille;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

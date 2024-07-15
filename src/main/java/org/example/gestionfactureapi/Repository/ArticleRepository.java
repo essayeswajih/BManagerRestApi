@@ -1,7 +1,6 @@
 package org.example.gestionfactureapi.Repository;
 
 import org.example.gestionfactureapi.Entity.Article;
-import org.example.gestionfactureapi.Entity.Fournisseur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

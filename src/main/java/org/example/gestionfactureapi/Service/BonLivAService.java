@@ -4,13 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.BonLivDTO;
 import org.example.gestionfactureapi.Entity.BonCmdA;
 import org.example.gestionfactureapi.Entity.BonLivA;
-import org.example.gestionfactureapi.Entity.FactureA;
 import org.example.gestionfactureapi.Entity.Ste;
-import org.example.gestionfactureapi.Repository.BonCmdARepository;
 import org.example.gestionfactureapi.Repository.BonLivARepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service

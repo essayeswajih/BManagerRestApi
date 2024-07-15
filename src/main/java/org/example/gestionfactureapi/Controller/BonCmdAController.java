@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.BonCmdADTO;
 import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.BonCmdA;
-import org.example.gestionfactureapi.Entity.File;
 import org.example.gestionfactureapi.Entity.Item;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.Service.*;
-import org.example.gestionfactureapi.pdf.PDFGeneration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

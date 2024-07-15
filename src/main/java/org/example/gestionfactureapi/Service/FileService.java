@@ -9,7 +9,6 @@ import org.example.gestionfactureapi.Entity.FactureA;
 import org.example.gestionfactureapi.Entity.File;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

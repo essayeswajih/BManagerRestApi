@@ -3,7 +3,6 @@ package org.example.gestionfactureapi.Controller;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.Client;
-import org.example.gestionfactureapi.Entity.Fournisseur;
 import org.example.gestionfactureapi.Service.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

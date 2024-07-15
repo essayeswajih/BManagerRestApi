@@ -1,7 +1,6 @@
 package org.example.gestionfactureapi.Controller;
 
 import com.itextpdf.text.DocumentException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.BonLivDTO;
 import org.example.gestionfactureapi.Entity.BonCmdA;
@@ -65,14 +64,11 @@ public class BonLivAController {
                     }else {
                         stockService.save(stock);
                     }
-
-
                 }catch (Exception e){
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }
 
             }
-
             return ResponseEntity.ok(x);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());

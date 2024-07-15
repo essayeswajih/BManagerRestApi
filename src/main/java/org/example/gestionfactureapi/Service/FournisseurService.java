@@ -2,7 +2,6 @@ package org.example.gestionfactureapi.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.gestionfactureapi.Entity.Depot;
 import org.example.gestionfactureapi.Entity.Fournisseur;
 import org.example.gestionfactureapi.Repository.FournisseurRepository;
 import org.springframework.stereotype.Service;

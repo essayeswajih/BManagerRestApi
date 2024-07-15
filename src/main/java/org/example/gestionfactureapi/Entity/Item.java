@@ -21,5 +21,7 @@ public class Item {
 
     private Double remise;
 
+    private Double newVenteHT;
+
     private Double totalNet;
 }
