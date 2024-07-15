@@ -1,14 +1,20 @@
 package org.example.gestionfactureapi.Controller;
 
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.DevisDTO;
+import org.example.gestionfactureapi.Entity.BonLivA;
 import org.example.gestionfactureapi.Entity.Devis;
 import org.example.gestionfactureapi.Entity.Item;
 import org.example.gestionfactureapi.Repository.ItemRepository;
 import org.example.gestionfactureapi.Service.DevisService;
+import org.example.gestionfactureapi.Service.FileService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +24,7 @@ import java.util.List;
 public class DevisController {
     private final DevisService devisService;
     private final ItemRepository itemRepository;
+    private final FileService fileService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         try {
@@ -66,5 +73,10 @@ public class DevisController {
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
+    }
+    @PostMapping(value = "toPdf", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> toPdF(@RequestBody Devis devis) throws DocumentException, IOException, URISyntaxException {
+        fileService.createAndSavePDF(devis);
+        return ResponseEntity.ok("created");
     }
 }

@@ -1,4 +1,4 @@
-package org.example.gestionfactureapi.pdf;
+package org.example.gestionfactureapi.pdf.devis;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
-public class PDFGeneration {
+public class DevisPdfGenerator {
     private  int x;
-    private BonCmdA bon;
+    private Devis bon;
     private List<BonLivA> bonCmds;
     private double baseTVA;
     private double taux;
@@ -27,29 +27,9 @@ public class PDFGeneration {
     private Date date;
     private Integer numero;
 
-    public PDFGeneration(BonCmdA bon) {
-        this.bon = bon;
-        this.numero = bon.getId();
-        this.date = bon.getDateCreation();
-        this.name = "Bon de commande n°";
-    }
-    public PDFGeneration(BonLivA bonLivA) {
-        this.bon = bonLivA.getBonCmdA();
-        this.numero = bon.getId();
-        this.date = bonLivA.getDateCreation();
-        this.name = "Bon de livraison n°";
-    }
-    public PDFGeneration(FactureA factureA) {
-        this.bonCmds = factureA.getBonLivAS();
-        List<Item> items =new ArrayList<>();
-        for(BonLivA bonx : factureA.getBonLivAS()){
-            items.addAll(bonx.getBonCmdA().getItems());
-        }
-        this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getBonCmdA().getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
-        this.date = factureA.getDateCreation();
-        this.name = "Facture n°";
-        this.numero = factureA.getId();
-        this.x=3;
+
+    public DevisPdfGenerator(Devis devis) {
+        this.bon = devis;
     }
 
 
@@ -146,11 +126,11 @@ public class PDFGeneration {
         clientCell.setBorder(Rectangle.NO_BORDER);
         clientCell.setPadding(5);
         clientCell.setPaddingLeft(50);
-        clientCell.addElement(new Paragraph("Fournisseur : " + this.bon.getFournisseur().getIntitule(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
-        clientCell.addElement(new Paragraph("MF :" + this.bon.getFournisseur().getMatriculeFiscale(), normalFont));
-        clientCell.addElement(new Paragraph("Adresse :" + this.bon.getFournisseur().getAdresse(), normalFont));
-        clientCell.addElement(new Paragraph("Tel :" + this.bon.getFournisseur().getFax() + " / " + this.bon.getFournisseur().getTel(), normalFont));
-        clientCell.addElement(new Paragraph("Email :" + this.bon.getFournisseur().getEmail(), normalFont));
+        clientCell.addElement(new Paragraph("Fournisseur : " + this.bon.getClient().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
+        clientCell.addElement(new Paragraph("MF :" + this.bon.getClient().getMatriculeFiscale(), normalFont));
+        clientCell.addElement(new Paragraph("Adresse :" + this.bon.getClient().getAdresse(), normalFont));
+        clientCell.addElement(new Paragraph("Tel :" + this.bon.getClient().getFax() + " / " + this.bon.getClient().getTel(), normalFont));
+        clientCell.addElement(new Paragraph("Email :" + this.bon.getClient().getEmail(), normalFont));
 
         headerTable.addCell(companyCell);
         headerTable.addCell(clientCell);
