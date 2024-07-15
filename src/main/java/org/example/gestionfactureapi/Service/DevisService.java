@@ -12,24 +12,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DevisService {
     private final DevisRepository devisRepository;
-    List<Devis> findAllByIdSte(Integer id){
+    public List<Devis> findAllByIdSte(Integer id){
         return devisRepository.findAllBySte_IdSteOrderByDateCreation(id);
     }
-    List<Devis> findAllByIdClient(Integer id){
+    public List<Devis> findAllByIdClient(Integer id){
         return devisRepository.findAllByClient_IdClientOrderByDateCreation(id);
     }
-    List<Devis> findAll(){
+    public List<Devis> findAll(){
         return devisRepository.findAll();
     }
-    Devis findById(Integer id){
+    public Devis findById(Integer id){
         return devisRepository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException("Devis Not Found")
         );
     }
-    Devis save(Devis devis){
+    public Devis save(Devis devis){
         return devisRepository.saveAndFlush(devis);
     }
-    void delete(Integer id){
+    public void delete(Integer id){
         devisRepository.deleteById(id);
     }
 
