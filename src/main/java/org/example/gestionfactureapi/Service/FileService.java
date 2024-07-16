@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
+import org.example.gestionfactureapi.pdf.bonLivV.BonLivVPDFGenerator;
 import org.example.gestionfactureapi.pdf.devis.DevisPdfGenerator;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,12 @@ public class FileService {
         PDFGeneration pdfGeneration = new PDFGeneration(bonLivA);
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "bonLivAchat"+bonLivA.getBonCmdA().getId()+".pdf", "application/pdf");
+        fileRepository.save(file);
+    }
+    public void createAndSavePDF(BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
+        BonLivVPDFGenerator pdfGeneration = new BonLivVPDFGenerator(bonLivV);
+        byte[] pdfData = pdfGeneration.run();
+        File file = new File(pdfData, "bonLivVente"+bonLivV.getDevis().getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public void createAndSavePDF(Devis devis) throws DocumentException, IOException, URISyntaxException {
