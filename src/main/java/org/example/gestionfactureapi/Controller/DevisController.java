@@ -3,12 +3,9 @@ package org.example.gestionfactureapi.Controller;
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.DevisDTO;
-import org.example.gestionfactureapi.Entity.BonLivA;
-import org.example.gestionfactureapi.Entity.Devis;
-import org.example.gestionfactureapi.Entity.Item;
+import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Repository.ItemRepository;
-import org.example.gestionfactureapi.Service.DevisService;
-import org.example.gestionfactureapi.Service.FileService;
+import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +22,9 @@ public class DevisController {
     private final DevisService devisService;
     private final ItemRepository itemRepository;
     private final FileService fileService;
+    private final ClientService clientService;
+    private final SteService steService;
+    private final ArticleService articleService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         try {
@@ -51,16 +51,21 @@ public class DevisController {
     }
     @PostMapping("save")
     public ResponseEntity<?> save(@RequestBody Devis devis){
-        System.out.println(devis.getClient().getIdClient());
         try {
-            System.out.println(devis);
-            Devis newDevis = new Devis(null,devis.getClient(),null,devis.getDateCreation(),devis.getSte(),false);
-            newDevis = devisService.save(newDevis);
-            List<Item> newItems = itemRepository.saveAllAndFlush(devis.getItems());
-            newDevis.setItems(newItems);
 
-            //devisService.save(devis);
-            return ResponseEntity.ok(devisService.save(newDevis));
+            Client client = clientService.findById(devis.getClient().getIdClient());
+            Ste ste = steService.findById(devis.getSte().getIdSte());
+            List<Item> newItems = itemRepository.saveAllAndFlush(devis.getItems());
+            Devis newDevis = new Devis(null, client, newItems, devis.getDateCreation(), ste, false);
+            newDevis = devisService.save(newDevis);
+
+            for(Item i:newItems){
+                Article a = articleService.findById(i.getArticle().getIdArticle());
+                i.setArticle(a);
+            }
+
+            toPdF(newDevis);
+            return ResponseEntity.ok(newDevis);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

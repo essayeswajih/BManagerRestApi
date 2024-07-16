@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 public class DevisPdfGenerator {
-    private  int x;
     private Devis bon;
     private List<BonLivA> bonCmds;
     private double baseTVA;
@@ -30,6 +29,9 @@ public class DevisPdfGenerator {
 
     public DevisPdfGenerator(Devis devis) {
         this.bon = devis;
+        this.name = "Devis n°";
+        this.numero = devis.getId();
+        this.date = devis.getDateCreation();
     }
 
 
@@ -57,7 +59,7 @@ public class DevisPdfGenerator {
             index++;
             addRow(table, i);
             this.baseTVA += i.getTotalNet();
-            tva += i.getArticle().getTva();
+            tva += i.getArticle().getTva()!=null ? i.getArticle().getTva() : 19;
         }
         if(this.bon.getItems().size()<10){
             int rows = 10-this.bon.getItems().size();
@@ -86,19 +88,17 @@ public class DevisPdfGenerator {
         Image img = Image.getInstance("src/main/resources/pdf/logo1.png");  // Replace with the path to your logo image
         img.scaleToFit(460, 100);  // Scale the image to fit the desired size
         img.setAlignment(Element.ALIGN_CENTER);
-
         PdfPTable logoTable = new PdfPTable(1);
         logoTable.setWidthPercentage(100);
         logoTable.setSpacingBefore(0);
         logoTable.setSpacingAfter(0);
-        logoTable.addCell(getCellWithImage(img, PdfPCell.ALIGN_LEFT));
-
+        logoTable.addCell(getCellWithImage(img));
         doc.add(logoTable);
     }
 
-    private static PdfPCell getCellWithImage(Image img, int alignment) {
+    private static PdfPCell getCellWithImage(Image img) {
         PdfPCell cell = new PdfPCell(img);
-        cell.setHorizontalAlignment(alignment);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(Rectangle.NO_BORDER);
         return cell;
     }
@@ -126,7 +126,7 @@ public class DevisPdfGenerator {
         clientCell.setBorder(Rectangle.NO_BORDER);
         clientCell.setPadding(5);
         clientCell.setPaddingLeft(50);
-        clientCell.addElement(new Paragraph("Fournisseur : " + this.bon.getClient().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
+        clientCell.addElement(new Paragraph("Client : " + this.bon.getClient().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
         clientCell.addElement(new Paragraph("MF :" + this.bon.getClient().getMatriculeFiscale(), normalFont));
         clientCell.addElement(new Paragraph("Adresse :" + this.bon.getClient().getAdresse(), normalFont));
         clientCell.addElement(new Paragraph("Tel :" + this.bon.getClient().getFax() + " / " + this.bon.getClient().getTel(), normalFont));
@@ -180,15 +180,16 @@ public class DevisPdfGenerator {
         ligneDetails.add((String) i.getArticle().getDesignation());
         ligneDetails.add(i.getQte().toString());
         ligneDetails.add(i.getArticle().getUnite());
-        ligneDetails.add(String.format("%.3f", i.getArticle().getAchatHT()));
+        ligneDetails.add(String.format("%.3f", i.getNewVenteHT()));
         ligneDetails.add(i.getRemise().toString());
-        double achatHT = i.getArticle().getAchatHT();
+        double venteHT = i.getNewVenteHT();
         int qte = i.getQte();
         double remise = i.getRemise();  // Assuming getRemise() returns the discount percentage
-        double totalHT = achatHT * qte;
+        double totalHT = venteHT * qte;
         double discountedTotalHT = totalHT - (totalHT * remise / 100);
         ligneDetails.add(String.format("%.3f", discountedTotalHT));
-        ligneDetails.add(i.getArticle().getTva().toString());
+        int tva = i.getArticle().getTva()!=null ? i.getArticle().getTva() : 19;
+        ligneDetails.add(String.valueOf(tva));
         for (int i1 = 0; i1 < 8; i1++) {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
