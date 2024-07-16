@@ -2,7 +2,6 @@ package org.example.gestionfactureapi.Controller;
 
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
-import org.example.gestionfactureapi.DTO.DevisDTO;
 import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Repository.ItemRepository;
 import org.example.gestionfactureapi.Service.*;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
