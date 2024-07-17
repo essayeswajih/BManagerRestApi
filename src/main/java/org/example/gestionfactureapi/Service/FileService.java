@@ -19,7 +19,6 @@ public class FileService {
 
     private final FileRepository fileRepository;
 
-    private final PDFGeneration pdfGeneration;
 
     public void createAndSavePDF(BonCmdA bonCmdA) throws DocumentException, IOException, URISyntaxException {
         PDFGeneration pdfGeneration = new PDFGeneration(bonCmdA);

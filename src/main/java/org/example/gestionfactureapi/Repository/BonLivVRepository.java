@@ -10,6 +10,5 @@ import java.util.List;
 public interface BonLivVRepository extends JpaRepository<BonLivV,Integer> {
     public BonLivV findBonLivVByDevis (Devis devis);
     public List<BonLivV> findAllBySte(Ste ste);
-
-    void deleteBonLivAByDevis_Id(Integer id);
+    void deleteBonLivVByDevis_Id(Integer id);
 }
