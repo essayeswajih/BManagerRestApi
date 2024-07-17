@@ -48,8 +48,9 @@ public class BonLivVController {
     }
     @PostMapping("save")
     public ResponseEntity<?> save(@RequestBody BonLivV b1){
-
+        System.out.println(b1);
         try {
+            b1.setSte(b1.getDevis().getSte());
             BonLivV x = bonLivVService.save(b1);
             Devis devis = x.getDevis();
             devis.setTrans(true);
