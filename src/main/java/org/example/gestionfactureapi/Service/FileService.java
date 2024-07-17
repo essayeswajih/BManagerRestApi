@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Repository.FileRepository;
+import org.example.gestionfactureapi.pdf.FactureV.FactureVPDFGenerator;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
 import org.example.gestionfactureapi.pdf.bonLivV.BonLivVPDFGenerator;
 import org.example.gestionfactureapi.pdf.devis.DevisPdfGenerator;
@@ -48,6 +49,12 @@ public class FileService {
         PDFGeneration pdfGeneration = new PDFGeneration(factureA);
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "factureAchat"+factureA.getId()+".pdf", "application/pdf");
+        fileRepository.save(file);
+    }
+    public void createAndSavePDF(FactureV factureV) throws DocumentException, IOException, URISyntaxException {
+        FactureVPDFGenerator pdfGeneration = new FactureVPDFGenerator(factureV);
+        byte[] pdfData = pdfGeneration.run();
+        File file = new File(pdfData, "factureVente"+factureV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public File findByFileName(String fileName) {

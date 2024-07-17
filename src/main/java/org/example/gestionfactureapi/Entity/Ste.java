@@ -61,6 +61,10 @@ public class Ste {
 
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FactureV> facturesVente;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks;
 
     @JsonIgnore
