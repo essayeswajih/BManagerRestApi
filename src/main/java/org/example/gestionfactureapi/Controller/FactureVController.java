@@ -3,9 +3,7 @@ package org.example.gestionfactureapi.Controller;
 import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.gestionfactureapi.Entity.BonLivA;
 import org.example.gestionfactureapi.Entity.BonLivV;
-import org.example.gestionfactureapi.Entity.FactureA;
 import org.example.gestionfactureapi.Entity.FactureV;
 import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.HttpStatus;
@@ -58,6 +56,7 @@ public class FactureVController {
         try{
             FactureV sv = factureVService.save(f);
             for(BonLivV bon :sv.getBonLivVS()){
+                System.out.println(bon);
                 bon.setFacture(sv);
                 bonLivVService.saveAndFlush(bon);
             }

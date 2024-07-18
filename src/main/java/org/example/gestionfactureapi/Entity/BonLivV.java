@@ -31,6 +31,6 @@ public class BonLivV {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "facture_id")
+    @JoinColumn(name = "facture__id")
     private FactureV facture;
 }
