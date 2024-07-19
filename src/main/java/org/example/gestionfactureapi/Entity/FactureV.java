@@ -26,6 +26,14 @@ public class FactureV {
     private Date dateCreation;
 
     private double timbre = 1;
+    private Double baseTVA19 = (double) 0;
+    private Double baseTVA13 = (double) 0;
+    private Double baseTVA7 = (double) 0;
+    private Double montTVA19 = (double) 0;
+    private Double montTVA13 = (double) 0;
+    private Double montTVA7 = (double) 0;
+    private Double total = (double) 0;
+    private Double totalTTC = (double) 0;
 
 
     @OneToMany(mappedBy = "facture")

@@ -56,7 +56,7 @@ public class PDFGeneration {
     public byte[] run() throws DocumentException, IOException, URISyntaxException {
         Document doc = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        PdfWriter.getInstance(doc, byteArrayOutputStream);
+        PdfWriter writer = PdfWriter.getInstance(doc, byteArrayOutputStream);
         doc.open();
 
         // Add company logo
@@ -82,19 +82,19 @@ public class PDFGeneration {
         if(this.bon.getItems().size()<10){
             int rows = 10-this.bon.getItems().size();
             for(int xxx = 0; xxx< rows;xxx++){
-                addRow1(table);
+                //addRow1(table);                                 sdqfdqdfqsd
             }
 
         }
         this.taux = tva / index;
         doc.add(table);
 
-        // Add custom row after the table
-        PdfPTable customTable = new PdfPTable(8);
-        customTable.setWidthPercentage(100);
-        customTable.setWidths(new int[]{2, 2, 1, 1, 2, 2, 2, 2});
-        addCustomRow(customTable);  // Add custom row with image and description
 
+        PdfPTable customTable = new PdfPTable(8);
+        customTable.setWidthPercentage(100); // Adjust the percentage as needed
+        customTable.setHorizontalAlignment(PdfPTable.ALIGN_RIGHT);
+        addCustomRow(customTable);  // Add custom row with image and description
+        customTable.setSpacingBefore(0);
         doc.add(customTable);
 
         doc.close();
@@ -213,7 +213,7 @@ public class PDFGeneration {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
-            cell.setPadding(10);
+            cell.setPadding(7);
             table.addCell(cell);
         }
         table.setTotalWidth(100);
@@ -221,43 +221,85 @@ public class PDFGeneration {
 
     private void addCustomRow(PdfPTable table) {
         Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
 
-        // Column 1: Base T.V.A.
-        PdfPCell cell = new PdfPCell(new Phrase("Base T.V.A: \n " + String.format("%.3f", (this.baseTVA)), boldFont));
+        // Row 1
+        addCellOfHeading(table, "Taux", normalFont);
+        addCellOfHeading(table, "Base" , normalFont);
+        addCellOfHeading(table, "TVA", normalFont);
+        addCellOfHeading(table, "T.HT", normalFont);
+        addCell(table, String.format("%.3f", this.baseTVA), normalFont,2);
+        addCellOfHeading(table, "T.TVA", normalFont);
+        addCell(table, String.format("%.3f", this.baseTVA), normalFont);
+
+        // Row 1
+        addCell(table, "19", normalFont);
+        addCell(table, "497", normalFont);
+        addCell(table, "94", normalFont);
+        addCellOfHeading(table, "Taux/Mt remise\nNet HT", normalFont,1,2);
+        addCell(table, String.format("%.3f", 0.0), normalFont);
+        addCell(table, String.format("%.3f", 0.0), normalFont);
+        addCellOfHeading(table,"Timbre\nTTC",normalFont,1,2);
+        addCell(table, "0.000", normalFont);
+
+        // Row 1
+        addCell(table, "13", normalFont);
+        addCell(table, "" , normalFont);
+        addCell(table, "", normalFont);
+        addCell(table, "497.9", normalFont,2);
+        addCell(table, "592.000", normalFont);
+
+        // Row 1
+        addCell(table, "7", normalFont);
+        addCell(table, "" , normalFont);
+        addCell(table, "", normalFont);
+        addCellOfHeading(table, "Fodec" , normalFont);
+        addCell(table, "0.000", normalFont,2);
+        addCell(table, "", normalFont,2);
+
+    }
+
+    private void addCell(PdfPTable table, String content, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
         cell.setColspan(1);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-
-        // Column 2: Taux
-        cell = new PdfPCell(new Phrase("Taux: " + String.valueOf(this.taux), boldFont));
+    }
+    private void addCell(PdfPTable table, String content, Font font,int colspan) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
+        cell.setColspan(colspan);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+    }
+    private void addCell(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
+        cell.setColspan(colspan);
+        cell.setRowspan(rowlspan);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+    }
+    private void addCellOfHeading(PdfPTable table, String content, Font font) {
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+        PdfPCell cell = new PdfPCell(new Phrase(content, headerFont));
         cell.setColspan(1);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.DARK_GRAY);
         table.addCell(cell);
 
-        // Column 3: Montant T.V.A.
-        cell = new PdfPCell(new Phrase("Mont T.V.A:\n" + String.format("%.3f", (this.baseTVA * (this.taux / 100))), boldFont));
-        cell.setColspan(2);
-        cell.setFixedHeight(70);
+    }
+    private void addCellOfHeading(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+        PdfPCell cell = new PdfPCell(new Phrase(content, headerFont));
+        cell.setColspan(colspan);
+        cell.setRowspan(rowlspan);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.DARK_GRAY);
         table.addCell(cell);
 
-        // Column 4: Signature de Client
-        cell = new PdfPCell(new Phrase("Signature de Client", boldFont));
-        cell.setColspan(2);
-        table.addCell(cell);
-
-        // Column 5: Signature du magasinier
-        cell = new PdfPCell(new Phrase("Signature du magasinier", boldFont));
-        cell.setColspan(2);
-        table.addCell(cell);
-
-        // Column 6: Total HT
-        cell = new PdfPCell(new Phrase("Total HT", boldFont));
-        cell.setColspan(2);
-        table.addCell(cell);
-
-        // Column 7: Total T.T.C
-        cell = new PdfPCell(new Phrase("Total T.T.C\n" + (this.baseTVA + (this.baseTVA * (this.taux / 100))), boldFont));
-        cell.setColspan(2);
-        cell.setFixedHeight(70);
-        table.addCell(cell);
-        table.setSpacingBefore(20);
     }
 }

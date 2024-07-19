@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.BonLivA;
 import org.example.gestionfactureapi.Entity.FactureA;
+import org.example.gestionfactureapi.Entity.Item;
 import org.example.gestionfactureapi.Service.BonLivAService;
 import org.example.gestionfactureapi.Service.FactureAService;
 import org.example.gestionfactureapi.Service.FileService;
@@ -47,15 +48,36 @@ public class FactureAController {
     }
     @PostMapping("save")
     public ResponseEntity<?> save(@RequestBody FactureA f){
-        System.out.println(f);
+        double baseTVA19=0;
+        double baseTVA7=0;
+        double baseTVA13=0;
+        double totalHT=0;
+        double totalTTC=0;
         try{
             FactureA sv = factureAService.save(f);
             for(BonLivA bon :sv.getBonLivAS()){
                 bon.setFacture(sv);
                 bonLivAService.saveAndFlush(bon);
+                for(Item item :bon.getBonCmdA().getItems()){
+                    int tva = item.getArticle().getTva();
+                    if(tva==19){
+                        baseTVA19+=item.getTotalNet()*.19;
+                    } else if (tva==7) {
+                        baseTVA7+=item.getTotalNet()*.7;
+                    } else if (tva==13) {
+                        baseTVA13+=item.getTotalNet()*.13;
+                    }
+                    totalHT+=item.getTotalNet();
+                }
             }
+            totalTTC=totalHT+ baseTVA19 + baseTVA7 + baseTVA13+sv.getTimbre();
+            sv.setBaseTVA7(baseTVA7);
+            sv.setBaseTVA13(baseTVA13);
+            sv.setBaseTVA19(baseTVA19);
+            sv.setTotal(totalHT);
+            sv.setTotalTTC(totalTTC);
             FactureA res = factureAService.save(sv);
-            this.toPdF(res);
+            fileService.createAndSavePDF(res);
             return ResponseEntity.ok(res);
 
         }catch (Exception e){
