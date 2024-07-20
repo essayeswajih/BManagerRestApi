@@ -1,11 +1,15 @@
 package org.example.gestionfactureapi.pdf;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,18 +30,32 @@ public class PDFGeneration {
 
     private Date date;
     private Integer numero;
+    static class RoundedBorder implements PdfPCellEvent {
+        @Override
+        public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
+            PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
+            cb.saveState();
+            cb.setColorStroke(BaseColor.BLACK); // Border color
+            cb.setColorFill(BaseColor.DARK_GRAY); // Background color
+            float radius = 10; // Radius for rounded corners
+            // Draw rounded rectangle
+            cb.roundRectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight(), radius);
+            cb.fillStroke();
+            cb.restoreState();
+        }
+    }
 
     public PDFGeneration(BonCmdA bon) {
         this.bon = bon;
         this.numero = bon.getId();
         this.date = bon.getDateCreation();
-        this.name = "Bon de commande n°";
+        this.name = "Bon de commande";
     }
     public PDFGeneration(BonLivA bonLivA) {
         this.bon = bonLivA.getBonCmdA();
         this.numero = bon.getId();
         this.date = bonLivA.getDateCreation();
-        this.name = "Bon de livraison n°";
+        this.name = "Bon de livraison";
     }
     public PDFGeneration(FactureA factureA) {
         this.bonCmds = factureA.getBonLivAS();
@@ -47,7 +65,7 @@ public class PDFGeneration {
         }
         this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getBonCmdA().getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
         this.date = factureA.getDateCreation();
-        this.name = "Facture n°";
+        this.name = "Facture";
         this.numero = factureA.getId();
         this.x=3;
     }
@@ -68,7 +86,7 @@ public class PDFGeneration {
         // Add table with data
         PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100);
-        table.setSpacingBefore(20);
+        table.setSpacingBefore(10);
         table.setWidths(new int[]{2, 4, 1, 1, 2, 1, 2, 1});
         tableHeader(table);
         double index = 0;
@@ -90,11 +108,12 @@ public class PDFGeneration {
         doc.add(table);
 
 
-        PdfPTable customTable = new PdfPTable(8);
+        PdfPTable customTable = new PdfPTable(6);
+        customTable.setWidths(new int[]{9, 9, 9, 1, 9, 9});
         customTable.setWidthPercentage(100); // Adjust the percentage as needed
         customTable.setHorizontalAlignment(PdfPTable.ALIGN_RIGHT);
         addCustomRow(customTable);  // Add custom row with image and description
-        customTable.setSpacingBefore(0);
+        customTable.setSpacingBefore(10);
         doc.add(customTable);
 
         doc.close();
@@ -134,35 +153,52 @@ public class PDFGeneration {
 
         PdfPCell companyCell = new PdfPCell();
         //companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
-        companyCell.addElement(new Paragraph("MF :" + this.bon.getSte().getMatriculeFiscale(), normalFont));
+        companyCell.addElement(new Paragraph("Code TVA: " + this.bon.getSte().getMatriculeFiscale(), normalFont));
         companyCell.addElement(new Paragraph("Adresse :" + this.bon.getSte().getAdresse(), normalFont));
-        companyCell.addElement(new Paragraph("Tel :" + this.bon.getSte().getFax() + " / " + this.bon.getSte().getTel(), normalFont));
+        companyCell.addElement(new Paragraph("GSM :" + this.bon.getSte().getFax() + " - " + this.bon.getSte().getTel(), normalFont));
         companyCell.addElement(new Paragraph("Email :" + this.bon.getSte().getEmail(), normalFont));
-        companyCell.setBorder(Rectangle.NO_BORDER);
-        companyCell.setPadding(10);
-        companyCell.setPaddingTop(0);
-
+        companyCell.setBorder(0);
+        companyCell.setPaddingBottom(10);
         PdfPCell clientCell = new PdfPCell();
         clientCell.setBorder(Rectangle.NO_BORDER);
-        clientCell.setPadding(5);
-        clientCell.setPaddingLeft(50);
-        clientCell.addElement(new Paragraph("Fournisseur : " + this.bon.getFournisseur().getIntitule(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
-        clientCell.addElement(new Paragraph("MF :" + this.bon.getFournisseur().getMatriculeFiscale(), normalFont));
-        clientCell.addElement(new Paragraph("Adresse :" + this.bon.getFournisseur().getAdresse(), normalFont));
-        clientCell.addElement(new Paragraph("Tel :" + this.bon.getFournisseur().getFax() + " / " + this.bon.getFournisseur().getTel(), normalFont));
-        clientCell.addElement(new Paragraph("Email :" + this.bon.getFournisseur().getEmail(), normalFont));
-
+        PdfPTable clientTbale = new PdfPTable(3);
+        addCellOfHeading(clientTbale, "Fournisseur", normalFont, 1, 1);
+        addCell(clientTbale,  this.bon.getFournisseur().getIntitule(), normalFont, 2, 1);
+        addCellOfHeading(clientTbale, "Adresse", normalFont, 1, 1);
+        addCell(clientTbale, this.bon.getFournisseur().getAdresse(), normalFont, 2, 1);
+        addCellOfHeading(clientTbale, "Code TVA", normalFont, 1, 1);
+        addCell(clientTbale, this.bon.getFournisseur().getMatriculeFiscale(), normalFont, 2, 1);
         headerTable.addCell(companyCell);
+        clientTbale.setSpacingBefore(52);
+        clientCell.addElement(clientTbale);
+        clientCell.setRowspan(2);
         headerTable.addCell(clientCell);
-
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.WHITE);
+        PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
+        headingName.setBorder(0);
+        headingName.setPadding(10);
+        headingName.setPaddingBottom(15);
+        headingName.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        headingName.setBackgroundColor(BaseColor.WHITE);
+        PdfPCellEvent roundedBorder = new RoundedBorder();
+        headingName.setCellEvent(roundedBorder);
+        headerTable.addCell(headingName);
+        PdfPCell headingEspace = new PdfPCell(new Phrase(""));
+        headingEspace.setBorder(0);
+        //headerTable.addCell(headingEspace);
         // Add the header table to the document
         doc.add(headerTable);
 
         // Additional information
+        PdfPTable tablex = new PdfPTable(2);
+        tablex.setSpacingBefore(10);
+        addRowx(tablex);
+        doc.add(tablex);
+
         Paragraph additionalInfo = new Paragraph();
         additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLACK)));
         additionalInfo.add(new Chunk("Date : " + this.date + "\n", boldFont));
-        doc.add(additionalInfo);
+        //doc.add(additionalInfo);
     }
 
     private static void tableHeader(PdfPTable table) {
@@ -218,44 +254,67 @@ public class PDFGeneration {
         }
         table.setTotalWidth(100);
     }
-
+    private void addRowx(PdfPTable table){
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
+        Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.BLACK);
+        addCellOfHeading(table,"n°", headerFont);
+        addCellOfHeading(table, "Date", headerFont);
+        System.out.println(this.date);
+        addCell(table, ""+this.numero, normal);
+        addCell(table, ""+this.date, normal);
+        table.setWidthPercentage(100);
+    }
     private void addCustomRow(PdfPTable table) {
         Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
         Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
 
         // Row 1
-        addCellOfHeading(table, "Taux", normalFont);
-        addCellOfHeading(table, "Base" , normalFont);
-        addCellOfHeading(table, "TVA", normalFont);
-        addCellOfHeading(table, "T.HT", normalFont);
-        addCell(table, String.format("%.3f", this.baseTVA), normalFont,2);
-        addCellOfHeading(table, "T.TVA", normalFont);
-        addCell(table, String.format("%.3f", this.baseTVA), normalFont);
-
-        // Row 1
-        addCell(table, "19", normalFont);
-        addCell(table, "497", normalFont);
-        addCell(table, "94", normalFont);
-        addCellOfHeading(table, "Taux/Mt remise\nNet HT", normalFont,1,2);
-        addCell(table, String.format("%.3f", 0.0), normalFont);
-        addCell(table, String.format("%.3f", 0.0), normalFont);
-        addCellOfHeading(table,"Timbre\nTTC",normalFont,1,2);
+        addCellOfHeading(table, "Taux", headerNormalFont);
+        addCellOfHeading(table, "Base" , headerNormalFont);
+        addCellOfHeading(table, "TVA", headerNormalFont);
+        addCellVide(table);
+        addCellOfHeading(table, "TOTAL HT", headerNormalFont);
         addCell(table, "0.000", normalFont);
 
         // Row 1
-        addCell(table, "13", normalFont);
-        addCell(table, "" , normalFont);
-        addCell(table, "", normalFont);
-        addCell(table, "497.9", normalFont,2);
-        addCell(table, "592.000", normalFont);
+        addCell(table, "19%", normalFont);
+        addCell(table, "497", normalFont);
+        addCell(table, "94", normalFont);
+        addCellVide(table);
+        addCellOfHeading(table,"REMISE",headerNormalFont);
+        addCell(table, "0.000", normalFont);
 
         // Row 1
-        addCell(table, "7", normalFont);
-        addCell(table, "" , normalFont);
-        addCell(table, "", normalFont);
-        addCellOfHeading(table, "Fodec" , normalFont);
-        addCell(table, "0.000", normalFont,2);
-        addCell(table, "", normalFont,2);
+        addCell(table, "13%", normalFont);
+        addCell(table, "497", normalFont);
+        addCell(table, "94", normalFont);
+        addCellVide(table);
+        addCellOfHeading(table,"NET HT",headerNormalFont);
+        addCell(table, "0.000", normalFont);
+
+        // Row 1
+        addCell(table, "7%", normalFont);
+        addCell(table, "497", normalFont);
+        addCell(table, "94", normalFont);
+        addCellVide(table);
+        addCellOfHeading(table,"TOTAL TVA",headerNormalFont);
+        addCell(table, "0.000", normalFont);
+
+        addCellVide(table);
+        addCellVide(table);
+        addCellVide(table);
+        addCellVide(table);
+        addCellOfHeading(table,"TIMBRE",headerNormalFont);
+        addCell(table, "0.000", normalFont);
+
+        addCellVide(table);
+        addCellVide(table);
+        addCellVide(table);
+        addCellVide(table);
+        addCellOfHeading(table,"TTC",headerNormalFont);
+        addCell(table, "0.000", normalFont);
+
 
     }
 
@@ -281,9 +340,18 @@ public class PDFGeneration {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
     }
+    private void addCellVide(PdfPTable table) {
+        PdfPCell cell = new PdfPCell();
+        cell.setBorderWidthBottom(0);
+        cell.setBorderWidthLeft(0);
+        cell.setBorderWidthRight(0);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+    }
     private void addCellOfHeading(PdfPTable table, String content, Font font) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
-        PdfPCell cell = new PdfPCell(new Phrase(content, headerFont));
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -302,4 +370,5 @@ public class PDFGeneration {
         table.addCell(cell);
 
     }
+
 }
