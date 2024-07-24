@@ -1,5 +1,6 @@
 package org.example.gestionfactureapi.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -62,5 +64,9 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "famille_id")
     private Famille famille;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<HistoriqueArticle> historiqueArticles;
 
 }

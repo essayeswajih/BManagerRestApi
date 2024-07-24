@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,6 +56,7 @@ public class BonLivVController {
             devis.setTrans(true);
             x.setDevis(devisService.save(devis));
             String artcleNamesToAlert = "";
+            List<String> ListOfArticlesToAlert= new ArrayList<>();
             for (Item item:x.getDevis().getItems()){
                 Stock stock = new Stock(null,item.getArticle(),item.getQte(),x.getSte());
                 try {
@@ -62,6 +66,7 @@ public class BonLivVController {
                         stockService.save(s);
                         if(s.getQte()<10){
                             artcleNamesToAlert+=s.getArticle().getDesignation()+"\n";
+                            ListOfArticlesToAlert.add(s.getArticle().getDesignation());
                         }
                     }else {
                         stockService.save(stock);
@@ -70,17 +75,21 @@ public class BonLivVController {
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }
             }
-            /*
+
             if(artcleNamesToAlert!=""){
                 System.out.println(x.getSte().getEmail());
                 System.out.println(artcleNamesToAlert);
                 emailService.sendSimpleMessage(
                         x.getSte().getEmail(),
                         "Stock Alert !!",
-                        artcleNamesToAlert+" Stock will end soon !!!");
+                        artcleNamesToAlert+"Stock will end soon !!!");
             }
-            */
-            return ResponseEntity.ok(x);
+            HashMap<String, List<?>> respone = new HashMap<>();
+            List<Object> res = new ArrayList<>();
+            res.add(x);
+            res.add(ListOfArticlesToAlert);
+            respone.put("Response",res);
+            return ResponseEntity.ok(respone);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
