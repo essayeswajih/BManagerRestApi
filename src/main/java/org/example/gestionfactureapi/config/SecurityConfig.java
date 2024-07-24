@@ -54,9 +54,7 @@ public class SecurityConfig {
                                         "/refresh_token/**"
                                 )
                                 .permitAll()
-                                .requestMatchers("/admin","/api/v1/**").hasAuthority("ADMIN")
-                                .requestMatchers("/admin","/api/v1/**/**").hasAuthority("ADMIN")
-                                .requestMatchers("/admin","/api/v1/**/**/**").hasAuthority("ADMIN")
+                                .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsServiceImp)
@@ -92,10 +90,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:4200",
                 "https://b-manager.vercel.app/",
-                "https://b-manager.vercel.app",
-                "https://b-manager.vercel.app/**",
-                "https://b-manager.vercel.app/*",
-                "https://b-manager.vercel.app**"
+                "https://b-manager.vercel.app"
         )); // Add allowed origins here
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
