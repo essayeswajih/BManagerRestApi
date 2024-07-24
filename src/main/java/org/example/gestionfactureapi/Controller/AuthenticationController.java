@@ -30,6 +30,7 @@ public class AuthenticationController {
     public ResponseEntity<?> login(
             @RequestBody User request
     ) {
+        System.out.println(request);
         AuthenticationResponse respone =authService.authenticate(request);
         if(respone.getMessage().equals("User login was successful")){
             return ResponseEntity.ok(respone);

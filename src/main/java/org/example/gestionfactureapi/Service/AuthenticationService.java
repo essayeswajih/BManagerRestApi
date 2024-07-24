@@ -76,6 +76,8 @@ public class AuthenticationService {
         );
 
         User user = repository.findUserByUsername(request.getUsername()).orElseThrow();
+        System.out.println("user from db");
+        System.out.println(user);
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
