@@ -31,7 +31,7 @@ public class Article {
     @NotNull
     @Column(nullable = false)
     private String designation;
-    private String model;
+    private String sousFamille;
 
     @Min(0)
     private Double achatHT;

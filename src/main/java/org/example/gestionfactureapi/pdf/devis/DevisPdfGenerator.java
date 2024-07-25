@@ -85,7 +85,7 @@ public class DevisPdfGenerator {
 
 
     private static void addCompanyLogo(Document doc) throws DocumentException, IOException {
-        Image img = Image.getInstance("src/main/resources/pdf/logo1.png");  // Replace with the path to your logo image
+        Image img = Image.getInstance("https://raw.githubusercontent.com/essayeswajih/BManagerRestApi/main/src/main/resources/pdf/logo1.png");  // Replace with the path to your logo image
         img.scaleToFit(460, 100);  // Scale the image to fit the desired size
         img.setAlignment(Element.ALIGN_CENTER);
         PdfPTable logoTable = new PdfPTable(1);

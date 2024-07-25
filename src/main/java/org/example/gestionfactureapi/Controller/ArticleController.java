@@ -41,13 +41,6 @@ public class ArticleController {
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Article article){
-        System.out.println("id"+article.getIdArticle());
-        System.out.println("designation"+article.getDesignation());
-        System.out.println("Tva"+article.getTva());
-        System.out.println("MontantMarge"+article.getMontantMarge());
-        System.out.println("AchatHT"+article.getAchatHT());
-        System.out.println("fodec"+article.getFodec());
-        System.out.println("Article"+article);
         try {
             return ResponseEntity.ok().body(articleService.save(article));
         }catch (Exception e){
