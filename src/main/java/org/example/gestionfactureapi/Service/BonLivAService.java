@@ -23,7 +23,12 @@ public class BonLivAService {
         return bonLivARepository.findAllBySte(ste);
     }
     public BonLivA save(BonLivDTO b1){
-        return bonLivARepository.saveAndFlush(new BonLivA(b1.getBon().getId(),b1.getBon(),b1.getBon().getSte(),b1.getDate(),null));
+        BonLivA bonLivA = new BonLivA();
+        bonLivA.setBonCmdA(b1.getBon());
+        bonLivA.setSte(b1.getBon().getSte());
+        bonLivA.setDateCreation(b1.getDate());
+
+        return bonLivARepository.saveAndFlush(bonLivA);
     }
     public void delete(Integer id){
         bonLivARepository.deleteById(id);

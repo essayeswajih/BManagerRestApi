@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +22,14 @@ public class BonLivA {
     @OneToOne
     @JoinColumn(name = "bon_cmd_id",nullable = false)
     private BonCmdA bonCmdA;
+
+    @ManyToOne
+    @JoinColumn(name = "fournisseur_id")
+    private Fournisseur fournisseur;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "bon_liv_a_id")
+    private List<Item> items;
 
     @ManyToOne
     @JoinColumn(name = "ste_id")
