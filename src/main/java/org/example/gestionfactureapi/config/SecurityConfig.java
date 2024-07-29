@@ -90,7 +90,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:4200",
                 "https://b-manager.vercel.app/",
-                "https://b-manager.vercel.app"
+                "https://b-manager.vercel.app",
+                "http://192.168.100.51:4200"
         )); // Add allowed origins here
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));

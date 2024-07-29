@@ -42,4 +42,7 @@ public class BonLivA {
     @JsonIgnore
     @JoinColumn(name = "facture_id")
     private FactureA facture;
+    
+    @Column
+    private Boolean trans = false;
 }

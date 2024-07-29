@@ -27,6 +27,7 @@ public class BonLivAService {
         bonLivA.setBonCmdA(b1.getBon());
         bonLivA.setSte(b1.getBon().getSte());
         bonLivA.setDateCreation(b1.getDate());
+        bonLivA.setItems(b1.getItems());
 
         return bonLivARepository.saveAndFlush(bonLivA);
     }
