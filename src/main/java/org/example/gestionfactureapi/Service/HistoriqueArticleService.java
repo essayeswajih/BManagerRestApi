@@ -5,11 +5,13 @@ import org.example.gestionfactureapi.Entity.HistoriqueArticle;
 import org.example.gestionfactureapi.Repository.HistoriqueArticleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class HistoriqueArticleService {
     private final HistoriqueArticleRepository historiqueArticleRepository;
-    HistoriqueArticle findByArticle(Integer id){
+    public List<HistoriqueArticle> findByArticle(Integer id){
         return historiqueArticleRepository.findByArticle_IdArticle(id);
     }
     HistoriqueArticle save(HistoriqueArticle historiqueArticle){
