@@ -65,34 +65,14 @@ public class ArticleController {
         }
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteArticle(@PathVariable("id") Integer id) {
         try {
-            // Check if the article exists and delete its history
-            itemRepository.deleteAllByArticle_IdArticle(id);
-            List<HistoriqueArticle> historiques = historiqueArticleService.findByArticle(id);
-            if (historiques != null && !historiques.isEmpty()) {
-                historiqueArticleService.deletAll(historiques);
-            }
-
-            // Find the stock by article ID
-            Stock stock = stockService.findStockByIdArticle(id);
-            if (stock != null) {
-                stockService.delete(stock.getId());
-            }
-
-            // Find and delete the article
-            Article article = articleService.findById(id);
-            if (article != null) {
-                articleService.delete(article.getIdArticle());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Article not found for id: " + id);
-            }
-
-            return ResponseEntity.ok().body("Article with id :" + id + " Deleted");
+            articleService.delete(id);
+            return ResponseEntity.ok().body("Article with id " + id + " deleted successfully.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the article: " + e.getMessage());
         }
     }
 
