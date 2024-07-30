@@ -17,4 +17,8 @@ public class HistoriqueArticleService {
     public HistoriqueArticle save(HistoriqueArticle historiqueArticle){
         return historiqueArticleRepository.save(historiqueArticle);
     }
+
+    public void deletAll(List<HistoriqueArticle> byArticle) {
+        this.historiqueArticleRepository.deleteAll(byArticle);
+    }
 }
