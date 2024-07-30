@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ public class BonLivVController {
     private final SteService steService;
     private final StockService stockService;
     private final EmailService emailService;
+    private final HistoriqueArticleService historiqueArticleService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(bonLivVService.findAll());
@@ -69,8 +72,22 @@ public class BonLivVController {
                             ListOfArticlesToAlert.add(s.getArticle().getDesignation());
                         }
                     }else {
-                        stockService.save(stock);
+                        s = stockService.save(stock);
                     }
+                    LocalDate localDate = LocalDate.now();
+                    Date sqlDate = Date.valueOf(localDate);
+
+                    HistoriqueArticle ha = new HistoriqueArticle();
+                    ha.setDate(sqlDate);
+                    ha.setInput(0);
+                    ha.setOutput(item.getQte());
+                    ha.setArticle(item.getArticle());
+                    ha.setDocName("bonLivVente"+x.getDevis().getId());
+                    ha.setDocId(x.getId());
+                    ha.setPrice(item.getNewVenteHT());
+                    ha.setStock(s);
+                    ha.setQteReel(s.getQte());
+                    historiqueArticleService.save(ha);
                 }catch (Exception e){
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }

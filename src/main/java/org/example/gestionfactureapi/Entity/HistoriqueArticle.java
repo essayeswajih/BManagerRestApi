@@ -22,6 +22,7 @@ public class HistoriqueArticle {
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+    private Integer qteReel;
     private Integer docId;
     private String docName;
     @ManyToOne

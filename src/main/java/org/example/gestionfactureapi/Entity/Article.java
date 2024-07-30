@@ -21,11 +21,10 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idArticle;
 
-
     @Column(unique = true,nullable = false)
     private String refArticle;
 
-    @Column(unique = true,nullable = false)
+    //@Column(unique = true,nullable = false)
     private String refFournisseur;
 
     @NotNull

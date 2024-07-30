@@ -3,10 +3,7 @@ package org.example.gestionfactureapi.Controller;
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.BonLivDTO;
-import org.example.gestionfactureapi.Entity.BonCmdA;
-import org.example.gestionfactureapi.Entity.BonLivA;
-import org.example.gestionfactureapi.Entity.Item;
-import org.example.gestionfactureapi.Entity.Stock;
+import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.time.LocalDate;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +24,8 @@ public class BonLivAController {
     private final FileService fileService;
     private final SteService steService;
     private final StockService stockService;
+    private final HistoriqueArticleService historiqueArticleService;
+
     @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(bonLivAService.findAll());
@@ -62,8 +64,23 @@ public class BonLivAController {
                         s.setQte(s.getQte()+stock.getQte());
                         stockService.save(s);
                     }else {
-                        stockService.save(stock);
+                        s = stockService.save(stock);
                     }
+
+                    LocalDate localDate = LocalDate.now();
+                    Date sqlDate = Date.valueOf(localDate);
+
+                    HistoriqueArticle ha = new HistoriqueArticle();
+                    ha.setDate(sqlDate);
+                    ha.setInput(item.getQte());
+                    ha.setOutput(0);
+                    ha.setArticle(item.getArticle());
+                    ha.setDocName("bonLivAchat"+x.getBonCmdA().getId());
+                    ha.setDocId(x.getId());
+                    ha.setPrice(item.getArticle().getAchatHT());
+                    ha.setStock(s);
+                    ha.setQteReel(s.getQte());
+                    historiqueArticleService.save(ha);
                 }catch (Exception e){
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }

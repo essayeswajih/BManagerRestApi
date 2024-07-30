@@ -14,7 +14,7 @@ public class HistoriqueArticleService {
     public List<HistoriqueArticle> findByArticle(Integer id){
         return historiqueArticleRepository.findByArticle_IdArticle(id);
     }
-    HistoriqueArticle save(HistoriqueArticle historiqueArticle){
+    public HistoriqueArticle save(HistoriqueArticle historiqueArticle){
         return historiqueArticleRepository.save(historiqueArticle);
     }
 }
