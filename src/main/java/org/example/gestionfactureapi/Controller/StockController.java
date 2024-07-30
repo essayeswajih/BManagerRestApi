@@ -2,7 +2,10 @@ package org.example.gestionfactureapi.Controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.gestionfactureapi.DTO.StockDTO;
+import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.Stock;
+import org.example.gestionfactureapi.Service.ArticleService;
 import org.example.gestionfactureapi.Service.StockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/stock")
 public class StockController {
     private final StockService stockService;
+    private final ArticleService articleService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         try {
@@ -75,5 +79,13 @@ public class StockController {
         }
     }
 
-
+    @PostMapping("setStockInitial")
+    public ResponseEntity<?> setStockInitial(@RequestBody StockDTO stock){
+        try {
+            Article article = articleService.findById(stock.getIdArticle());
+            return ResponseEntity.ok(stockService.save(new Stock(null,article, stock.getStockInitiale(),article.getSte())));
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
