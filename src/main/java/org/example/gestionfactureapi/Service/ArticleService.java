@@ -37,12 +37,12 @@ public class ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException("Article not found for id: " + id));
 
         // Delete related historiqueArticles
-        historiqueArticleRepository.deleteByArticleId(id);
+        historiqueArticleRepository.deleteAllByArticle_IdArticle(id);
 
         // Check and delete items if necessary
-        itemRepository.deleteByArticleId(id);
+        itemRepository.deleteAllByArticle_IdArticle(id);
 
-        stockRepository.deleteByArticleId(id);
+        stockRepository.deleteAllByArticle_IdArticle(id);
         // Delete the article itself
         articleRepository.delete(article);
     }

@@ -10,6 +10,5 @@ import java.util.List;
 public interface StockRepository extends JpaRepository<Stock,Integer> {
     public List<Stock> findAllBySte_IdSteOrderByArticle(Integer id);
     public Stock findStockByArticle_IdArticle(Integer id);
-
-    void deleteByArticleId(Integer id);
+    void deleteAllByArticle_IdArticle(Integer id);
 }

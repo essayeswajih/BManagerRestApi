@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface HistoriqueArticleRepository extends JpaRepository<HistoriqueArticle,Integer> {
     List<HistoriqueArticle> findAllByArticle_IdArticle(Integer id);
 
-    void deleteByArticleId(Integer id);
+    void deleteAllByArticle_IdArticle(Integer id);
 }
