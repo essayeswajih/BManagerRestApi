@@ -63,8 +63,8 @@ public class ArticleController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
         try {
-            stockService.delete(stockService.findStockByIdArticle(id).getId());
             historiqueArticleService.deletAll(historiqueArticleService.findByArticle(id));
+            stockService.delete(stockService.findStockByIdArticle(id).getId());
             articleService.delete(articleService.findById(id).getIdArticle());
             return ResponseEntity.ok().body("Article with id :"+id+" Deleted");
         }catch (EntityNotFoundException e){
