@@ -75,7 +75,7 @@ public class ArticleController {
             if (stock != null) {
                 stockService.delete(stock.getId());
             }
-            
+
             Article article = articleService.findById(id);
             if (article != null) {
                 articleService.delete(article.getIdArticle());

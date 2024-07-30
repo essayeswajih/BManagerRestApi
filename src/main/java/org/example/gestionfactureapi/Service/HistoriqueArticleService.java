@@ -12,7 +12,7 @@ import java.util.List;
 public class HistoriqueArticleService {
     private final HistoriqueArticleRepository historiqueArticleRepository;
     public List<HistoriqueArticle> findByArticle(Integer id){
-        return historiqueArticleRepository.findByArticle_IdArticle(id);
+        return historiqueArticleRepository.findAllByArticle_IdArticle(id);
     }
     public HistoriqueArticle save(HistoriqueArticle historiqueArticle){
         return historiqueArticleRepository.save(historiqueArticle);

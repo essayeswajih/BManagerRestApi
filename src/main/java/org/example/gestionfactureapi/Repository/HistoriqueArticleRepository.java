@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface HistoriqueArticleRepository extends JpaRepository<HistoriqueArticle,Integer> {
-    List<HistoriqueArticle> findByArticle_IdArticle(Integer id);
+    List<HistoriqueArticle> findAllByArticle_IdArticle(Integer id);
 }
