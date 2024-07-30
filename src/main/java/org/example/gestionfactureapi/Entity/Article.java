@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -66,6 +67,6 @@ public class Article {
 
     @JsonIgnore
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private List<HistoriqueArticle> historiqueArticles;
+    private List<HistoriqueArticle> historiqueArticles = new ArrayList<>();
 
 }

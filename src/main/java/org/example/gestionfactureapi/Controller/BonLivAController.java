@@ -71,6 +71,7 @@ public class BonLivAController {
                     Date sqlDate = Date.valueOf(localDate);
 
                     HistoriqueArticle ha = new HistoriqueArticle();
+                    ha.setId(null);
                     ha.setDate(sqlDate);
                     ha.setInput(item.getQte());
                     ha.setOutput(0);
@@ -81,6 +82,7 @@ public class BonLivAController {
                     ha.setStock(s);
                     ha.setQteReel(s.getQte());
                     historiqueArticleService.save(ha);
+
                 }catch (Exception e){
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }

@@ -14,7 +14,7 @@ import java.sql.Date;
 public class HistoriqueArticle {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private Date date;
     private int Input;
     private int Output;
