@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Integer> {
+    void deleteAllByArticle_IdArticle(Integer id);
 }

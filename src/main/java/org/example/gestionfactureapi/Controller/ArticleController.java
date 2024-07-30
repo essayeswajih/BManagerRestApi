@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.HistoriqueArticle;
 import org.example.gestionfactureapi.Entity.Stock;
+import org.example.gestionfactureapi.Repository.ItemRepository;
 import org.example.gestionfactureapi.Service.ArticleService;
 import org.example.gestionfactureapi.Service.HistoriqueArticleService;
+import org.example.gestionfactureapi.Service.ItemService;
 import org.example.gestionfactureapi.Service.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class ArticleController {
     private final ArticleService articleService;
     private final StockService stockService;
     private final HistoriqueArticleService historiqueArticleService;
+    private final ItemRepository itemRepository;
     @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(articleService.findAll());
@@ -65,6 +68,7 @@ public class ArticleController {
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         try {
             // Check if the article exists and delete its history
+            itemRepository.deleteAllByArticle_IdArticle(id);
             List<HistoriqueArticle> historiques = historiqueArticleService.findByArticle(id);
             if (historiques != null && !historiques.isEmpty()) {
                 historiqueArticleService.deletAll(historiques);
@@ -76,6 +80,7 @@ public class ArticleController {
                 stockService.delete(stock.getId());
             }
 
+            // Find and delete the article
             Article article = articleService.findById(id);
             if (article != null) {
                 articleService.delete(article.getIdArticle());
