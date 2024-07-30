@@ -78,6 +78,7 @@ public class BonLivVController {
                     Date sqlDate = Date.valueOf(localDate);
 
                     HistoriqueArticle ha = new HistoriqueArticle();
+                    ha.setId(null);
                     ha.setDate(sqlDate);
                     ha.setInput(0);
                     ha.setOutput(item.getQte());
