@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.HistoriqueArticle;
+import org.example.gestionfactureapi.Entity.Stock;
 import org.example.gestionfactureapi.Service.ArticleService;
 import org.example.gestionfactureapi.Service.HistoriqueArticleService;
 import org.example.gestionfactureapi.Service.StockService;
@@ -61,16 +62,33 @@ public class ArticleController {
         }
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         try {
-            historiqueArticleService.deletAll(historiqueArticleService.findByArticle(id));
-            stockService.delete(stockService.findStockByIdArticle(id).getId());
-            articleService.delete(articleService.findById(id).getIdArticle());
-            return ResponseEntity.ok().body("Article with id :"+id+" Deleted");
-        }catch (EntityNotFoundException e){
+            // Check if the article exists and delete its history
+            List<HistoriqueArticle> historiques = historiqueArticleService.findByArticle(id);
+            if (historiques != null && !historiques.isEmpty()) {
+                historiqueArticleService.deletAll(historiques);
+            }
+
+            // Find the stock by article ID
+            Stock stock = stockService.findStockByIdArticle(id);
+            if (stock != null) {
+                stockService.delete(stock.getId());
+            }
+            
+            Article article = articleService.findById(id);
+            if (article != null) {
+                articleService.delete(article.getIdArticle());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Article not found for id: " + id);
+            }
+
+            return ResponseEntity.ok().body("Article with id :" + id + " Deleted");
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
 }
