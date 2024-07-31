@@ -1,6 +1,7 @@
 package org.example.gestionfactureapi.Entity;
 
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,7 @@ public class HistoriqueArticle {
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreation;
 }
