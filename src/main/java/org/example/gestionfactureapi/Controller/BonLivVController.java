@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -113,26 +114,27 @@ public class BonLivVController {
         }
     }
     @PostMapping("saveNew")
-    public ResponseEntity<?> saveNew(@RequestBody BonLivV b1){
-        System.out.println(b1);
+    public ResponseEntity<?> saveNew(@RequestBody BonLivV b1) {
         try {
             BonLivV x = bonLivVService.saveAndFlush(b1);
-            String artcleNamesToAlert = "";
-            List<String> ListOfArticlesToAlert= new ArrayList<>();
-            for (Item item:x.getItems()){
-                Stock stock = new Stock(null,item.getArticle(),item.getQte(),x.getSte());
+            StringBuilder artcleNamesToAlert = new StringBuilder();
+            List<String> listOfArticlesToAlert = new ArrayList<>();
+
+            for (Item item : x.getItems()) {
+                Stock stock = new Stock(null, item.getArticle(), item.getQte(), x.getSte());
                 try {
                     Stock s = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
-                    if(s!=null){
-                        s.setQte(s.getQte()-stock.getQte());
+                    if (s != null) {
+                        s.setQte(s.getQte() - stock.getQte());
                         stockService.save(s);
-                        if(s.getQte()<10){
-                            artcleNamesToAlert+=s.getArticle().getDesignation()+"\n";
-                            ListOfArticlesToAlert.add(s.getArticle().getDesignation());
+                        if (s.getQte() < 10) {
+                            artcleNamesToAlert.append(s.getArticle().getDesignation()).append("\n");
+                            listOfArticlesToAlert.add(s.getArticle().getDesignation());
                         }
-                    }else {
+                    } else {
                         s = stockService.save(stock);
                     }
+
                     LocalDate localDate = LocalDate.now();
                     Date sqlDate = Date.valueOf(localDate);
 
@@ -142,35 +144,37 @@ public class BonLivVController {
                     ha.setInput(0);
                     ha.setOutput(item.getQte());
                     ha.setArticle(item.getArticle());
-                    ha.setDocName("bonLivVente"+x.getId());
+                    ha.setDocName("bonLivVente" + x.getId());
                     ha.setDocId(x.getId());
                     ha.setPrice(item.getNewVenteHT());
                     ha.setStock(s);
                     ha.setQteReel(s.getQte());
                     historiqueArticleService.save(ha);
-                }catch (Exception e){
+
+                } catch (Exception e) {
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }
             }
 
-            if(artcleNamesToAlert!=""){
-                System.out.println(x.getSte().getEmail());
-                System.out.println(artcleNamesToAlert);
-                emailService.sendSimpleMessage(
-                        x.getSte().getEmail(),
-                        "Stock Alert !!",
-                        artcleNamesToAlert+"Stock will end soon !!!");
+            if (!artcleNamesToAlert.isEmpty()) {
+                String email = x.getSte().getEmail();
+                String alertMessage = artcleNamesToAlert.toString() + "Stock will end soon !!!";
+                emailService.sendSimpleMessage(email, "Stock Alert !!", alertMessage);
             }
-            HashMap<String, List<?>> respone = new HashMap<>();
+
+            Map<String, Object> response = new HashMap<>();
             List<Object> res = new ArrayList<>();
             res.add(x);
-            res.add(ListOfArticlesToAlert);
-            respone.put("Response",res);
-            return ResponseEntity.ok(respone);
-        }catch (Exception e){
+            res.add(listOfArticlesToAlert);
+            response.put("Response", res);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
     @PostMapping(value = "toPdf", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> toPdF(@RequestBody BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(bonLivV);
