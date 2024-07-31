@@ -153,12 +153,15 @@ public class BonLivVController {
                 }
             }
 
-            if (!artcleNamesToAlert.isEmpty()) {
-                emailService.sendSimpleMessage(
-                        x.getSte().getEmail(),
-                        "Stock Alert !!",
-                        artcleNamesToAlert + "Stock will end soon !!!"
-                );
+            if (artcleNamesToAlert != null && !artcleNamesToAlert.isEmpty()) {
+                System.out.println(x.getSte().getEmail());
+                System.out.println(artcleNamesToAlert);
+                if(x.getSte().getEmail()!=null){
+                    emailService.sendSimpleMessage(
+                            x.getSte().getEmail(),
+                            "Stock Alert !!",
+                            artcleNamesToAlert + "Stock will end soon !!!");
+                }
             }
             HashMap<String, List<?>> respone = new HashMap<>();
             List<Object> res = new ArrayList<>();
