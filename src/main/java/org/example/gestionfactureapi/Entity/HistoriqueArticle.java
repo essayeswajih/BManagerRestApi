@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -30,6 +31,13 @@ public class HistoriqueArticle {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Column(name = "date_creation", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "date_creation")
     private Date dateCreation;
+
+    @PrePersist
+    public void prePersist() {
+        if (dateCreation == null) {
+            dateCreation = new Date(Instant.now().toEpochMilli());
+        }
+    }
 }
