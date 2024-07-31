@@ -30,6 +30,6 @@ public class HistoriqueArticle {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_creation", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateCreation;
 }
