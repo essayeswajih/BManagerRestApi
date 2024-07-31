@@ -117,7 +117,7 @@ public class BonLivAController {
                     ha.setInput(item.getQte());
                     ha.setOutput(0);
                     ha.setArticle(item.getArticle());
-                    ha.setDocName("bonLivAchat"+x.getBonCmdA().getId());
+                    ha.setDocName("bonLivAchat"+x.getId());
                     ha.setDocId(x.getId());
                     ha.setPrice(item.getArticle().getAchatHT());
                     ha.setStock(s);
