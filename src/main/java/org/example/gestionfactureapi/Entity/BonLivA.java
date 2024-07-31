@@ -20,7 +20,7 @@ public class BonLivA {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "bon_cmd_id",nullable = false)
+    @JoinColumn(name = "bon_cmd_id")
     private BonCmdA bonCmdA;
 
     @ManyToOne

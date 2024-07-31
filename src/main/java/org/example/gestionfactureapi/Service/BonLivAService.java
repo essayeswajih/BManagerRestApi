@@ -28,7 +28,9 @@ public class BonLivAService {
         bonLivA.setSte(b1.getBon().getSte());
         bonLivA.setDateCreation(b1.getDate());
         bonLivA.setItems(b1.getItems());
-
+        return bonLivARepository.saveAndFlush(bonLivA);
+    }
+    public BonLivA save(BonLivA bonLivA){
         return bonLivARepository.saveAndFlush(bonLivA);
     }
     public void delete(Integer id){
