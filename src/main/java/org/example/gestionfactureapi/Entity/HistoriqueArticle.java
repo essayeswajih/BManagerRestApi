@@ -1,14 +1,12 @@
 package org.example.gestionfactureapi.Entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.time.Instant;
-
+import java.sql.Timestamp;
 @Data
 @Entity
 @NoArgsConstructor
@@ -32,12 +30,12 @@ public class HistoriqueArticle {
     private Article article;
 
     @Column(name = "date_creation")
-    private Date dateCreation;
+    private Timestamp dateCreation;
 
     @PrePersist
     public void prePersist() {
         if (dateCreation == null) {
-            dateCreation = new Date(Instant.now().toEpochMilli());
+            dateCreation = new Timestamp(System.currentTimeMillis());
         }
     }
 }
