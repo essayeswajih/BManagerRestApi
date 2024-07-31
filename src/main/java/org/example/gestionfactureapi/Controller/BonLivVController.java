@@ -116,7 +116,7 @@ public class BonLivVController {
     public ResponseEntity<?> saveNew(@RequestBody BonLivV b1){
         System.out.println(b1);
         try {
-            BonLivV x = bonLivVService.save(b1);
+            BonLivV x = bonLivVService.saveAndFlush(b1);
             String artcleNamesToAlert = "";
             List<String> ListOfArticlesToAlert= new ArrayList<>();
             for (Item item:x.getItems()){
