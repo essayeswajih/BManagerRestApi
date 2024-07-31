@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface HistoriqueArticleRepository extends JpaRepository<HistoriqueArticle,Integer> {
-    List<HistoriqueArticle> findAllByArticle_IdArticle(Integer id);
+    List<HistoriqueArticle> findAllByArticle_IdArticleOrderByDateCreation(Integer id);
 
-    void deleteAllByArticle_IdArticleOrderByDateCreation(Integer id);
+    void deleteAllByArticle_IdArticle(Integer id);
 }
