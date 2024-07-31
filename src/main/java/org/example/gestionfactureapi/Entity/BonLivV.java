@@ -35,6 +35,10 @@ public class BonLivV {
     private Date dateCreation;
 
     @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "facture__id")
     private FactureV facture;
