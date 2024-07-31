@@ -24,4 +24,6 @@ public class Item {
     private Double newVenteHT;
 
     private Double totalNet;
+
+    private Double totalTTC;
 }
