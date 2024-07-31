@@ -153,13 +153,12 @@ public class BonLivVController {
                 }
             }
 
-            if(artcleNamesToAlert!=""){
-                System.out.println(x.getSte().getEmail());
-                System.out.println(artcleNamesToAlert);
+            if (!artcleNamesToAlert.isEmpty()) {
                 emailService.sendSimpleMessage(
                         x.getSte().getEmail(),
                         "Stock Alert !!",
-                        artcleNamesToAlert+"Stock will end soon !!!");
+                        artcleNamesToAlert + "Stock will end soon !!!"
+                );
             }
             HashMap<String, List<?>> respone = new HashMap<>();
             List<Object> res = new ArrayList<>();
