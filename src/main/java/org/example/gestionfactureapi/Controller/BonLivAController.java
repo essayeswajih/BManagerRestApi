@@ -129,6 +129,7 @@ public class BonLivAController {
                 }
 
             }
+            fileService.createAndSavePDF(x);
             return ResponseEntity.ok(x);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
