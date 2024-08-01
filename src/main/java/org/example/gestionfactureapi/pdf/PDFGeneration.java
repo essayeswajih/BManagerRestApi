@@ -50,12 +50,21 @@ public class PDFGeneration {
         this.numero = bon.getId();
         this.date = bon.getDateCreation();
         this.name = "Bon de commande";
+        this.x=1;
     }
     public PDFGeneration(BonLivA bonLivA) {
+        if(bonLivA.getBonCmdA()==null){
+            BonCmdA bca = new BonCmdA();
+            bca.setItems(bonLivA.getItems());
+            bca.setId(bonLivA.getId());
+            bca.setSte(bonLivA.getSte());
+            bca.setFournisseur(bonLivA.getFournisseur());
+        }
         this.bon = bonLivA.getBonCmdA();
         this.numero = bon.getId();
         this.date = bonLivA.getDateCreation();
         this.name = "Bon de livraison";
+        this.x=2;
     }
     public PDFGeneration(FactureA factureA) {
         this.bonCmds = factureA.getBonLivAS();
@@ -97,13 +106,13 @@ public class PDFGeneration {
             this.baseTVA += i.getTotalNet();
             tva += i.getArticle().getTva();
         }
-        if(this.bon.getItems().size()<10){
+        /*if(this.bon.getItems().size()<10){
             int rows = 10-this.bon.getItems().size();
             for(int xxx = 0; xxx< rows;xxx++){
-                //addRow1(table);                                 sdqfdqdfqsd
+                addRow1(table);                                 sdqfdqdfqsd
             }
 
-        }
+        }*/
         this.taux = tva / index;
         doc.add(table);
 
