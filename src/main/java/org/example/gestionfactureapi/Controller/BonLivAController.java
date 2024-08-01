@@ -131,7 +131,6 @@ public class BonLivAController {
                 }
 
             }
-            fileService.createAndSavePDF(x);
             return ResponseEntity.ok(x);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -139,8 +138,6 @@ public class BonLivAController {
     }
     @PostMapping(value = "toPdf")
     public ResponseEntity<?> toPdF(@RequestBody BonLivA bonLivA) throws DocumentException, IOException, URISyntaxException {
-        System.out.println("bon Liv A");
-        System.out.println(bonLivA);
         fileService.createAndSavePDF(bonLivA);
         return ResponseEntity.ok("created");
     }
