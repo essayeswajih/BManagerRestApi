@@ -37,7 +37,9 @@ public class FactureA {
     private Double totalTTC = (double) 0;
 
     @OneToMany(mappedBy = "facture")
-
     private List<BonLivA> bonLivAS;
-    // Constructors and ge
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "facture_a_id")
+    private List<Item> items;
 }

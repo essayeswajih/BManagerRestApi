@@ -37,6 +37,9 @@ public class FactureV {
 
 
     @OneToMany(mappedBy = "facture")
-
     private List<BonLivV> bonLivVS;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "facture_v_id")
+    private List<Item> items;
 }
