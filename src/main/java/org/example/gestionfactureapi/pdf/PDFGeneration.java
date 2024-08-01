@@ -243,8 +243,8 @@ public class PDFGeneration {
     private static void addRow(PdfPTable table, Item i) {
         Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
         List<String> ligneDetails = new ArrayList<>();
-        ligneDetails.add((String) i.getArticle().getRefArticle());
-        ligneDetails.add((String) i.getArticle().getDesignation());
+        ligneDetails.add(i.getArticle().getRefArticle());
+        ligneDetails.add(i.getArticle().getDesignation());
         ligneDetails.add(i.getQte().toString());
         ligneDetails.add(i.getArticle().getUnite());
         ligneDetails.add(String.format("%.3f", i.getArticle().getAchatHT()));

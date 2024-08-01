@@ -173,7 +173,7 @@ public class BonLivVController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
-    @PostMapping(value = "toPdf", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "toPdf")
     public ResponseEntity<?> toPdF(@RequestBody BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(bonLivV);
         return ResponseEntity.ok("created");
