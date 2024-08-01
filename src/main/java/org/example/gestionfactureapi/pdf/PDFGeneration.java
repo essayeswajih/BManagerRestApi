@@ -63,7 +63,7 @@ public class PDFGeneration {
         }else {
             this.bon = bonLivA.getBonCmdA();
         }
-        this.numero = bon.getId();
+        this.numero = bonLivA.getId();
         this.date = bonLivA.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
