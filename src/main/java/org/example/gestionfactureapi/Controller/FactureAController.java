@@ -3,13 +3,8 @@ package org.example.gestionfactureapi.Controller;
 import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.gestionfactureapi.Entity.BonLivA;
-import org.example.gestionfactureapi.Entity.FactureA;
-import org.example.gestionfactureapi.Entity.Item;
-import org.example.gestionfactureapi.Service.BonLivAService;
-import org.example.gestionfactureapi.Service.FactureAService;
-import org.example.gestionfactureapi.Service.FileService;
-import org.example.gestionfactureapi.Service.SteService;
+import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +23,8 @@ public class FactureAController {
     private final SteService steService;
     private final FileService fileService;
     private final BonLivAService bonLivAService;
-
+    private final HistoriqueArticleService historiqueArticleService;
+    private final StockService stockService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         try {
@@ -94,6 +92,30 @@ public class FactureAController {
         try{
             FactureA sv = factureAService.save(f);
             for(Item item :sv.getItems()){
+                Stock stock = new Stock(null,item.getArticle(),item.getQte(),sv.getSte());
+                Stock s = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
+                if(s!=null){
+                    s.setQte(s.getQte()+stock.getQte());
+                    stockService.save(s);
+                }else {
+                    s = stockService.save(stock);
+                }
+
+                LocalDate localDate = LocalDate.now();
+                Date sqlDate = Date.valueOf(localDate);
+
+                HistoriqueArticle ha = new HistoriqueArticle();
+                ha.setId(null);
+                ha.setDate(sqlDate);
+                ha.setInput(item.getQte());
+                ha.setOutput(0);
+                ha.setArticle(item.getArticle());
+                ha.setDocName("FactureAchat"+sv.getId());
+                ha.setDocId(sv.getId());
+                ha.setPrice(item.getArticle().getAchatHT());
+                ha.setStock(s);
+                ha.setQteReel(s.getQte());
+                historiqueArticleService.save(ha);
                 int tva = item.getArticle().getTva();
                 if(tva==19){
                     baseTVA19+=item.getTotalNet()*.19;
