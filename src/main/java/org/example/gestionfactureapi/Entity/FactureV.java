@@ -44,6 +44,6 @@ public class FactureV {
     private List<Item> items;
 
     @ManyToOne
-    @JoinColumn(name = "fournisseur_id")
-    private Fournisseur fournisseur;
+    @JoinColumn(name = "client_id")
+    private Client client;
 }
