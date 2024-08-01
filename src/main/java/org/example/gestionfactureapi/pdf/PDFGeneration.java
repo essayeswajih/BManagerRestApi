@@ -248,10 +248,10 @@ public class PDFGeneration {
         ligneDetails.add(i.getQte().toString());
         ligneDetails.add(i.getArticle().getUnite());
         ligneDetails.add(String.format("%.3f", i.getArticle().getAchatHT()));
-        ligneDetails.add(i.getRemise().toString());
+        ligneDetails.add(i.getRemise() == null ? "0" :String.valueOf(i.getRemise()));
         double achatHT = i.getArticle().getAchatHT();
         int qte = i.getQte();
-        double remise = i.getRemise();  // Assuming getRemise() returns the discount percentage
+        double remise = i.getRemise() == null ? 0 : i.getRemise();  // Assuming getRemise() returns the discount percentage
         double totalHT = achatHT * qte;
         double discountedTotalHT = totalHT - (totalHT * remise / 100);
         ligneDetails.add(String.format("%.3f", discountedTotalHT));
