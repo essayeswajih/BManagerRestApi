@@ -30,14 +30,13 @@ public class FileService {
     public void createAndSavePDF(BonLivA bonLivA) throws DocumentException, IOException, URISyntaxException {
         PDFGeneration pdfGeneration = new PDFGeneration(bonLivA);
         byte[] pdfData = pdfGeneration.run();
-        int id = bonLivA.getBonCmdA().getId() != null ? bonLivA.getBonCmdA().getId() : bonLivA.getId();
-        File file = new File(pdfData, "bonLivAchat"+id+".pdf", "application/pdf");
+        File file = new File(pdfData, "bonLivAchat"+bonLivA.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public void createAndSavePDF(BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
         BonLivVPDFGenerator pdfGeneration = new BonLivVPDFGenerator(bonLivV);
         byte[] pdfData = pdfGeneration.run();
-        File file = new File(pdfData, "bonLivVente"+bonLivV.getDevis().getId()+".pdf", "application/pdf");
+        File file = new File(pdfData, "bonLivVente"+bonLivV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public void createAndSavePDF(Devis devis) throws DocumentException, IOException, URISyntaxException {
