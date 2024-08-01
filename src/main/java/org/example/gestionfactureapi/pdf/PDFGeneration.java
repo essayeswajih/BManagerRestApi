@@ -69,12 +69,21 @@ public class PDFGeneration {
         this.x=2;
     }
     public PDFGeneration(FactureA factureA) {
-        this.bonCmds = factureA.getBonLivAS();
-        List<Item> items =new ArrayList<>();
-        for(BonLivA bonx : factureA.getBonLivAS()){
-            items.addAll(bonx.getBonCmdA().getItems());
+        if(factureA.getBonLivAS() == null){
+            this.bon = new BonCmdA();
+            this.bon.setId(factureA.getId());
+            this.bon.setItems(factureA.getItems());
+            this.bon.setSte(factureA.getSte());
+            this.bon.setFournisseur(factureA.getFournisseur());
+        }else{
+            this.bonCmds = factureA.getBonLivAS();
+            List<Item> items =new ArrayList<>();
+            for(BonLivA bonx : factureA.getBonLivAS()){
+                items.addAll(bonx.getBonCmdA().getItems());
+            }
+            this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
         }
-        this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getBonCmdA().getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
+
         this.date = factureA.getDateCreation();
         this.name = "Facture";
         this.numero = factureA.getId();
