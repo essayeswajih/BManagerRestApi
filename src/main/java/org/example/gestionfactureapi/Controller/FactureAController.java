@@ -90,6 +90,7 @@ public class FactureAController {
         double totalHT=0;
         double totalTTC=0;
         try{
+            f.setSte(steService.findById(f.getSte().getIdSte()));
             FactureA sv = factureAService.save(f);
             for(Item item :sv.getItems()){
                 Stock stock = new Stock(null,item.getArticle(),item.getQte(),sv.getSte());
