@@ -98,6 +98,53 @@ public class FactureVController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+    @PostMapping("saveNew")
+    public ResponseEntity<?> saveNew(@RequestBody FactureV f){
+        double baseTVA19=0;
+        double baseTVA7=0;
+        double baseTVA13=0;
+        double montTVA19=0;
+        double montTVA7=0;
+        double montTVA13=0;
+        double totalTH=0;
+        double totalTTC=0;
+        try{
+            FactureV sv = factureVService.save(f);
+            for(BonLivV bon :sv.getBonLivVS()){
+                bon.setFacture(sv);
+                bonLivVService.saveAndFlush(bon);
+                for(Item item :bon.getDevis().getItems()){
+                    int tva = item.getArticle().getTva();
+                    if(tva==19){
+                        montTVA19+=item.getTotalNet()*.19;
+                        baseTVA19+=item.getTotalNet();
+                    } else if (tva==13) {
+                        montTVA13+=item.getTotalNet()*.13;
+                        baseTVA13+=item.getTotalNet();
+                    }else if (tva==7) {
+                        montTVA7+=item.getTotalNet()*.7;
+                        baseTVA7+=item.getTotalNet();
+                    }
+                    totalTH+=item.getTotalNet();
+                }
+            }
+            totalTTC=totalTH+ baseTVA19 + baseTVA7 + baseTVA13+sv.getTimbre();
+            sv.setBaseTVA7(baseTVA7);
+            sv.setBaseTVA13(baseTVA13);
+            sv.setBaseTVA19(baseTVA19);
+            sv.setMontTVA7(montTVA7);
+            sv.setMontTVA13(montTVA13);
+            sv.setMontTVA19(montTVA19);
+            sv.setTotal(totalTH);
+            sv.setTotalTTC(totalTTC);
+            FactureV res = factureVService.save(sv);
+            //fileService.createAndSavePDF(res);
+            return ResponseEntity.ok(res);
+
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
     @PostMapping(value = "toPdf", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> toPdF(@RequestBody FactureV factureV) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(factureV);

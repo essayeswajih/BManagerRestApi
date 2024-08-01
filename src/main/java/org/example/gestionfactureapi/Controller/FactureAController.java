@@ -84,6 +84,40 @@ public class FactureAController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+    @PostMapping("saveNew")
+    public ResponseEntity<?> saveNew(@RequestBody FactureA f){
+        double baseTVA19=0;
+        double baseTVA7=0;
+        double baseTVA13=0;
+        double totalHT=0;
+        double totalTTC=0;
+        try{
+            FactureA sv = factureAService.save(f);
+            for(Item item :sv.getItems()){
+                int tva = item.getArticle().getTva();
+                if(tva==19){
+                    baseTVA19+=item.getTotalNet()*.19;
+                } else if (tva==7) {
+                    baseTVA7+=item.getTotalNet()*.7;
+                } else if (tva==13) {
+                    baseTVA13+=item.getTotalNet()*.13;
+                }
+                totalHT+=item.getTotalNet();
+            }
+            totalTTC=totalHT+ baseTVA19 + baseTVA7 + baseTVA13+sv.getTimbre();
+            sv.setBaseTVA7(baseTVA7);
+            sv.setBaseTVA13(baseTVA13);
+            sv.setBaseTVA19(baseTVA19);
+            sv.setTotal(totalHT);
+            sv.setTotalTTC(totalTTC);
+            FactureA res = factureAService.save(sv);
+            //fileService.createAndSavePDF(res);
+            return ResponseEntity.ok(res);
+
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
         try {
