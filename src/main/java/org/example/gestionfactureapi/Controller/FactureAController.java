@@ -56,17 +56,33 @@ public class FactureAController {
             for(BonLivA bon :sv.getBonLivAS()){
                 bon.setFacture(sv);
                 bonLivAService.saveAndFlush(bon);
-                for(Item item :bon.getBonCmdA().getItems()){
-                    int tva = item.getArticle().getTva();
-                    if(tva==19){
-                        baseTVA19+=item.getTotalNet()*.19;
-                    } else if (tva==7) {
-                        baseTVA7+=item.getTotalNet()*.7;
-                    } else if (tva==13) {
-                        baseTVA13+=item.getTotalNet()*.13;
+                if(bon.getBonCmdA() == null){
+                    for(Item item :bon.getItems()){
+                        int tva = item.getArticle().getTva();
+                        if(tva==19){
+                            baseTVA19+=item.getTotalNet()*.19;
+                        } else if (tva==7) {
+                            baseTVA7+=item.getTotalNet()*.7;
+                        } else if (tva==13) {
+                            baseTVA13+=item.getTotalNet()*.13;
+                        }
+                        totalHT+=item.getTotalNet();
                     }
-                    totalHT+=item.getTotalNet();
                 }
+                else{
+                    for(Item item :bon.getBonCmdA().getItems()){
+                        int tva = item.getArticle().getTva();
+                        if(tva==19){
+                            baseTVA19+=item.getTotalNet()*.19;
+                        } else if (tva==7) {
+                            baseTVA7+=item.getTotalNet()*.7;
+                        } else if (tva==13) {
+                            baseTVA13+=item.getTotalNet()*.13;
+                        }
+                        totalHT+=item.getTotalNet();
+                    }
+                }
+
             }
             totalTTC=totalHT+ baseTVA19 + baseTVA7 + baseTVA13+sv.getTimbre();
             sv.setBaseTVA7(baseTVA7);

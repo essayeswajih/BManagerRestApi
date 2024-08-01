@@ -79,7 +79,7 @@ public class PDFGeneration {
             this.bonCmds = factureA.getBonLivAS();
             List<Item> items =new ArrayList<>();
             for(BonLivA bonx : factureA.getBonLivAS()){
-                if(bonx.getBonCmdA().getItems() == null){
+                if(bonx.getBonCmdA() == null){
                     items.addAll(bonx.getItems());
                 }else {
                     items.addAll(bonx.getBonCmdA().getItems());
