@@ -59,8 +59,10 @@ public class PDFGeneration {
             bca.setId(bonLivA.getId());
             bca.setSte(bonLivA.getSte());
             bca.setFournisseur(bonLivA.getFournisseur());
+            this.bon = bca;
+        }else {
+            this.bon = bonLivA.getBonCmdA();
         }
-        this.bon = bonLivA.getBonCmdA();
         this.numero = bon.getId();
         this.date = bonLivA.getDateCreation();
         this.name = "Bon de livraison";
