@@ -3,9 +3,7 @@ package org.example.gestionfactureapi.Controller;
 import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.gestionfactureapi.Entity.BonLivV;
-import org.example.gestionfactureapi.Entity.FactureV;
-import org.example.gestionfactureapi.Entity.Item;
+import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,9 @@ public class FactureVController {
     private final SteService steService;
     private final FileService fileService;
     private final BonLivVService bonLivVService;
+    private final HistoriqueArticleService historiqueArticleService;
+    private final StockService stockService;
+    private final EmailService emailService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         try {
@@ -108,9 +114,47 @@ public class FactureVController {
         double montTVA13=0;
         double totalTH=0;
         double totalTTC=0;
+        String artcleNamesToAlert = "";
+        List<String> ListOfArticlesToAlert= new ArrayList<>();
         try{
             FactureV sv = factureVService.save(f);
             for(Item item :sv.getItems()){
+                Stock stock = new Stock(null,item.getArticle(),item.getQte(),sv.getSte());
+                Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
+                if(stock22!=null){
+                    stock22.setQte(stock22.getQte()-stock.getQte());
+                    stockService.save(stock22);
+                    if(stock22.getQte()<10){
+                        artcleNamesToAlert+=stock22.getArticle().getDesignation()+"\n";
+                        ListOfArticlesToAlert.add(stock22.getArticle().getDesignation());
+                    }
+                }else {
+                    stock22 = stockService.save(stock);
+                }
+                LocalDate localDate = LocalDate.now();
+                Date sqlDate = Date.valueOf(localDate);
+                HistoriqueArticle ha = new HistoriqueArticle();
+                ha.setId(null);
+                ha.setDate(sqlDate);
+                ha.setInput(0);
+                ha.setOutput(item.getQte());
+                ha.setArticle(item.getArticle());
+                ha.setDocName("FactureVente"+sv.getId());
+                ha.setDocId(sv.getId());
+                ha.setPrice(item.getNewVenteHT());
+                ha.setStock(stock22);
+                ha.setQteReel(stock22.getQte());
+                historiqueArticleService.save(ha);
+                if (artcleNamesToAlert != null && !artcleNamesToAlert.isEmpty()) {
+                    System.out.println(sv.getSte().getEmail());
+                    System.out.println(artcleNamesToAlert);
+                    if(sv.getSte().getEmail()!=null){
+                        emailService.sendSimpleMessage(
+                                sv.getSte().getEmail(),
+                                "Stock Alert !!",
+                                artcleNamesToAlert + "Stock will end soon !!!");
+                    }
+                }
                 int tva = item.getArticle().getTva();
                 if(tva==19){
                     montTVA19+=item.getTotalNet()*.19;
@@ -133,8 +177,12 @@ public class FactureVController {
             sv.setMontTVA19(montTVA19);
             sv.setTotal(totalTH);
             sv.setTotalTTC(totalTTC);
-            FactureV res = factureVService.save(sv);
+            FactureV sv1 = factureVService.save(sv);
             //fileService.createAndSavePDF(res);
+            HashMap<String, List<?>> respone = new HashMap<>();
+            List<Object> res = new ArrayList<>();
+            res.add(sv1);
+            res.add(ListOfArticlesToAlert);
             return ResponseEntity.ok(res);
 
         }catch (Exception e){
