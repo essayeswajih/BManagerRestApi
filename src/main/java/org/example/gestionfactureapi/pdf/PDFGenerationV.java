@@ -133,7 +133,7 @@ public class PDFGenerationV {
                     this.baseTVA13+=i.getTotalNet();
                     this.montTVA13+=i.getTotalNet()*.13;
                 }
-            this.remise += i.getTotalNet() *i.getRemise() / 100;
+            this.remise += i.getNewVenteHT() !=null ?i.getNewVenteHT() :i.getArticle().getVenteHT() *i.getRemise() / 100;
             this.totalHT+=i.getTotalNet();
 
         }
