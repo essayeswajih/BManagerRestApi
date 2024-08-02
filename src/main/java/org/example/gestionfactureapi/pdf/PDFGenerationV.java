@@ -133,7 +133,10 @@ public class PDFGenerationV {
                     this.baseTVA13+=i.getTotalNet();
                     this.montTVA13+=i.getTotalNet()*.13;
                 }
-            this.remise += i.getNewVenteHT() !=null ?i.getNewVenteHT() :i.getArticle().getVenteHT() * (i.getRemise() / 100);
+            int qte = i.getQte();
+            double remise = i.getRemise() == null ? 0 : i.getRemise();
+            double totalHT = i.getNewVenteHT() * qte;
+            this.remise += (totalHT * remise / 100);
             this.totalHT+=i.getTotalNet();
 
         }
@@ -272,10 +275,10 @@ public class PDFGenerationV {
         ligneDetails.add(i.getArticle().getUnite());
         ligneDetails.add(String.format("%.3f", i.getNewVenteHT()));
         ligneDetails.add(i.getRemise() == null ? "0" :String.valueOf(i.getRemise()));
-        double achatHT = i.getNewVenteHT();
+        double venteHT = i.getNewVenteHT();
         int qte = i.getQte();
         double remise = i.getRemise() == null ? 0 : i.getRemise();  // Assuming getRemise() returns the discount percentage
-        double totalHT = achatHT * qte;
+        double totalHT = venteHT * qte;
         double discountedTotalHT = totalHT - (totalHT * remise / 100);
         ligneDetails.add(String.format("%.3f", discountedTotalHT));
         ligneDetails.add(i.getArticle().getTva().toString());
