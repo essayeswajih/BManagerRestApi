@@ -26,9 +26,10 @@ public class PDFGenerationV {
     private double montTVA7=0;
     private double baseTVA13=0;
     private double montTVA13=0;
+    private double remise = 0;
     private double totalHT=0;
     private double totalTTC=0;
-
+    private double timbre = 0;
     private String name;
 
     private Date date;
@@ -70,6 +71,7 @@ public class PDFGenerationV {
         this.date = bonLivV.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
+        this.timbre=1;
     }
     public PDFGenerationV(FactureV factureV) {
         if(factureV.getBonLivVS() == null){
@@ -96,6 +98,7 @@ public class PDFGenerationV {
         this.name = "Facture";
         this.numero = factureV.getId();
         this.x=3;
+        this.timbre=1;
     }
 
 
@@ -131,10 +134,11 @@ public class PDFGenerationV {
                     this.baseTVA13+=i.getTotalNet();
                     this.montTVA13+=i.getTotalNet()*.13;
                 }
+                this.remise = i.getRemise();
             this.totalHT+=i.getTotalNet();
 
         }
-        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + 1;
+        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
 
         doc.add(table);
 
@@ -314,7 +318,7 @@ public class PDFGenerationV {
         addCell(table, String.format("%.3f",this.montTVA19), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"REMISE",headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        addCell(table, String.format("%.3f",this.remise), normalFont);
 
         // Row 1
         addCell(table, "13%", normalFont);
@@ -338,7 +342,7 @@ public class PDFGenerationV {
         addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
-        addCell(table, "1.000", normalFont);
+        addCell(table, String.format("%.3f",this.timbre), normalFont);
 
         addCellVide(table);
         addCellVide(table);
@@ -346,7 +350,6 @@ public class PDFGenerationV {
         addCellVide(table);
         addCellOfHeading(table,"TTC",headerNormalFont);
         addCell(table, String.format("%.3f",this.totalTTC), normalFont);
-
 
     }
 
