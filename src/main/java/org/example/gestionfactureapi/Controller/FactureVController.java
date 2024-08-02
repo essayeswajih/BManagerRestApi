@@ -73,20 +73,39 @@ public class FactureVController {
             for(BonLivV bon :sv.getBonLivVS()){
                 bon.setFacture(sv);
                 bonLivVService.saveAndFlush(bon);
-                for(Item item :bon.getDevis().getItems()){
-                    int tva = item.getArticle().getTva();
-                    if(tva==19){
-                        montTVA19+=item.getTotalNet()*.19;
-                        baseTVA19+=item.getTotalNet();
-                    } else if (tva==13) {
-                        montTVA13+=item.getTotalNet()*.13;
-                        baseTVA13+=item.getTotalNet();
-                    }else if (tva==7) {
-                        montTVA7+=item.getTotalNet()*.7;
-                        baseTVA7+=item.getTotalNet();
+                if (bon.getDevis() == null){
+                    for(Item item :bon.getItems()){
+                        int tva = item.getArticle().getTva();
+                        if(tva==19){
+                            montTVA19+=item.getTotalNet()*.19;
+                            baseTVA19+=item.getTotalNet();
+                        } else if (tva==13) {
+                            montTVA13+=item.getTotalNet()*.13;
+                            baseTVA13+=item.getTotalNet();
+                        }else if (tva==7) {
+                            montTVA7+=item.getTotalNet()*.7;
+                            baseTVA7+=item.getTotalNet();
+                        }
+                        totalTH+=item.getTotalNet();
                     }
-                    totalTH+=item.getTotalNet();
                 }
+                else {
+                    for(Item item :bon.getDevis().getItems()){
+                        int tva = item.getArticle().getTva();
+                        if(tva==19){
+                            montTVA19+=item.getTotalNet()*.19;
+                            baseTVA19+=item.getTotalNet();
+                        } else if (tva==13) {
+                            montTVA13+=item.getTotalNet()*.13;
+                            baseTVA13+=item.getTotalNet();
+                        }else if (tva==7) {
+                            montTVA7+=item.getTotalNet()*.7;
+                            baseTVA7+=item.getTotalNet();
+                        }
+                        totalTH+=item.getTotalNet();
+                    }
+                }
+
             }
             totalTTC=totalTH+ baseTVA19 + baseTVA7 + baseTVA13+sv.getTimbre();
             sv.setBaseTVA7(baseTVA7);
