@@ -31,12 +31,25 @@ public class FactureVPDFGenerator {
 
 
     public FactureVPDFGenerator(FactureV factureV) {
-        this.bonCmds = factureV.getBonLivVS();
-        List<Item> items =new ArrayList<>();
-        for(BonLivV bonx : factureV.getBonLivVS()){
-            items.addAll(bonx.getDevis().getItems());
+        if(factureV.getBonLivVS() == null){
+            this.bon = new Devis();
+            this.bon.setId(factureV.getId());
+            this.bon.setItems(factureV.getItems());
+            this.bon.setSte(factureV.getSte());
+            this.bon.setClient(factureV.getClient());
+        }else{
+            this.bonCmds = factureV.getBonLivVS();
+            List<Item> items =new ArrayList<>();
+            for(BonLivV bonx : factureV.getBonLivVS()){
+                if(bonx.getDevis() == null){
+                    items.addAll(bonx.getItems());
+                }else {
+                    items.addAll(bonx.getDevis().getItems());
+                }
+
+            }
+            this.bon = new Devis(factureV.getId(),factureV.getBonLivVS().get(0).getClient(), items,factureV.getDateCreation(),factureV.getSte(),false);
         }
-        this.bon = new Devis(factureV.getId(),factureV.getBonLivVS().get(0).getDevis().getClient(), items,factureV.getDateCreation(),factureV.getBonLivVS().get(0).getSte(),false);
         this.date = factureV.getDateCreation();
         this.name = "Facture n°";
         this.numero = factureV.getId();

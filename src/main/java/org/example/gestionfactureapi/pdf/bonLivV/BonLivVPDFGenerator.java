@@ -208,7 +208,7 @@ public class BonLivVPDFGenerator {
         ligneDetails.add(i.getQte().toString());
         ligneDetails.add(i.getArticle().getUnite());
         ligneDetails.add(String.format("%.3f", i.getNewVenteHT()));
-        ligneDetails.add(i.getRemise().toString());
+        ligneDetails.add(String.valueOf(i.getRemise()));
         double venteHT = i.getNewVenteHT();
         int qte = i.getQte();
         double remise = i.getRemise();  // Assuming getRemise() returns the discount percentage
