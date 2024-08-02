@@ -4,9 +4,8 @@ import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
-import org.example.gestionfactureapi.Filter.PDFGenerationV;
+import org.example.gestionfactureapi.pdf.PDFGenerationV;
 import org.example.gestionfactureapi.Repository.FileRepository;
-import org.example.gestionfactureapi.pdf.FactureV.FactureVPDFGenerator;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
 import org.example.gestionfactureapi.pdf.bonLivV.BonLivVPDFGenerator;
 import org.example.gestionfactureapi.pdf.devis.DevisPdfGenerator;
@@ -35,7 +34,7 @@ public class FileService {
         fileRepository.save(file);
     }
     public void createAndSavePDF(BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
-        BonLivVPDFGenerator pdfGeneration = new BonLivVPDFGenerator(bonLivV);
+        PDFGenerationV pdfGeneration = new PDFGenerationV(bonLivV);
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "bonLivVente"+bonLivV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);

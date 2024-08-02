@@ -1,4 +1,4 @@
-package org.example.gestionfactureapi.Filter;
+package org.example.gestionfactureapi.pdf;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
@@ -184,7 +184,7 @@ public class PDFGenerationV {
         PdfPCell clientCell = new PdfPCell();
         clientCell.setBorder(Rectangle.NO_BORDER);
         PdfPTable clientTbale = new PdfPTable(3);
-        addCellOfHeading(clientTbale, "Fournisseur", normalFont, 1, 1);
+        addCellOfHeading(clientTbale, "Client", normalFont, 1, 1);
         addCell(clientTbale,  this.bon.getClient().getName(), normalFont, 2, 1);
         addCellOfHeading(clientTbale, "Adresse", normalFont, 1, 1);
         addCell(clientTbale, this.bon.getClient().getAdresse(), normalFont, 2, 1);
@@ -260,7 +260,7 @@ public class PDFGenerationV {
         ligneDetails.add(i.getArticle().getUnite());
         ligneDetails.add(String.format("%.3f", i.getNewVenteHT()));
         ligneDetails.add(i.getRemise() == null ? "0" :String.valueOf(i.getRemise()));
-        double achatHT = i.getArticle().getAchatHT();
+        double achatHT = i.getNewVenteHT();
         int qte = i.getQte();
         double remise = i.getRemise() == null ? 0 : i.getRemise();  // Assuming getRemise() returns the discount percentage
         double totalHT = achatHT * qte;
