@@ -40,7 +40,7 @@ public class FileService {
         fileRepository.save(file);
     }
     public void createAndSavePDF(Devis devis) throws DocumentException, IOException, URISyntaxException {
-        DevisPdfGenerator pdfGeneration = new DevisPdfGenerator(devis);
+        PDFGenerationV pdfGeneration = new PDFGenerationV(devis);
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "devisVente"+devis.getId()+".pdf", "application/pdf");
         fileRepository.save(file);

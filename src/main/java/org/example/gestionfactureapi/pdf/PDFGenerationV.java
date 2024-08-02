@@ -19,9 +19,15 @@ import java.util.stream.Stream;
 public class PDFGenerationV {
     private  int x;
     private Devis bon;
-    private List<BonLivV> bonCmds;
-    private double baseTVA;
-    private double taux;
+    private List<BonLivV> bonLivVs;
+    private double baseTVA19=0;
+    private double montTVA19=0;
+    private double baseTVA7=0;
+    private double montTVA7=0;
+    private double baseTVA13=0;
+    private double montTVA13=0;
+    private double totalHT=0;
+    private double totalTTC=0;
 
     private String name;
 
@@ -73,7 +79,7 @@ public class PDFGenerationV {
             this.bon.setSte(factureV.getSte());
             this.bon.setClient(factureV.getClient());
         }else{
-            this.bonCmds = factureV.getBonLivVS();
+            this.bonLivVs = factureV.getBonLivVS();
             List<Item> items =new ArrayList<>();
             for(BonLivV bonx : factureV.getBonLivVS()){
                 if(bonx.getDevis() == null){
@@ -111,22 +117,25 @@ public class PDFGenerationV {
         table.setSpacingBefore(10);
         table.setWidths(new int[]{2, 4, 1, 1, 2, 1, 2, 1});
         tableHeader(table);
-        double index = 0;
-        double tva = 0;
-        for (Item i : this.bon.getItems()) {
-            index++;
-            addRow(table, i);
-            this.baseTVA += i.getTotalNet();
-            tva += i.getArticle().getTva();
-        }
-        /*if(this.bon.getItems().size()<10){
-            int rows = 10-this.bon.getItems().size();
-            for(int xxx = 0; xxx< rows;xxx++){
-                addRow1(table);                                 sdqfdqdfqsd
-            }
 
-        }*/
-        this.taux = tva / index;
+        for (Item i : this.bon.getItems()) {
+            addRow(table, i);
+                int tva = i.getArticle().getTva();
+                if(tva==19){
+                    this.baseTVA19+=i.getTotalNet();
+                    this.montTVA19+=i.getTotalNet()*.19;
+                } else if (tva==7) {
+                    this.baseTVA7+=i.getTotalNet();
+                    this.montTVA7+=i.getTotalNet()*7;
+                } else if (tva==13) {
+                    this.baseTVA13+=i.getTotalNet();
+                    this.montTVA13+=i.getTotalNet()*.13;
+                }
+            this.totalHT+=i.getTotalNet();
+
+        }
+        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + 1;
+
         doc.add(table);
 
 
@@ -297,45 +306,46 @@ public class PDFGenerationV {
         addCellOfHeading(table, "TVA", headerNormalFont);
         addCellVide(table);
         addCellOfHeading(table, "TOTAL HT", headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        addCell(table, String.format("%.3f",this.totalHT), normalFont);
 
         // Row 1
         addCell(table, "19%", normalFont);
-        addCell(table, "497", normalFont);
-        addCell(table, "94", normalFont);
+        addCell(table, String.format("%.3f",this.baseTVA19), normalFont);
+        addCell(table, String.format("%.3f",this.montTVA19), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"REMISE",headerNormalFont);
         addCell(table, "0.000", normalFont);
 
         // Row 1
         addCell(table, "13%", normalFont);
-        addCell(table, "497", normalFont);
-        addCell(table, "94", normalFont);
+        addCell(table, String.format("%.3f",this.baseTVA13), normalFont);
+        addCell(table, String.format("%.3f",this.montTVA13), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"NET HT",headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        addCell(table, String.format("%.3f",this.totalHT), normalFont);
 
         // Row 1
         addCell(table, "7%", normalFont);
-        addCell(table, "497", normalFont);
-        addCell(table, "94", normalFont);
+        addCell(table, String.format("%.3f",this.baseTVA7), normalFont);
+        addCell(table, String.format("%.3f",this.montTVA7), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"TOTAL TVA",headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        double totalTVA = this.baseTVA19 + this.baseTVA13 + this.baseTVA7;
+        addCell(table,String.format("%.3f",totalTVA) , normalFont);
 
         addCellVide(table);
         addCellVide(table);
         addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        addCell(table, "1.000", normalFont);
 
         addCellVide(table);
         addCellVide(table);
         addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TTC",headerNormalFont);
-        addCell(table, "0.000", normalFont);
+        addCell(table, String.format("%.3f",this.totalTTC), normalFont);
 
 
     }
