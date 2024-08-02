@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.Filter.PDFGenerationV;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.pdf.FactureV.FactureVPDFGenerator;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
@@ -52,7 +53,7 @@ public class FileService {
         fileRepository.save(file);
     }
     public void createAndSavePDF(FactureV factureV) throws DocumentException, IOException, URISyntaxException {
-        FactureVPDFGenerator pdfGeneration = new FactureVPDFGenerator(factureV);
+        PDFGenerationV pdfGeneration = new PDFGenerationV(factureV);
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "factureVente"+factureV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
