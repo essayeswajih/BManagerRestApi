@@ -176,7 +176,7 @@ public class FactureVPDFGenerator {
         table.addCell(createCell(String.format("%.2f", item.getNewVenteHT()), cellFont, Element.ALIGN_RIGHT));
         table.addCell(createCell(String.format("%.2f", item.getRemise()), cellFont, Element.ALIGN_RIGHT));
         table.addCell(createCell(String.format("%.2f", item.getTotalNet()), cellFont, Element.ALIGN_RIGHT));
-        table.addCell(createCell(String.format("%.2f", item.getArticle().getTva()), cellFont, Element.ALIGN_RIGHT));
+        table.addCell(createCell(item.getArticle().getTva().toString(), cellFont, Element.ALIGN_RIGHT));
     }
 
     private void addEmptyRow(PdfPTable table, Font cellFont) {
