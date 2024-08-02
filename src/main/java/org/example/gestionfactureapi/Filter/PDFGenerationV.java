@@ -1,15 +1,11 @@
-package org.example.gestionfactureapi.pdf;
+package org.example.gestionfactureapi.Filter;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,12 +13,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
 @Component
 @RequiredArgsConstructor
-public class PDFGeneration {
+public class PDFGenerationV {
     private  int x;
-    private BonCmdA bon;
-    private List<BonLivA> bonCmds;
+    private Devis bon;
+    private List<BonLivV> bonCmds;
     private double baseTVA;
     private double taux;
 
@@ -30,7 +27,7 @@ public class PDFGeneration {
 
     private Date date;
     private Integer numero;
-    public static class RoundedBorder implements PdfPCellEvent {
+    static class RoundedBorder implements PdfPCellEvent {
         @Override
         public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
             PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
@@ -45,53 +42,53 @@ public class PDFGeneration {
         }
     }
 
-    public PDFGeneration(BonCmdA bon) {
+    public PDFGenerationV(Devis bon) {
         this.bon = bon;
         this.numero = bon.getId();
         this.date = bon.getDateCreation();
         this.name = "Bon de commande";
         this.x=1;
     }
-    public PDFGeneration(BonLivA bonLivA) {
-        if(bonLivA.getBonCmdA()==null){
-            BonCmdA bca = new BonCmdA();
-            bca.setItems(bonLivA.getItems());
-            bca.setId(bonLivA.getId());
-            bca.setSte(bonLivA.getSte());
-            bca.setFournisseur(bonLivA.getFournisseur());
+    public PDFGenerationV(BonLivV bonLivV) {
+        if(bonLivV.getDevis()==null){
+            Devis bca = new Devis();
+            bca.setItems(bonLivV.getItems());
+            bca.setId(bonLivV.getId());
+            bca.setSte(bonLivV.getSte());
+            bca.setClient(bonLivV.getClient());
             this.bon = bca;
         }else {
-            this.bon = bonLivA.getBonCmdA();
+            this.bon = bonLivV.getDevis();
         }
-        this.numero = bonLivA.getId();
-        this.date = bonLivA.getDateCreation();
+        this.numero = bonLivV.getId();
+        this.date = bonLivV.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
     }
-    public PDFGeneration(FactureA factureA) {
-        if(factureA.getBonLivAS() == null){
-            this.bon = new BonCmdA();
-            this.bon.setId(factureA.getId());
-            this.bon.setItems(factureA.getItems());
-            this.bon.setSte(factureA.getSte());
-            this.bon.setFournisseur(factureA.getFournisseur());
+    public PDFGenerationV(FactureV factureV) {
+        if(factureV.getBonLivVS() == null){
+            this.bon = new Devis();
+            this.bon.setId(factureV.getId());
+            this.bon.setItems(factureV.getItems());
+            this.bon.setSte(factureV.getSte());
+            this.bon.setClient(factureV.getClient());
         }else{
-            this.bonCmds = factureA.getBonLivAS();
+            this.bonCmds = factureV.getBonLivVS();
             List<Item> items =new ArrayList<>();
-            for(BonLivA bonx : factureA.getBonLivAS()){
-                if(bonx.getBonCmdA() == null){
+            for(BonLivV bonx : factureV.getBonLivVS()){
+                if(bonx.getDevis() == null){
                     items.addAll(bonx.getItems());
                 }else {
-                    items.addAll(bonx.getBonCmdA().getItems());
+                    items.addAll(bonx.getDevis().getItems());
                 }
 
             }
-            this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
+            this.bon = new Devis(factureV.getId(),factureV.getBonLivVS().get(0).getClient(), items,factureV.getDateCreation(),factureV.getBonLivVS().get(0).getSte(),false);
         }
 
-        this.date = factureA.getDateCreation();
+        this.date = factureV.getDateCreation();
         this.name = "Facture";
-        this.numero = factureA.getId();
+        this.numero = factureV.getId();
         this.x=3;
     }
 
@@ -188,11 +185,11 @@ public class PDFGeneration {
         clientCell.setBorder(Rectangle.NO_BORDER);
         PdfPTable clientTbale = new PdfPTable(3);
         addCellOfHeading(clientTbale, "Fournisseur", normalFont, 1, 1);
-        addCell(clientTbale,  this.bon.getFournisseur().getIntitule(), normalFont, 2, 1);
+        addCell(clientTbale,  this.bon.getClient().getName(), normalFont, 2, 1);
         addCellOfHeading(clientTbale, "Adresse", normalFont, 1, 1);
-        addCell(clientTbale, this.bon.getFournisseur().getAdresse(), normalFont, 2, 1);
+        addCell(clientTbale, this.bon.getClient().getAdresse(), normalFont, 2, 1);
         addCellOfHeading(clientTbale, "Code TVA", normalFont, 1, 1);
-        addCell(clientTbale, this.bon.getFournisseur().getMatriculeFiscale(), normalFont, 2, 1);
+        addCell(clientTbale, this.bon.getClient().getMatriculeFiscale(), normalFont, 2, 1);
         headerTable.addCell(companyCell);
         clientTbale.setSpacingBefore(52);
         clientCell.addElement(clientTbale);
@@ -205,7 +202,7 @@ public class PDFGeneration {
         headingName.setPaddingBottom(15);
         headingName.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         headingName.setBackgroundColor(BaseColor.WHITE);
-        PdfPCellEvent roundedBorder = new RoundedBorder();
+        PdfPCellEvent roundedBorder = new org.example.gestionfactureapi.pdf.PDFGeneration.RoundedBorder();
         headingName.setCellEvent(roundedBorder);
         headerTable.addCell(headingName);
         PdfPCell headingEspace = new PdfPCell(new Phrase(""));
