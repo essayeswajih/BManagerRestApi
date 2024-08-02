@@ -31,10 +31,20 @@ public class BonLivVPDFGenerator {
     private Integer numero;
 
     public BonLivVPDFGenerator(BonLivV bonLivV) {
-        this.bon = bonLivV.getDevis();
-        this.numero = bon.getId();
+        if(bonLivV.getDevis()==null){
+            Devis bca = new Devis();
+            bca.setItems(bonLivV.getItems());
+            bca.setId(bonLivV.getId());
+            bca.setSte(bonLivV.getSte());
+            bca.setClient(bonLivV.getClient());
+            this.bon = bca;
+        }else {
+            this.bon = bonLivV.getDevis();
+        }
+        this.numero = bonLivV.getId();
         this.date = bonLivV.getDateCreation();
-        this.name = "Bon de livraison n°";
+        this.name = "Bon de livraison";
+        this.x=2;
     }
     public BonLivVPDFGenerator(FactureA factureA) {
         this.bonCmds = factureA.getBonLivAS();
