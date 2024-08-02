@@ -71,7 +71,6 @@ public class PDFGenerationV {
         this.date = bonLivV.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
-        this.timbre=1;
     }
     public PDFGenerationV(FactureV factureV) {
         if(factureV.getBonLivVS() == null){
@@ -334,7 +333,7 @@ public class PDFGenerationV {
         addCell(table, String.format("%.3f",this.montTVA7), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"TOTAL TVA",headerNormalFont);
-        double totalTVA = this.baseTVA19 + this.baseTVA13 + this.baseTVA7;
+        double totalTVA = this.montTVA19 + this.montTVA13 + this.montTVA7;
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
 
         addCellVide(table);
