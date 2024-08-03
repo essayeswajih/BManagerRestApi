@@ -135,7 +135,8 @@ public class PDFGenerationV {
                 }
             int qte = i.getQte();
             double remise = i.getRemise() == null ? 0 : i.getRemise();
-            double totalHT = i.getNewVenteHT() * qte;
+            double venteHT2 = i.getNewVenteHT() !=null ? i.getNewVenteHT() : i.getArticle().getVenteHT();
+            double totalHT = venteHT2 * qte;
             this.remise += (totalHT * remise / 100);
             this.totalHT+=i.getTotalNet();
 
