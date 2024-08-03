@@ -274,9 +274,9 @@ public class PDFGenerationV {
         ligneDetails.add(i.getArticle().getDesignation());
         ligneDetails.add(i.getQte().toString());
         ligneDetails.add(i.getArticle().getUnite());
-        ligneDetails.add(String.format("%.3f", i.getNewVenteHT()));
+        double venteHT = i.getNewVenteHT() !=null ? i.getNewVenteHT() : i.getArticle().getVenteHT();
+        ligneDetails.add(String.format("%.3f", venteHT));
         ligneDetails.add(i.getRemise() == null ? "0" :String.valueOf(i.getRemise()));
-        double venteHT = i.getNewVenteHT();
         int qte = i.getQte();
         double remise = i.getRemise() == null ? 0 : i.getRemise();  // Assuming getRemise() returns the discount percentage
         double totalHT = venteHT * qte;
