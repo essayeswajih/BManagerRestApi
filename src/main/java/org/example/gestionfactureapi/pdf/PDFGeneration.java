@@ -136,7 +136,10 @@ public class PDFGeneration {
                 this.baseTVA13+=i.getTotalNet();
                 this.montTVA13+=i.getTotalNet()*.13;
             }
-            this.remise += i.getArticle().getAchatHT() *i.getRemise() / 100;
+            int qte = i.getQte();
+            double remise1 = i.getRemise() == null ? 0 : i.getRemise();
+            double totalHT = i.getArticle().getAchatHT() * qte;
+            this.remise += (totalHT * remise1 / 100);
             this.totalHT+=i.getTotalNet();
 
         }
