@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -16,8 +17,12 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idClient;
+    @Column(unique = true)
+    @NonNull
     private String name;
     private String tel;
+    @Column(unique = true)
+    @NonNull
     private String matriculeFiscale;
     private String adresse;
     private String fax;
