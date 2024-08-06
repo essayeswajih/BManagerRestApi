@@ -296,9 +296,9 @@ public class PDFGeneration {
     }
     private void addRowx(PdfPTable table){
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
-        Font normal = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
-        addCellOfHeading(table,this.name+" n°", headerFont);
-        addCellOfHeading(table, "Date", headerFont);
+        Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.BLACK);
+        addCellOfHeading(table,(this.name+" n°").toUpperCase(), headerFont);
+        addCellOfHeading(table, "DATE", headerFont);
         addCell(table, ""+this.numero, normal);
         addCell(table, ""+this.date, normal);
         table.setWidthPercentage(100);
