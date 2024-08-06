@@ -43,7 +43,7 @@ public class PDFGeneration {
         public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
             PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
             cb.saveState();
-            cb.setColorStroke(BaseColor.BLACK); // Border color
+            cb.setColorStroke(BaseColor.DARK_GRAY); // Border color
             cb.setColorFill(BaseColor.LIGHT_GRAY); // Background color
             float radius = 10; // Radius for rounded corners
             // Draw rounded rectangle
@@ -249,6 +249,7 @@ public class PDFGeneration {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(headerColor);
                     header.setBorder(PdfPCell.BOX);
+                    header.setBorderColor(BaseColor.DARK_GRAY);
                     header.setPhrase(new Phrase(title, headerFont));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
@@ -288,6 +289,7 @@ public class PDFGeneration {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
+            cell.setBorderColor(BaseColor.DARK_GRAY);
             cell.setPadding(7);
             table.addCell(cell);
         }
@@ -395,6 +397,7 @@ public class PDFGeneration {
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        cell.setBorderColor(BaseColor.DARK_GRAY);
         table.addCell(cell);
 
     }
@@ -404,6 +407,7 @@ public class PDFGeneration {
         cell.setColspan(colspan);
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
+        cell.setBorderColor(BaseColor.DARK_GRAY);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
