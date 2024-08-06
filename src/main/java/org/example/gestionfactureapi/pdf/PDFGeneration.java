@@ -212,7 +212,7 @@ public class PDFGeneration {
         clientCell.addElement(clientTbale);
         clientCell.setRowspan(2);
         headerTable.addCell(clientCell);
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.GRAY);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
         PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
         headingName.setBorder(0);
         headingName.setPadding(10);
