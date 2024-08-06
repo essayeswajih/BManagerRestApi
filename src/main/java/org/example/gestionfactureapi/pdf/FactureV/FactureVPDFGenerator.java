@@ -178,6 +178,7 @@ public class FactureVPDFGenerator {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(headerColor);
                     header.setBorder(PdfPCell.BOX);
+                    header.setBorderColor(BaseColor.DARK_GRAY);
                     header.setPhrase(new Phrase(title, headerFont));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
@@ -217,6 +218,7 @@ public class FactureVPDFGenerator {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
+            cell.setBorderColor(BaseColor.DARK_GRAY);
             cell.setPadding(10);
             table.addCell(cell);
         }
