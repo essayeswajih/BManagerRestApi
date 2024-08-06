@@ -128,8 +128,8 @@ public class FactureVPDFGenerator {
     }
 
     private void addHeaderInformation(Document doc) throws DocumentException, IOException {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
-        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12,BaseColor.GRAY);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12,BaseColor.GRAY);
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
@@ -150,7 +150,7 @@ public class FactureVPDFGenerator {
         clientCell.setBorder(Rectangle.NO_BORDER);
         clientCell.setPadding(5);
         clientCell.setPaddingLeft(50);
-        clientCell.addElement(new Paragraph("Client : " + this.bon.getClient().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13)));
+        clientCell.addElement(new Paragraph("Client : " + this.bon.getClient().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13,BaseColor.GRAY)));
         clientCell.addElement(new Paragraph("MF : " + this.bon.getClient().getMatriculeFiscale(), normalFont));
         clientCell.addElement(new Paragraph("Adresse : " + this.bon.getClient().getAdresse(), normalFont));
         clientCell.addElement(new Paragraph("Tel : " + this.bon.getClient().getFax() + " / " + this.bon.getClient().getTel(), normalFont));
@@ -164,7 +164,7 @@ public class FactureVPDFGenerator {
 
         // Additional information
         Paragraph additionalInfo = new Paragraph();
-        additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLACK)));
+        additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.GRAY)));
         additionalInfo.add(new Chunk("Date : " + this.date + "\n", boldFont));
         doc.add(additionalInfo);
     }
@@ -185,7 +185,7 @@ public class FactureVPDFGenerator {
                 });
     }
     private void addRow1(PdfPTable table) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.GRAY);
         for (int i1 = 0; i1 < 8; i1++) {
             PdfPCell cell = new PdfPCell(new Phrase("", cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -199,7 +199,7 @@ public class FactureVPDFGenerator {
 
 
     private static void addRow(PdfPTable table, Item i) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.GRAY);
         List<String> ligneDetails = new ArrayList<>();
         ligneDetails.add((String) i.getArticle().getRefArticle());
         ligneDetails.add((String) i.getArticle().getDesignation());
@@ -226,7 +226,7 @@ public class FactureVPDFGenerator {
     }
 
     private void addCustomRow(PdfPTable table) {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.GRAY);
 
         // Column 1: Base T.V.A.
         PdfPCell cell = new PdfPCell(new Phrase("Base T.V.A: \n " + String.format("%.3f", (this.baseTVA)), boldFont));
