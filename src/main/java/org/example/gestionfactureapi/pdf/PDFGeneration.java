@@ -182,8 +182,8 @@ public class PDFGeneration {
     }
 
     private void addHeaderInformation(Document doc) throws DocumentException, IOException {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.GRAY);
-        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.GRAY);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.BLACK);
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
