@@ -72,6 +72,7 @@ public class FactureVController {
             FactureV sv = factureVService.save(f);
             for(BonLivV bon :sv.getBonLivVS()){
                 bon.setFacture(sv);
+                bon.setTrans(true);
                 bonLivVService.saveAndFlush(bon);
                 if (bon.getDevis() == null){
                     for(Item item :bon.getItems()){

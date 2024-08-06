@@ -55,6 +55,7 @@ public class FactureAController {
             FactureA sv = factureAService.save(f);
             for(BonLivA bon :sv.getBonLivAS()){
                 bon.setFacture(sv);
+                bon.setTrans(true);
                 bonLivAService.saveAndFlush(bon);
                 if(bon.getBonCmdA() == null){
                     for(Item item :bon.getItems()){
