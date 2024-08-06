@@ -300,7 +300,6 @@ public class PDFGeneration {
         Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.GRAY);
         addCellOfHeading(table,"n°", headerFont);
         addCellOfHeading(table, "Date", headerFont);
-        System.out.println(this.date);
         addCell(table, ""+this.numero, normal);
         addCell(table, ""+this.date, normal);
         table.setWidthPercentage(100);
@@ -364,6 +363,7 @@ public class PDFGeneration {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
     }
     private void addCell(PdfPTable table, String content, Font font,int colspan) {
@@ -371,6 +371,7 @@ public class PDFGeneration {
         cell.setColspan(colspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
     }
     private void addCell(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
@@ -379,6 +380,7 @@ public class PDFGeneration {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
     }
     private void addCellVide(PdfPTable table) {
