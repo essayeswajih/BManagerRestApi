@@ -48,7 +48,7 @@ public class ArticleService {
     }
 
     public List<Article> findAllByIdSte(Integer id) {
-        return articleRepository.findAllByIdSte(id);
+        return articleRepository.findAllBySte_IdSteOrderByDesignation(id);
     }
 
     public List<Article> saveAll(List<Article> articles) {

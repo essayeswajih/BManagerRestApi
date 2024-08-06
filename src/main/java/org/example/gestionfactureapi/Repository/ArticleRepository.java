@@ -12,5 +12,6 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article,Integer> {
     @Query("SELECT a FROM Article a WHERE a.ste.idSte = :idSte")
     List<Article> findAllByIdSte(@Param("idSte") Integer idSte);
+    List<Article> findAllBySte_IdSteOrderByDesignation(Integer idSte);
 
 }

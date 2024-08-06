@@ -17,11 +17,11 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idClient;
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     @NonNull
     private String name;
     private String tel;
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     @NonNull
     private String matriculeFiscale;
     private String adresse;
