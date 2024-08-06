@@ -42,5 +42,6 @@ public class BonLivV {
     @JsonIgnore
     @JoinColumn(name = "facture__id")
     private FactureV facture;
+
     private Boolean trans = false;
 }

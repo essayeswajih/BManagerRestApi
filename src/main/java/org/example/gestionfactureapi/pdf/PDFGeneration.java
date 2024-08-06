@@ -44,7 +44,7 @@ public class PDFGeneration {
             PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
             cb.saveState();
             cb.setColorStroke(BaseColor.BLACK); // Border color
-            cb.setColorFill(BaseColor.DARK_GRAY); // Background color
+            cb.setColorFill(BaseColor.LIGHT_GRAY); // Background color
             float radius = 10; // Radius for rounded corners
             // Draw rounded rectangle
             cb.roundRectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight(), radius);
@@ -242,7 +242,7 @@ public class PDFGeneration {
 
     private static void tableHeader(PdfPTable table) {
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
-        BaseColor headerColor = BaseColor.DARK_GRAY;
+        BaseColor headerColor = BaseColor.LIGHT_GRAY;
 
         Stream.of("Référence", "Désignation", "Qte", "U", "P.U.HT", "Rem %", "Total Net HT", "TVA")
                 .forEach(title -> {
@@ -394,7 +394,7 @@ public class PDFGeneration {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.DARK_GRAY);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
     }
@@ -405,7 +405,7 @@ public class PDFGeneration {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.DARK_GRAY);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
     }
