@@ -188,7 +188,7 @@ public class PDFGeneration {
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
         headerTable.setSpacingBefore(0);
-        headerTable.setWidths(new int[]{1, 3});
+        headerTable.setWidths(new int[]{7, 9});
 
         PdfPCell companyCell = new PdfPCell();
         //companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
