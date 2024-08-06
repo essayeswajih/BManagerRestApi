@@ -188,7 +188,7 @@ public class PDFGeneration {
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
         headerTable.setSpacingBefore(0);
-        headerTable.setWidths(new int[]{7, 9});
+        headerTable.setWidths(new int[]{2, 2});
 
         PdfPCell companyCell = new PdfPCell();
         //companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
@@ -198,7 +198,6 @@ public class PDFGeneration {
         companyCell.addElement(new Paragraph("Email :" + this.bon.getSte().getEmail(), normalFont));
         companyCell.setBorder(0);
         companyCell.setPaddingBottom(10);
-        companyCell.setColspan(2);
         PdfPCell clientCell = new PdfPCell();
         clientCell.setBorder(Rectangle.NO_BORDER);
         PdfPTable clientTbale = new PdfPTable(3);
@@ -209,9 +208,9 @@ public class PDFGeneration {
         addCellOfHeading(clientTbale, "Code TVA", normalFont, 1, 1);
         addCell(clientTbale, this.bon.getFournisseur().getMatriculeFiscale(), normalFont, 2, 1);
         headerTable.addCell(companyCell);
-        //clientTbale.setSpacingBefore(52);
+        clientTbale.setSpacingBefore(52);
         clientCell.addElement(clientTbale);
-
+        headerTable.addCell(clientCell);
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
         PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
         headingName.setBorder(0);
@@ -221,10 +220,7 @@ public class PDFGeneration {
         headingName.setBackgroundColor(BaseColor.WHITE);
         PdfPCellEvent roundedBorder = new RoundedBorder();
         headingName.setCellEvent(roundedBorder);
-
-        headerTable.addCell(headingName);
-        
-        headerTable.addCell(clientCell);
+        //headerTable.addCell(headingName);
         PdfPCell headingEspace = new PdfPCell(new Phrase(""));
         headingEspace.setBorder(0);
         //headerTable.addCell(headingEspace);
@@ -299,9 +295,9 @@ public class PDFGeneration {
         table.setTotalWidth(100);
     }
     private void addRowx(PdfPTable table){
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
-        Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.BLACK);
-        addCellOfHeading(table,"n°", headerFont);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+        Font normal = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
+        addCellOfHeading(table,this.name+" n°", headerFont);
         addCellOfHeading(table, "Date", headerFont);
         addCell(table, ""+this.numero, normal);
         addCell(table, ""+this.date, normal);
