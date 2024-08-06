@@ -241,8 +241,8 @@ public class PDFGeneration {
     }
 
     private static void tableHeader(PdfPTable table) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.GRAY);
-        BaseColor headerColor = BaseColor.BLACK;
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
+        BaseColor headerColor = BaseColor.GRAY;
 
         Stream.of("Référence", "Désignation", "Qte", "U", "P.U.HT", "Rem %", "Total Net HT", "TVA")
                 .forEach(title -> {
