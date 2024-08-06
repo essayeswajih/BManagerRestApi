@@ -198,6 +198,7 @@ public class PDFGeneration {
         companyCell.addElement(new Paragraph("Email :" + this.bon.getSte().getEmail(), normalFont));
         companyCell.setBorder(0);
         companyCell.setPaddingBottom(10);
+        companyCell.setColspan(2);
         PdfPCell clientCell = new PdfPCell();
         clientCell.setBorder(Rectangle.NO_BORDER);
         PdfPTable clientTbale = new PdfPTable(3);
@@ -210,8 +211,7 @@ public class PDFGeneration {
         headerTable.addCell(companyCell);
         //clientTbale.setSpacingBefore(52);
         clientCell.addElement(clientTbale);
-        clientCell.setRowspan(2);
-        headerTable.addCell(clientCell);
+
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
         PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
         headingName.setBorder(0);
@@ -221,7 +221,10 @@ public class PDFGeneration {
         headingName.setBackgroundColor(BaseColor.WHITE);
         PdfPCellEvent roundedBorder = new RoundedBorder();
         headingName.setCellEvent(roundedBorder);
+
         headerTable.addCell(headingName);
+        
+        headerTable.addCell(clientCell);
         PdfPCell headingEspace = new PdfPCell(new Phrase(""));
         headingEspace.setBorder(0);
         //headerTable.addCell(headingEspace);
