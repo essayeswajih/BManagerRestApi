@@ -212,7 +212,7 @@ public class PDFGeneration {
         clientCell.addElement(clientTbale);
         clientCell.setRowspan(2);
         headerTable.addCell(clientCell);
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.WHITE);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.GRAY);
         PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
         headingName.setBorder(0);
         headingName.setPadding(10);
@@ -241,8 +241,8 @@ public class PDFGeneration {
     }
 
     private static void tableHeader(PdfPTable table) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
-        BaseColor headerColor = BaseColor.GRAY;
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.GRAY);
+        BaseColor headerColor = BaseColor.LIGHT_GRAY;
 
         Stream.of("Référence", "Désignation", "Qte", "U", "P.U.HT", "Rem %", "Total Net HT", "TVA")
                 .forEach(title -> {
@@ -296,7 +296,7 @@ public class PDFGeneration {
         table.setTotalWidth(100);
     }
     private void addRowx(PdfPTable table){
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.GRAY);
         Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.GRAY);
         addCellOfHeading(table,"n°", headerFont);
         addCellOfHeading(table, "Date", headerFont);
@@ -307,7 +307,7 @@ public class PDFGeneration {
     private void addCustomRow(PdfPTable table) {
         Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.GRAY);
         Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8,BaseColor.GRAY);
-        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.GRAY);
 
         // Row 1
         addCellOfHeading(table, "Taux", headerNormalFont);
@@ -404,7 +404,7 @@ public class PDFGeneration {
 
     }
     private void addCellOfHeading(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.GRAY);
         PdfPCell cell = new PdfPCell(new Phrase(content, headerFont));
         cell.setColspan(colspan);
         cell.setRowspan(rowlspan);
