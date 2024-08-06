@@ -188,7 +188,7 @@ public class PDFGeneration {
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
         headerTable.setSpacingBefore(0);
-        headerTable.setWidths(new int[]{2, 2});
+        headerTable.setWidths(new int[]{1, 3});
 
         PdfPCell companyCell = new PdfPCell();
         //companyCell.addElement(new Paragraph(this.bon.getSte().getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK)));
@@ -234,9 +234,9 @@ public class PDFGeneration {
         addRowx(tablex);
         doc.add(tablex);
 
-        Paragraph additionalInfo = new Paragraph();
-        additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.GRAY)));
-        additionalInfo.add(new Chunk("Date : " + this.date + "\n", boldFont));
+        //Paragraph additionalInfo = new Paragraph();
+        //additionalInfo.add(new Chunk("\n"+this.name+" : " + this.numero + " \n", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.GRAY)));
+        //additionalInfo.add(new Chunk("Date : " + this.date + "\n", boldFont));
         //doc.add(additionalInfo);
     }
 
