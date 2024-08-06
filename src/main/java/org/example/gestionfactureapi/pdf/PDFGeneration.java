@@ -208,7 +208,7 @@ public class PDFGeneration {
         addCellOfHeading(clientTbale, "Code TVA", normalFont, 1, 1);
         addCell(clientTbale, this.bon.getFournisseur().getMatriculeFiscale(), normalFont, 2, 1);
         headerTable.addCell(companyCell);
-        clientTbale.setSpacingBefore(52);
+        //clientTbale.setSpacingBefore(52);
         clientCell.addElement(clientTbale);
         clientCell.setRowspan(2);
         headerTable.addCell(clientCell);
