@@ -43,8 +43,8 @@ public class PDFGeneration {
         public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
             PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
             cb.saveState();
-            cb.setColorStroke(BaseColor.GRAY); // Border color
-            cb.setColorFill(BaseColor.LIGHT_GRAY); // Background color
+            cb.setColorStroke(BaseColor.BLACK); // Border color
+            cb.setColorFill(BaseColor.GRAY); // Background color
             float radius = 10; // Radius for rounded corners
             // Draw rounded rectangle
             cb.roundRectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight(), radius);
@@ -242,21 +242,21 @@ public class PDFGeneration {
 
     private static void tableHeader(PdfPTable table) {
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.GRAY);
-        BaseColor headerColor = BaseColor.LIGHT_GRAY;
+        BaseColor headerColor = BaseColor.GRAY;
 
         Stream.of("Référence", "Désignation", "Qte", "U", "P.U.HT", "Rem %", "Total Net HT", "TVA")
                 .forEach(title -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(headerColor);
                     header.setBorder(PdfPCell.BOX);
-                    header.setBorderColor(BaseColor.GRAY);
+                    header.setBorderColor(BaseColor.BLACK);
                     header.setPhrase(new Phrase(title, headerFont));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
                 });
     }
     private void addRow1(PdfPTable table) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.GRAY);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.BLACK);
         for (int i1 = 0; i1 < 8; i1++) {
             PdfPCell cell = new PdfPCell(new Phrase("", cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -270,7 +270,7 @@ public class PDFGeneration {
 
 
     private static void addRow(PdfPTable table, Item i) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.GRAY);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.BLACK);
         List<String> ligneDetails = new ArrayList<>();
         ligneDetails.add(i.getArticle().getRefArticle());
         ligneDetails.add(i.getArticle().getDesignation());
@@ -289,15 +289,15 @@ public class PDFGeneration {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
-            cell.setBorderColor(BaseColor.GRAY);
+            cell.setBorderColor(BaseColor.BLACK);
             cell.setPadding(7);
             table.addCell(cell);
         }
         table.setTotalWidth(100);
     }
     private void addRowx(PdfPTable table){
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.GRAY);
-        Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.GRAY);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
+        Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.BLACK);
         addCellOfHeading(table,"n°", headerFont);
         addCellOfHeading(table, "Date", headerFont);
         addCell(table, ""+this.numero, normal);
@@ -305,9 +305,9 @@ public class PDFGeneration {
         table.setWidthPercentage(100);
     }
     private void addCustomRow(PdfPTable table) {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.GRAY);
-        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8,BaseColor.GRAY);
-        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.GRAY);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8,BaseColor.BLACK);
+        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.BLACK);
 
         // Row 1
         addCellOfHeading(table, "Taux", headerNormalFont);
@@ -363,7 +363,7 @@ public class PDFGeneration {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorderColor(BaseColor.GRAY);
+        cell.setBorderColor(BaseColor.BLACK);
         table.addCell(cell);
     }
     private void addCell(PdfPTable table, String content, Font font,int colspan) {
@@ -371,7 +371,7 @@ public class PDFGeneration {
         cell.setColspan(colspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorderColor(BaseColor.GRAY);
+        cell.setBorderColor(BaseColor.BLACK);
         table.addCell(cell);
     }
     private void addCell(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
@@ -380,7 +380,7 @@ public class PDFGeneration {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorderColor(BaseColor.GRAY);
+        cell.setBorderColor(BaseColor.BLACK);
         table.addCell(cell);
     }
     private void addCellVide(PdfPTable table) {
@@ -398,20 +398,20 @@ public class PDFGeneration {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-        cell.setBorderColor(BaseColor.GRAY);
+        cell.setBackgroundColor(BaseColor.GRAY);
+        cell.setBorderColor(BaseColor.BLACK);
         table.addCell(cell);
 
     }
     private void addCellOfHeading(PdfPTable table, String content, Font font,int colspan,int rowlspan) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.GRAY);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.BLACK);
         PdfPCell cell = new PdfPCell(new Phrase(content, headerFont));
         cell.setColspan(colspan);
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
-        cell.setBorderColor(BaseColor.GRAY);
+        cell.setBorderColor(BaseColor.BLACK);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        cell.setBackgroundColor(BaseColor.GRAY);
         table.addCell(cell);
 
     }
