@@ -40,7 +40,7 @@ public class PDFGenerationV {
             PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
             cb.saveState();
             cb.setColorStroke(BaseColor.BLACK); // Border color
-            cb.setColorFill(BaseColor.DARK_GRAY); // Background color
+            cb.setColorFill(BaseColor.GRAY); // Background color
             float radius = 10; // Radius for rounded corners
             // Draw rounded rectangle
             cb.roundRectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight(), radius);
@@ -181,8 +181,8 @@ public class PDFGenerationV {
     }
 
     private void addHeaderInformation(Document doc) throws DocumentException, IOException {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
-        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12,BaseColor.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12,BaseColor.BLACK);
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
@@ -211,7 +211,7 @@ public class PDFGenerationV {
         clientCell.addElement(clientTbale);
         clientCell.setRowspan(2);
         headerTable.addCell(clientCell);
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.WHITE);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
         PdfPCell headingName = new PdfPCell(new Phrase(this.name,headerFont));
         headingName.setBorder(0);
         headingName.setPadding(10);
@@ -240,21 +240,22 @@ public class PDFGenerationV {
     }
 
     private static void tableHeader(PdfPTable table) {
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
-        BaseColor headerColor = BaseColor.DARK_GRAY;
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.BLACK);
+        BaseColor headerColor = BaseColor.GRAY;
 
         Stream.of("Référence", "Désignation", "Qte", "U", "P.U.HT", "Rem %", "Total Net HT", "TVA")
                 .forEach(title -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(headerColor);
                     header.setBorder(PdfPCell.BOX);
+                    header.setBorderColor(BaseColor.BLACK);
                     header.setPhrase(new Phrase(title, headerFont));
                     header.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(header);
                 });
     }
     private void addRow1(PdfPTable table) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.BLACK);
         for (int i1 = 0; i1 < 8; i1++) {
             PdfPCell cell = new PdfPCell(new Phrase("", cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -268,7 +269,7 @@ public class PDFGenerationV {
 
 
     private static void addRow(PdfPTable table, Item i) {
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.BLACK);
         List<String> ligneDetails = new ArrayList<>();
         ligneDetails.add(i.getArticle().getRefArticle());
         ligneDetails.add(i.getArticle().getDesignation());
@@ -287,13 +288,14 @@ public class PDFGenerationV {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
+            cell.setBorderColor(BaseColor.BLACK);
             cell.setPadding(7);
             table.addCell(cell);
         }
         table.setTotalWidth(100);
     }
     private void addRowx(PdfPTable table){
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.WHITE);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
         Font normal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.BLACK);
         addCellOfHeading(table,"n°", headerFont);
         addCellOfHeading(table, "Date", headerFont);
@@ -303,9 +305,9 @@ public class PDFGenerationV {
         table.setWidthPercentage(100);
     }
     private void addCustomRow(PdfPTable table) {
-        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
-        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
-        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10,BaseColor.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 8,BaseColor.BLACK);
+        Font headerNormalFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.BLACK);
 
         // Row 1
         addCellOfHeading(table, "Taux", headerNormalFont);
@@ -393,7 +395,7 @@ public class PDFGenerationV {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.DARK_GRAY);
+        cell.setBackgroundColor(BaseColor.GRAY);
         table.addCell(cell);
 
     }
@@ -404,7 +406,7 @@ public class PDFGenerationV {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.DARK_GRAY);
+        cell.setBackgroundColor(BaseColor.GRAY);
         table.addCell(cell);
 
     }
