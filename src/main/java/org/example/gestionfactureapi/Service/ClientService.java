@@ -28,7 +28,7 @@ public class ClientService {
         clientRepository.deleteById(id);
     }
     public List<Client> findByIdSte (Integer id){
-        return clientRepository.findAllByIdSte(id);
+        return clientRepository.findAllBySte_IdSteOrderByName(id);
     }
 
     public List<Client> saveAll(List<Client> clients) {

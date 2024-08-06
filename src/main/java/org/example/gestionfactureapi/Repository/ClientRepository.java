@@ -12,4 +12,5 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client,Integer> {
     @Query("SELECT c FROM Client c WHERE c.ste.idSte = :idSte")
     List<Client> findAllByIdSte(@Param("idSte") Integer idSte);
+    List<Client> findAllBySte_IdSteOrderByName(Integer idSte);
 }
