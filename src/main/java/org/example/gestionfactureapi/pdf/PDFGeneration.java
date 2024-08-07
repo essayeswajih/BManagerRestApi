@@ -343,16 +343,12 @@ public class PDFGeneration {
         addCellOfHeading(table,"TOTAL TVA",headerNormalFont);
         double totalTVA = this.montTVA19 + this.montTVA13 + this.montTVA7;
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
-
-        addCellVide(table);
-        addCellVide(table);
-        addCellVide(table);
+        String text="Arrétél le présent "+this.name+" à la somme de :";
+        addCell(table,text,headerNormalFont,3,2,0);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
         addCell(table, String.format("%.3f",this.timbre), normalFont);
 
-        addCellVide(table);
-        addCellVide(table);
         addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TTC",headerNormalFont);
@@ -381,6 +377,16 @@ public class PDFGeneration {
         cell.setColspan(colspan);
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderColor(BaseColor.GRAY);
+        table.addCell(cell);
+    }
+    private void addCell(PdfPTable table, String content, Font font,int colspan,int rowlspan,int border) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
+        cell.setColspan(colspan);
+        cell.setRowspan(rowlspan);
+        cell.setPadding(5);
+        cell.setBorder(border);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
