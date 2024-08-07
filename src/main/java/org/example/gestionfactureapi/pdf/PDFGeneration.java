@@ -350,6 +350,7 @@ public class PDFGeneration {
         String text="Arrété à la somme de : "+converter.toText().toUpperCase();
         addCell(table,text,boldFont,3,2,0);
         addCellVide(table);
+        addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
         addCell(table, String.format("%.3f",this.timbre), normalFont);
 
