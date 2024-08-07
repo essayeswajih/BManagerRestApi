@@ -346,7 +346,7 @@ public class PDFGeneration {
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
         NumberToText converter = new NumberToText(String.format("%.3f",this.totalTTC));
         String text="Arrété à la somme de : "+converter.toText().toUpperCase();
-        addCell(table,text,headerNormalFont,3,2,0);
+        addCell(table,text,boldFont,3,2,0);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
         addCell(table, String.format("%.3f",this.timbre), normalFont);
@@ -387,6 +387,7 @@ public class PDFGeneration {
         cell.setColspan(colspan);
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
+        cell.setPaddingTop(15);
         cell.setBorder(border);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorderColor(BaseColor.GRAY);
