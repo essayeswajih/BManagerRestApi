@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.tools.NumberToText;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -28,6 +29,7 @@ public class PDFGenerationV {
     private double montTVA13=0;
     private double remise = 0;
     private double totalHT=0;
+    double netHT = 0;
     private double totalTTC=0;
     private double timbre = 0;
     private String name;
@@ -146,6 +148,7 @@ public class PDFGenerationV {
             montTVA13 =0;
             montTVA7 = 0;
         }
+        this.netHT = this.totalHT -this.remise;
         this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
 
         doc.add(table);
@@ -286,6 +289,7 @@ public class PDFGenerationV {
         int qte = i.getQte();
         double remise = i.getRemise() == null ? 0 : i.getRemise();  // Assuming getRemise() returns the discount percentage
         double totalHT = venteHT * qte;
+
         double discountedTotalHT = totalHT - (totalHT * remise / 100);
         ligneDetails.add(String.format("%.3f", discountedTotalHT));
         ligneDetails.add(i.getArticle().getTva().toString());
@@ -336,7 +340,7 @@ public class PDFGenerationV {
         addCell(table, String.format("%.3f",this.montTVA13), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"NET HT",headerNormalFont);
-        addCell(table, String.format("%.3f",this.totalHT), normalFont);
+        addCell(table, String.format("%.3f",this.netHT), normalFont);
 
         // Row 1
         addCell(table, "7%", normalFont);
@@ -347,16 +351,15 @@ public class PDFGenerationV {
         double totalTVA = this.montTVA19 + this.montTVA13 + this.montTVA7;
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
 
-        addCellVide(table);
-        addCellVide(table);
+        NumberToText converter = new NumberToText(String.format("%.3f",this.totalTTC));
+        String text="Arrété à la somme de : "+converter.toText().toUpperCase();
+        addCell(table,text,boldFont,3,2,0);
         addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
         addCell(table, String.format("%.3f",this.timbre), normalFont);
 
-        addCellVide(table);
-        addCellVide(table);
-        addCellVide(table);
+
         addCellVide(table);
         addCellOfHeading(table,"TTC",headerNormalFont);
         addCell(table, String.format("%.3f",this.totalTTC), normalFont);
@@ -383,6 +386,17 @@ public class PDFGenerationV {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+    }
+    private void addCell(PdfPTable table, String content, Font font,int colspan,int rowlspan,int border) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
+        cell.setColspan(colspan);
+        cell.setRowspan(rowlspan);
+        cell.setPadding(5);
+        cell.setPaddingTop(15);
+        cell.setBorder(border);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
     }
     private void addCellVide(PdfPTable table) {

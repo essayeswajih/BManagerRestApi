@@ -29,7 +29,7 @@ public class NumberToText {
         String integerWords = convertIntegerToFrench(integerPart);
         String fractionalWords = convertFractionsToFrench(fractionalPart);
 
-        return integerWords + " dinars et " + fractionalWords + " MELLIMES";
+        return integerWords + " dinars et " + fractionalWords + " MILLIMES";
     }
 
     private String convertIntegerToFrench(int number) {

@@ -33,6 +33,7 @@ public class PDFGeneration {
     private double remise = 0;
     private double totalHT=0;
     private double totalTTC=0;
+    private double netHT = 0;
     private double timbre = 0;
 
     private String name;
@@ -144,6 +145,7 @@ public class PDFGeneration {
             this.totalHT+=i.getTotalNet();
 
         }
+        this.netHT = this.totalHT -this.remise;
         this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
         doc.add(table);
 
@@ -334,7 +336,7 @@ public class PDFGeneration {
         addCell(table, String.format("%.3f",this.montTVA13), normalFont);
         addCellVide(table);
         addCellOfHeading(table,"NET HT",headerNormalFont);
-        addCell(table, String.format("%.3f",this.totalHT), normalFont);
+        addCell(table, String.format("%.3f",this.netHT), normalFont);
 
         // Row 1
         addCell(table, "7%", normalFont);
