@@ -1,7 +1,5 @@
 package org.example.gestionfactureapi.tools;
 
-import java.text.DecimalFormat;
-
 public class NumberToText {
 
     private static final String[] units = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
@@ -56,27 +54,26 @@ public class NumberToText {
             number %= 100;
         }
         if (number >= 20) {
-            if (number < 30) {
-                words.append(tens[2]).append("-").append(units[number - 20]).append(" ");
-            } else if (number < 40) {
-                words.append(tens[3]).append("-").append(units[number - 30]).append(" ");
-            } else if (number < 50) {
-                words.append(tens[4]).append("-").append(units[number - 40]).append(" ");
-            } else if (number < 60) {
-                words.append(tens[5]).append("-").append(units[number - 50]).append(" ");
-            } else if (number < 70) {
-                words.append(tens[6]).append("-").append(units[number - 60]).append(" ");
+            if (number < 70) {
+                words.append(tens[number / 10]);
+                if (number % 10 != 0) {
+                    words.append("-").append(units[number % 10]);
+                }
             } else if (number < 80) {
-                words.append("soixante-").append(teens[number - 70]).append(" ");
-            } else if (number < 90) {
-                words.append(tens[8]).append("-").append(units[number - 80]).append(" ");
+                words.append("soixante-").append(teens[number - 70]);
             } else {
-                words.append("quatre-vingt-").append(teens[number - 90]).append(" ");
+                words.append("quatre-vingt");
+                if (number % 10 != 0) {
+                    words.append("-").append(units[number % 10]);
+                }
             }
+            number = 0;
+        } else if (number >= 10) {
+            words.append(teens[number - 10]);
             number = 0;
         }
         if (number > 0 && number < 10) {
-            words.append(units[number]).append(" ");
+            words.append(units[number]);
         }
 
         return words.toString().trim();
@@ -95,18 +92,19 @@ public class NumberToText {
             if (number < 20) {
                 sb.append(teens[number - 10]).append(" ");
             } else {
-                sb.append(tens[number / 10]).append("-");
-                number %= 10;
+                sb.append(tens[number / 10]);
+                if (number % 10 != 0) {
+                    sb.append("-").append(units[number % 10]);
+                }
             }
-        }
-        if (number > 0) {
-            sb.append(units[number]).append(" ");
+        } else if (number > 0) {
+            sb.append(units[number]);
         }
         return sb.toString().trim();
     }
 
     public static void main(String[] args) {
-        NumberToText converter = new NumberToText("1234.567");
-        System.out.println(converter.toText());
+        NumberToText converter = new NumberToText("213.772");
+        System.out.println(converter.toText());  // Output: deux cents treize dinars et sept cent soixante-douze MILLIMES
     }
 }
