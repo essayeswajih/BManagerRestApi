@@ -6,12 +6,8 @@ public class NumberToText {
 
     private static final String[] units = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private static final String[] teens = {"dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"};
-    private static final String[] tens = {"", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"};
+    private static final String[] tens = {"", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante-dix", "quatre-vingt", "quatre-vingt-dix"};
     private static final String[] hundreds = {"", "cent", "deux cents", "trois cents", "quatre cents", "cinq cents", "six cents", "sept cents", "huit cents", "neuf cents"};
-    private static final String[] thousands = {"", "mille", "deux mille", "trois mille", "quatre mille", "cinq mille", "six mille", "sept mille", "huit mille", "neuf mille"};
-    private static final String[] tenThousands = {"", "dix mille", "vingt mille", "trente mille", "quarante mille", "cinquante mille", "soixante mille", "soixante mille", "quatre-vingt mille", "quatre-vingt mille"};
-    private static final String[] hundredThousands = {"", "cent mille", "deux cent mille", "trois cent mille", "quatre cent mille", "cinq cent mille", "six cent mille", "sept cent mille", "huit cent mille", "neuf cent mille"};
-
 
     private double number;
 
@@ -43,19 +39,11 @@ public class NumberToText {
         }
 
         StringBuilder words = new StringBuilder();
-        if (number >= 100000) {
-            words.append(hundredThousands[number / 100000]).append(" ");
-            number %= 100000;
-        }
-        if (number >= 10000) {
-            words.append(tenThousands[number / 10000]).append(" ");
-            number %= 10000;
-        }
         if (number >= 1000) {
             if (number / 1000 == 1) {
                 words.append("mille ");
             } else {
-                words.append(thousands[number / 1000]).append(" ");
+                words.append(convertIntegerToFrench(number / 1000)).append(" mille ");
             }
             number %= 1000;
         }
@@ -67,10 +55,7 @@ public class NumberToText {
             }
             number %= 100;
         }
-        if (number >= 10 && number < 20) {
-            words.append(teens[number - 10]).append(" ");
-            number = 0;
-        } else if (number >= 20) {
+        if (number >= 20) {
             if (number < 30) {
                 words.append(tens[2]).append("-").append(units[number - 20]).append(" ");
             } else if (number < 40) {
@@ -102,16 +87,26 @@ public class NumberToText {
             return "zéro";
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(units[number / 100]).append(" ");
-        number %= 100;
-        sb.append(units[number / 10]).append(" ");
-        number %= 10;
-        sb.append(units[number]);
-        return sb.toString();
+        if (number >= 100) {
+            sb.append(units[number / 100]).append(" cent ");
+            number %= 100;
+        }
+        if (number >= 10) {
+            if (number < 20) {
+                sb.append(teens[number - 10]).append(" ");
+            } else {
+                sb.append(tens[number / 10]).append("-");
+                number %= 10;
+            }
+        }
+        if (number > 0) {
+            sb.append(units[number]).append(" ");
+        }
+        return sb.toString().trim();
     }
 
     public static void main(String[] args) {
-        NumberToText converter = new NumberToText("1234567.890");
+        NumberToText converter = new NumberToText("1234.567");
         System.out.println(converter.toText());
     }
 }
