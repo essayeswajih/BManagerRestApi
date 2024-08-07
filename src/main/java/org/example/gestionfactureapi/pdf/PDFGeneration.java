@@ -345,7 +345,7 @@ public class PDFGeneration {
         double totalTVA = this.montTVA19 + this.montTVA13 + this.montTVA7;
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
         NumberToText converter = new NumberToText(String.format("%.3f",this.totalTTC));
-        String text="Arrétél le présent "+this.name+" à la somme de : "+converter;
+        String text="Arrétél le présent "+this.name+" à la somme de : "+converter.toText();
         addCell(table,text,headerNormalFont,3,2,0);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
