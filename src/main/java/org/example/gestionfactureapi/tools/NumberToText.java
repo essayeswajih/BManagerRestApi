@@ -4,14 +4,14 @@ import java.text.DecimalFormat;
 
 public class NumberToText {
 
-    private static final String[] units = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
-    private static final String[] teens = {"dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"};
-    private static final String[] tens = {"", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"};
-    private static final String[] hundreds = {"", "cent", "deux cents", "trois cents", "quatre cents", "cinq cents", "six cents", "sept cents", "huit cents", "neuf cents"};
-    private static final String[] thousands = {"", "mille", "deux mille", "trois mille", "quatre mille", "cinq mille", "six mille", "sept mille", "huit mille", "neuf mille"};
-    private static final String[] tenThousands = {"", "dix mille", "vingt mille", "trente mille", "quarante mille", "cinquante mille", "soixante mille", "soixante mille", "quatre-vingt mille", "quatre-vingt mille"};
-    private static final String[] hundredThousands = {"", "cent mille", "deux cent mille", "trois cent mille", "quatre cent mille", "cinq cent mille", "six cent mille", "sept cent mille", "huit cent mille", "neuf cent mille"};
+    private static final String[] uniteNames1 = {
+            "", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix",
+            "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"
+    };
 
+    private static final String[] dizaineNames = {
+            "", "", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"
+    };
 
     private double number;
 
@@ -37,81 +37,89 @@ public class NumberToText {
         return integerWords + " dinars et " + fractionalWords + " MILLIMES";
     }
 
+    private String convertZeroToHundred(int number) {
+        int laDizaine = number / 10;
+        int lUnite = number % 10;
+        String resultat = "";
+
+        if (laDizaine == 1 || laDizaine == 7 || laDizaine == 9) {
+            lUnite += 10;
+        }
+
+        String laLiaison = (laDizaine > 1 && lUnite > 0) ? "-" : "";
+        if (lUnite == 1 && laDizaine != 8) {
+            laLiaison = " et ";
+        } else if (lUnite == 11 && laDizaine == 7) {
+            laLiaison = " et ";
+        }
+
+        switch (laDizaine) {
+            case 0:
+                resultat = uniteNames1[lUnite];
+                break;
+            case 8:
+                if (lUnite == 0) {
+                    resultat = dizaineNames[laDizaine];
+                } else {
+                    resultat = dizaineNames[laDizaine] + laLiaison + uniteNames1[lUnite];
+                }
+                break;
+            default:
+                resultat = dizaineNames[laDizaine] + laLiaison + uniteNames1[lUnite];
+        }
+        return resultat;
+    }
+
+    private String convertLessThanOneThousand(int number) {
+        int lesCentaines = number / 100;
+        int leReste = number % 100;
+        String sReste = convertZeroToHundred(leReste);
+
+        String resultat;
+        switch (lesCentaines) {
+            case 0:
+                resultat = sReste;
+                break;
+            case 1:
+                resultat = (leReste > 0) ? "cent " + sReste : "cent";
+                break;
+            default:
+                resultat = uniteNames1[lesCentaines] + " cent " + sReste;
+                break;
+        }
+        return resultat;
+    }
+
     private String convertIntegerToFrench(int number) {
         if (number == 0) {
             return "zéro";
         }
 
         StringBuilder words = new StringBuilder();
-        if (number >= 100000) {
-            words.append(hundredThousands[number / 100000]).append(" ");
-            number %= 100000;
-        }
-        if (number >= 10000) {
-            words.append(tenThousands[number / 10000]).append(" ");
-            number %= 10000;
-        }
+
         if (number >= 1000) {
             if (number / 1000 == 1) {
                 words.append("mille ");
             } else {
-                words.append(thousands[number / 1000]).append(" ");
+                words.append(convertLessThanOneThousand(number / 1000)).append("mille ");
             }
             number %= 1000;
         }
-        if (number >= 100) {
-            if (number / 100 == 1 && number % 100 == 0) {
-                words.append("cent ");
-            } else {
-                words.append(hundreds[number / 100]).append(" ");
-            }
-            number %= 100;
-        }
-        if (number >= 10 && number < 20) {
-            words.append(teens[number - 10]).append(" ");
-            number = 0;
-        } else if (number >= 20) {
-            if (number < 30) {
-                words.append(tens[2]).append("-").append(units[number - 20]).append(" ");
-            } else if (number < 40) {
-                words.append(tens[3]).append("-").append(units[number - 30]).append(" ");
-            } else if (number < 50) {
-                words.append(tens[4]).append("-").append(units[number - 40]).append(" ");
-            } else if (number < 60) {
-                words.append(tens[5]).append("-").append(units[number - 50]).append(" ");
-            } else if (number < 70) {
-                words.append(tens[6]).append("-").append(units[number - 60]).append(" ");
-            } else if (number < 80) {
-                words.append("soixante-").append(teens[number - 70]).append(" ");
-            } else if (number < 90) {
-                words.append(tens[8]).append("-").append(units[number - 80]).append(" ");
-            } else {
-                words.append("quatre-vingt-").append(units[number - 90]).append(" ");
-            }
-            number = 0;
-        }
-        if (number > 0 && number < 10) {
-            words.append(units[number]).append(" ");
+
+        if (number > 0) {
+            words.append(convertLessThanOneThousand(number));
         }
 
         return words.toString().trim();
     }
 
     private String convertFractionsToFrench(int number) {
-        if (number == 0) {
-            return "zéro";
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(units[number / 100]).append(" ");
-        number %= 100;
-        sb.append(units[number / 10]).append(" ");
-        number %= 10;
-        sb.append(units[number]);
-        return sb.toString();
+        DecimalFormat df = new DecimalFormat("000");
+        return df.format(number);
     }
 
     public static void main(String[] args) {
-        NumberToText converter = new NumberToText("1234567.890");
+        NumberToText converter = new NumberToText("1234.567");
         System.out.println(converter.toText());
     }
 }
