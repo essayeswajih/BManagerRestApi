@@ -7,6 +7,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.tools.NumberToText;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -343,13 +344,13 @@ public class PDFGeneration {
         addCellOfHeading(table,"TOTAL TVA",headerNormalFont);
         double totalTVA = this.montTVA19 + this.montTVA13 + this.montTVA7;
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
-        String text="Arrétél le présent "+this.name+" à la somme de :";
+        NumberToText converter = new NumberToText(String.format("%.3f",this.totalTTC));
+        String text="Arrétél le présent "+this.name+" à la somme de : "+converter;
         addCell(table,text,headerNormalFont,3,2,0);
         addCellVide(table);
         addCellOfHeading(table,"TIMBRE",headerNormalFont);
         addCell(table, String.format("%.3f",this.timbre), normalFont);
 
-        addCellVide(table);
         addCellVide(table);
         addCellOfHeading(table,"TTC",headerNormalFont);
         addCell(table, String.format("%.3f",this.totalTTC), normalFont);
