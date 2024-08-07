@@ -298,7 +298,7 @@ public class PDFGenerationV {
             PdfPCell cell = new PdfPCell(new Phrase(ligneDetails.get(i1), cellFont));
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBorder(PdfPCell.BOX);
-            cell.setBorderColor(BaseColor.BLACK);
+            cell.setBorderColor(BaseColor.GRAY);
             cell.setPadding(7);
             table.addCell(cell);
         }
