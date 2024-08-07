@@ -398,7 +398,7 @@ public class PDFGeneration {
         cell.setColspan(1);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.GRAY);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
 
