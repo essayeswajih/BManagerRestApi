@@ -380,7 +380,7 @@ public class PDFGeneration {
         cell.setRowspan(rowlspan);
         cell.setPadding(5);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorderColor(BaseColor.BLACK);
+        cell.setBorderColor(BaseColor.GRAY);
         table.addCell(cell);
     }
     private void addCellVide(PdfPTable table) {
