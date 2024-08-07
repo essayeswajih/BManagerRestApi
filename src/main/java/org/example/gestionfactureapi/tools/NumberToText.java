@@ -67,11 +67,11 @@ public class NumberToText {
             } else if (number < 70) {
                 words.append(tens[6]).append("-").append(units[number - 60]).append(" ");
             } else if (number < 80) {
-                words.append("soixante-dix").append(teens[number - 70]).append(" ");
+                words.append("soixante-").append(teens[number - 70]).append(" ");
             } else if (number < 90) {
                 words.append(tens[8]).append("-").append(units[number - 80]).append(" ");
             } else {
-                words.append("quatre-vingt-dix").append(units[number - 90]).append(" ");
+                words.append("quatre-vingt-").append(teens[number - 90]).append(" ");
             }
             number = 0;
         }
