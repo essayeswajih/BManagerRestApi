@@ -141,6 +141,11 @@ public class PDFGenerationV {
             this.totalHT+=i.getTotalNet();
 
         }
+        if(this.bon.getClient().isExonere() && this.x>1){
+            montTVA19 = 0;
+            montTVA13 =0;
+            montTVA7 = 0;
+        }
         this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
 
         doc.add(table);
