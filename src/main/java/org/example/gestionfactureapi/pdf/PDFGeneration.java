@@ -426,7 +426,6 @@ public class PDFGeneration {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
-
     }
 
 }
