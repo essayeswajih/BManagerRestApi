@@ -8,6 +8,10 @@ public class NumberToText {
     private static final String[] teens = {"dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"};
     private static final String[] tens = {"", "dix", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"};
     private static final String[] hundreds = {"", "cent", "deux cents", "trois cents", "quatre cents", "cinq cents", "six cents", "sept cents", "huit cents", "neuf cents"};
+    private static final String[] thousands = {"", "mille", "deux mille", "trois mille", "quatre mille", "cinq mille", "six mille", "sept mille", "huit mille", "neuf mille"};
+    private static final String[] tenThousands = {"", "dix mille", "vingt mille", "trente mille", "quarante mille", "cinquante mille", "soixante mille", "soixante mille", "quatre-vingt mille", "quatre-vingt mille"};
+    private static final String[] hundredThousands = {"", "cent mille", "deux cent mille", "trois cent mille", "quatre cent mille", "cinq cent mille", "six cent mille", "sept cent mille", "huit cent mille", "neuf cent mille"};
+
 
     private double number;
 
@@ -39,11 +43,19 @@ public class NumberToText {
         }
 
         StringBuilder words = new StringBuilder();
+        if (number >= 100000) {
+            words.append(hundredThousands[number / 100000]).append(" ");
+            number %= 100000;
+        }
+        if (number >= 10000) {
+            words.append(tenThousands[number / 10000]).append(" ");
+            number %= 10000;
+        }
         if (number >= 1000) {
             if (number / 1000 == 1) {
                 words.append("mille ");
             } else {
-                words.append(convertIntegerToFrench(number / 1000)).append(" mille ");
+                words.append(thousands[number / 1000]).append(" ");
             }
             number %= 1000;
         }
@@ -55,7 +67,10 @@ public class NumberToText {
             }
             number %= 100;
         }
-        if (number >= 20) {
+        if (number >= 10 && number < 20) {
+            words.append(teens[number - 10]).append(" ");
+            number = 0;
+        } else if (number >= 20) {
             if (number < 30) {
                 words.append(tens[2]).append("-").append(units[number - 20]).append(" ");
             } else if (number < 40) {
@@ -86,12 +101,17 @@ public class NumberToText {
         if (number == 0) {
             return "zéro";
         }
-        DecimalFormat df = new DecimalFormat("000");
-        return df.format(number);
+        StringBuilder sb = new StringBuilder();
+        sb.append(units[number / 100]).append(" ");
+        number %= 100;
+        sb.append(units[number / 10]).append(" ");
+        number %= 10;
+        sb.append(units[number]);
+        return sb.toString();
     }
 
     public static void main(String[] args) {
-        NumberToText converter = new NumberToText("1234.567");
+        NumberToText converter = new NumberToText("1234567.890");
         System.out.println(converter.toText());
     }
 }
