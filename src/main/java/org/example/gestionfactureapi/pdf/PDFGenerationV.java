@@ -210,7 +210,7 @@ public class PDFGenerationV {
         clientCell.setPadding(0);
         PdfPTable clientTbale = new PdfPTable(3);
         clientTbale.setWidthPercentage(100);
-        addCellOfHeading(clientTbale, "Fournisseur", normalFont, 1, 1);
+        addCellOfHeading(clientTbale, "Client", normalFont, 1, 1);
         addCell(clientTbale,  this.bon.getClient().getName(), normalFont, 2, 1);
         addCellOfHeading(clientTbale, "Adresse", normalFont, 1, 1);
         addCell(clientTbale, this.bon.getClient().getAdresse(), normalFont, 2, 1);
