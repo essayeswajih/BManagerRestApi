@@ -216,8 +216,7 @@ public class BonLivVController {
                     return ResponseEntity.internalServerError().body(e.getMessage());
                 }
             }
-
-            return ResponseEntity.ok(x);
+            return ResponseEntity.ok(bonLivVService.save(x));
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
