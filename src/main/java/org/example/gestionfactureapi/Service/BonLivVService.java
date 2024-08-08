@@ -1,5 +1,6 @@
 package org.example.gestionfactureapi.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.GetBonLiv;
 import org.example.gestionfactureapi.Entity.*;
@@ -33,6 +34,13 @@ public class BonLivVService {
     }
 
     public BonLivV getById(GetBonLiv bonliv) {
-        return bonLivVRepository.findByIdAndSteIdSte(bonliv.getIdBon(),bonliv.getIdSte());
+        BonLivV b = bonLivVRepository.findById(bonliv.getIdBon()).orElseThrow(
+                ()-> new EntityNotFoundException("Bon Liv not found")
+        );
+        if(b.getSte().getIdSte()==bonliv.getIdSte()){
+            return b;
+        }else {
+            throw new EntityNotFoundException("Bon Liv not found");
+        }
     }
 }
