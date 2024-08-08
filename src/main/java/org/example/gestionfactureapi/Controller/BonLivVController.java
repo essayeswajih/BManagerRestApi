@@ -240,7 +240,7 @@ public class BonLivVController {
                 Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte());
                 updateStock(stock);
 
-                saveHistoriqueArticle(item, stock, qte, Long.valueOf(b1.getId()));
+                saveHistoriqueArticle(item, stock, qte, b1.getId());
             }
 
             // Save the updated BonLivV
@@ -273,7 +273,7 @@ public class BonLivVController {
         }
     }
 
-    private void saveHistoriqueArticle(Item item, Stock stock, int qte, Long docId) {
+    private void saveHistoriqueArticle(Item item, Stock stock, int qte, Integer docId) {
         LocalDate localDate = LocalDate.now();
         Date sqlDate = Date.valueOf(localDate);
 
@@ -284,6 +284,7 @@ public class BonLivVController {
         ha.setOutput(0);
         ha.setArticle(item.getArticle());
         ha.setDocName("bonLivRetour" + docId);
+        ha.setDocId(docId);
         ha.setPrice(item.getNewVenteHT());
         ha.setStock(stock);
         ha.setQteReel(stock.getQte());
