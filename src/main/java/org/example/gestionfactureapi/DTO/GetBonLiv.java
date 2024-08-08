@@ -1,0 +1,13 @@
+package org.example.gestionfactureapi.DTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetBonLiv {
+    private Integer idBon;
+    private Integer idSte;
+}

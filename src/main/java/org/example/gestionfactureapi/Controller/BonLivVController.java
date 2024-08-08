@@ -2,6 +2,7 @@ package org.example.gestionfactureapi.Controller;
 
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
+import org.example.gestionfactureapi.DTO.GetBonLiv;
 import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.MediaType;
@@ -170,6 +171,14 @@ public class BonLivVController {
             res.add(ListOfArticlesToAlert);
             respone.put("Response",res);
             return ResponseEntity.ok(respone);
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+    @PostMapping("getById")
+    public ResponseEntity<?> getById(@RequestBody GetBonLiv bonliv){
+        try {
+            return ResponseEntity.ok(bonLivVService.getById(bonliv));
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

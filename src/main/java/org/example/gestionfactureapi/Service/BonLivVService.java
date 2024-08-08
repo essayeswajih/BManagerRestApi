@@ -1,6 +1,7 @@
 package org.example.gestionfactureapi.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.gestionfactureapi.DTO.GetBonLiv;
 import org.example.gestionfactureapi.Entity.*;
 import org.example.gestionfactureapi.Repository.BonLivVRepository;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,9 @@ public class BonLivVService {
 
     public BonLivV saveAndFlush(BonLivV b) {
         return bonLivVRepository.saveAndFlush(b);
+    }
+
+    public BonLivV getById(GetBonLiv bonliv) {
+        return bonLivVRepository.findBySte_IdSteAndId(bonliv.getIdSte(), bonliv.getIdBon());
     }
 }
