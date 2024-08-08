@@ -184,36 +184,37 @@ public class BonLivVController {
             for (Item item:x.getItems()){
                 int qte =0;
                 for(Item item2:last.getItems()){
-                    if(item.getArticle().getIdArticle()==item2.getArticle().getIdArticle()){
-                        qte = item2.getQte()-item.getQte();
-                    }
-                }
-                Stock stock = new Stock(null,item.getArticle(),qte,x.getSte()); //5555
-                try {
-                    Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
-                    if(stock22!=null){
-                        stock22.setQte(stock22.getQte()+stock.getQte()); // ssss
-                        stockService.save(stock22);
-                    }else {
-                        stock22 = stockService.save(stock);
-                    }
-                    LocalDate localDate = LocalDate.now();
-                    Date sqlDate = Date.valueOf(localDate);
+                    if(item.getArticle().getIdArticle()==item2.getArticle().getIdArticle()) {
+                        qte = item2.getQte() - item.getQte();
 
-                    HistoriqueArticle ha = new HistoriqueArticle();
-                    ha.setId(null);
-                    ha.setDate(sqlDate);
-                    ha.setInput(qte);
-                    ha.setOutput(0);
-                    ha.setArticle(item.getArticle());
-                    ha.setDocName("bonLivRetour"+x.getId());
-                    ha.setDocId(x.getId());
-                    ha.setPrice(item.getNewVenteHT());
-                    ha.setStock(stock22);
-                    ha.setQteReel(stock22.getQte());
-                    historiqueArticleService.save(ha);
-                }catch (Exception e){
-                    return ResponseEntity.internalServerError().body(e.getMessage());
+                        Stock stock = new Stock(null, item.getArticle(), qte, x.getSte()); //5555
+                        try {
+                            Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
+                            if (stock22 != null) {
+                                stock22.setQte(stock22.getQte() + stock.getQte()); // ssss
+                                stockService.save(stock22);
+                            } else {
+                                stock22 = stockService.save(stock);
+                            }
+                            LocalDate localDate = LocalDate.now();
+                            Date sqlDate = Date.valueOf(localDate);
+
+                            HistoriqueArticle ha = new HistoriqueArticle();
+                            ha.setId(null);
+                            ha.setDate(sqlDate);
+                            ha.setInput(qte);
+                            ha.setOutput(0);
+                            ha.setArticle(item.getArticle());
+                            ha.setDocName("bonLivRetour" + x.getId());
+                            ha.setDocId(x.getId());
+                            ha.setPrice(item.getNewVenteHT());
+                            ha.setStock(stock22);
+                            ha.setQteReel(stock22.getQte());
+                            historiqueArticleService.save(ha);
+                        } catch (Exception e) {
+                            return ResponseEntity.internalServerError().body(e.getMessage());
+                        }
+                    }
                 }
             }
             return ResponseEntity.ok(bonLivVService.save(x));
