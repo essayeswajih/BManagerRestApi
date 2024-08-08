@@ -182,11 +182,11 @@ public class BonLivVController {
             BonLivV last = bonLivVService.findById(b1.getId());
             BonLivV x =b1;
             for (Item item:x.getItems()){
-                int qte =0;
                 for(Item item2:last.getItems()){
+                    int qte =0;
                     if(item.getArticle().getIdArticle()==item2.getArticle().getIdArticle()) {
                         qte = item2.getQte() - item.getQte();
-
+                        System.out.println("QTE:" +qte);
                         Stock stock = new Stock(null, item.getArticle(), qte, x.getSte()); //5555
                         try {
                             Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
