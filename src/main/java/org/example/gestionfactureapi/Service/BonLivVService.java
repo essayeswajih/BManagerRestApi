@@ -33,6 +33,6 @@ public class BonLivVService {
     }
 
     public BonLivV getById(GetBonLiv bonliv) {
-        return bonLivVRepository.findByIdAndSteIdSte(bonliv.getIdSte(), bonliv.getIdBon());
+        return bonLivVRepository.findByIdAndSteIdSte(bonliv.getIdBon(),bonliv.getIdSte());
     }
 }
