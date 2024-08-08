@@ -43,4 +43,10 @@ public class BonLivVService {
             throw new EntityNotFoundException("Bon Liv not found");
         }
     }
+
+    public BonLivV findById(Integer id) {
+        return bonLivVRepository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("Bon Liv Not Found")
+        );
+    }
 }
