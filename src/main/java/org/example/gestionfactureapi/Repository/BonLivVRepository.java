@@ -11,5 +11,5 @@ public interface BonLivVRepository extends JpaRepository<BonLivV,Integer> {
     public BonLivV findBonLivVByDevis (Devis devis);
     public List<BonLivV> findAllBySte(Ste ste);
     void deleteBonLivVByDevis_Id(Integer id);
-    public BonLivV findBySte_IdSteAndId(Integer idSte,Integer id);
+    public BonLivV findByIdAndSteIdSte(Integer idSte,Integer id);
 }
