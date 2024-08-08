@@ -222,6 +222,78 @@ public class BonLivVController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+    @PostMapping("saveBonRetour1")
+    public ResponseEntity<?> saveBonRetour1(@RequestBody BonLivV b1) {
+        if (b1 == null || b1.getId() == null) {
+            return ResponseEntity.badRequest().body("Invalid 'BonLivV' data");
+        }
+
+        try {
+            BonLivV last = bonLivVService.findById(b1.getId());
+            if (last == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            for (Item item : b1.getItems()) {
+                int qte = calculateQuantity(item, last);
+
+                Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte());
+                updateStock(stock);
+
+                saveHistoriqueArticle(item, stock, qte, Long.valueOf(b1.getId()));
+            }
+
+            // Save the updated BonLivV
+            BonLivV savedBonLivV = bonLivVService.save(b1);
+            return ResponseEntity.ok(savedBonLivV);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    private int calculateQuantity(Item item, BonLivV last) {
+        return last.getItems().stream()
+                .filter(item2 -> item.getArticle().getIdArticle() == item2.getArticle().getIdArticle())
+                .mapToInt(item2 -> item2.getQte() - item.getQte())
+                .findFirst()
+                .orElse(0);
+    }
+
+    private void updateStock(Stock stock) {
+        try {
+            Stock existingStock = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
+            if (existingStock != null) {
+                existingStock.setQte(existingStock.getQte() + stock.getQte());
+                stockService.save(existingStock);
+            } else {
+                stockService.save(stock);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private void saveHistoriqueArticle(Item item, Stock stock, int qte, Long docId) {
+        LocalDate localDate = LocalDate.now();
+        Date sqlDate = Date.valueOf(localDate);
+
+        HistoriqueArticle ha = new HistoriqueArticle();
+        ha.setId(null);
+        ha.setDate(sqlDate);
+        ha.setInput(qte);
+        ha.setOutput(0);
+        ha.setArticle(item.getArticle());
+        ha.setDocName("bonLivRetour" + docId);
+        ha.setPrice(item.getNewVenteHT());
+        ha.setStock(stock);
+        ha.setQteReel(stock.getQte());
+
+        try {
+            historiqueArticleService.save(ha);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
     @PostMapping("getById")
     public ResponseEntity<?> getById(@RequestBody GetBonLiv bonliv){
         try {
