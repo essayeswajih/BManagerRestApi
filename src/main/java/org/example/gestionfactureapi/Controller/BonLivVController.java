@@ -177,9 +177,10 @@ public class BonLivVController {
     }
     @PostMapping("saveBonRetour")
     public ResponseEntity<?> saveBonRetour(@RequestBody BonLivV b1){
-        System.out.println(b1);
         try {
             BonLivV last = bonLivVService.findById(b1.getId());
+            System.out.println(last);
+            System.out.println(b1);
             BonLivV x =b1;
             for (Item item:x.getItems()){
                 for(Item item2:last.getItems()){
