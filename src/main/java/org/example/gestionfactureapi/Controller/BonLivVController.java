@@ -179,8 +179,8 @@ public class BonLivVController {
     public ResponseEntity<?> saveBonRetour(@RequestBody BonLivV b1){
         try {
             BonLivV last = bonLivVService.findById(b1.getId());
-            System.out.println(last);
-            System.out.println(b1);
+            System.out.println(last.getItems());
+            System.out.println(b1.getItems());
             BonLivV x =b1;
             for (Item item:x.getItems()){
                 for(Item item2:last.getItems()){
