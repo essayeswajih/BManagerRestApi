@@ -179,16 +179,13 @@ public class BonLivVController {
     public ResponseEntity<?> saveBonRetour(@RequestBody BonLivV b1){
         try {
             BonLivV last = bonLivVService.findById(b1.getId());
-            System.out.println(last.getItems());
-            System.out.println(b1.getItems());
-            BonLivV x =b1;
-            for (Item item:x.getItems()){
+            for (Item item: b1.getItems()){
                 for(Item item2:last.getItems()){
-                    int qte =0;
                     if(item.getArticle().getIdArticle()==item2.getArticle().getIdArticle()) {
+                        int qte =0;
                         qte = item2.getQte() - item.getQte();
                         System.out.println("QTE:" +qte);
-                        Stock stock = new Stock(null, item.getArticle(), qte, x.getSte()); //5555
+                        Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte()); //5555
                         try {
                             Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
                             if (stock22 != null) {
@@ -206,8 +203,8 @@ public class BonLivVController {
                             ha.setInput(qte);
                             ha.setOutput(0);
                             ha.setArticle(item.getArticle());
-                            ha.setDocName("bonLivRetour" + x.getId());
-                            ha.setDocId(x.getId());
+                            ha.setDocName("bonLivRetour" + b1.getId());
+                            ha.setDocId(b1.getId());
                             ha.setPrice(item.getNewVenteHT());
                             ha.setStock(stock22);
                             ha.setQteReel(stock22.getQte());
@@ -218,7 +215,7 @@ public class BonLivVController {
                     }
                 }
             }
-            return ResponseEntity.ok(bonLivVService.save(x));
+            return ResponseEntity.ok(bonLivVService.save(b1));
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
