@@ -177,34 +177,37 @@ public class BonLivVController {
         }
     }
     @PostMapping("saveBonRetour")
-    public ResponseEntity<?> saveBonRetour(@RequestBody BonLivV b1){
+    public ResponseEntity<?> saveBonRetour(@RequestBody BonLivV b1) {
         try {
             BonLivV last = bonLivVService.findById(b1.getId());
-            List<Item> remouved = new ArrayList<>();
-            for (Item item: b1.getItems()){
-                int index = 0;
-                for(Item item2:last.getItems()){
-                    if(Objects.equals(item.getArticle().getIdArticle(), item2.getArticle().getIdArticle())) {
-                        int qte =0;
-                        qte = item2.getQte() - item.getQte();
-                        System.out.println("QTE:" +qte);
-                        Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte()); //5555
+
+            for (Item item : b1.getItems()) {
+                boolean itemExists = false;
+
+                for (Item item2 : last.getItems()) {
+                    if (Objects.equals(item.getArticle().getIdArticle(), item2.getArticle().getIdArticle())) {
+                        itemExists = true;
+                        int qte = item2.getQte() - item.getQte();
+                        System.out.println("QTE: " + qte);
+                        Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte());
+
                         try {
                             Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
                             if (stock22 != null) {
-                                stock22.setQte(stock22.getQte() + qte); // ssss
+                                stock22.setQte(stock22.getQte() + qte);
                                 stockService.save(stock22);
                             } else {
                                 stock22 = stockService.save(stock);
                             }
+
                             LocalDate localDate = LocalDate.now();
                             Date sqlDate = Date.valueOf(localDate);
 
                             HistoriqueArticle ha = new HistoriqueArticle();
                             ha.setId(null);
                             ha.setDate(sqlDate);
-                            ha.setInput(qte);
-                            ha.setOutput(0);
+                            ha.setInput(qte > 0 ? qte : 0);
+                            ha.setOutput(qte < 0 ? -qte : 0);
                             ha.setArticle(item.getArticle());
                             ha.setDocName("bonLivRetour" + b1.getId());
                             ha.setDocId(b1.getId());
@@ -215,42 +218,47 @@ public class BonLivVController {
                         } catch (Exception e) {
                             return ResponseEntity.internalServerError().body(e.getMessage());
                         }
+                        break; // Exit the inner loop once the item is found and processed
+                    }
+                }
 
-                        if((item2 == last.getItems().getLast()) && (!Objects.equals(item.getId(), item2.getId()))){
-                            qte = item2.getQte();
-                            Stock stock1 = new Stock(null, item.getArticle(), qte, b1.getSte()); //5555
-                            try {
-                                Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
-                                if (stock22 != null) {
-                                    stock22.setQte(stock22.getQte() + qte); // ssss
-                                    stockService.save(stock22);
-                                } else {
-                                    stock22 = stockService.save(stock1);
-                                }
-                                LocalDate localDate = LocalDate.now();
-                                Date sqlDate = Date.valueOf(localDate);
+                // Handle the case where item from b1 was not found in last.getItems()
+                if (!itemExists) {
+                    int qte = item.getQte();
+                    Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte());
 
-                                HistoriqueArticle ha = new HistoriqueArticle();
-                                ha.setId(null);
-                                ha.setDate(sqlDate);
-                                ha.setInput(qte);
-                                ha.setOutput(0);
-                                ha.setArticle(item.getArticle());
-                                ha.setDocName("bonLivRetour" + b1.getId());
-                                ha.setDocId(b1.getId());
-                                ha.setPrice(item.getNewVenteHT());
-                                ha.setStock(stock22);
-                                ha.setQteReel(stock22.getQte());
-                                historiqueArticleService.save(ha);
-                            } catch (Exception e) {
-                                return ResponseEntity.internalServerError().body(e.getMessage());
-                            }
+                    try {
+                        Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
+                        if (stock22 != null) {
+                            stock22.setQte(stock22.getQte() + qte);
+                            stockService.save(stock22);
+                        } else {
+                            stock22 = stockService.save(stock);
                         }
+
+                        LocalDate localDate = LocalDate.now();
+                        Date sqlDate = Date.valueOf(localDate);
+
+                        HistoriqueArticle ha = new HistoriqueArticle();
+                        ha.setId(null);
+                        ha.setDate(sqlDate);
+                        ha.setInput(qte);
+                        ha.setOutput(0);
+                        ha.setArticle(item.getArticle());
+                        ha.setDocName("bonLivRetour" + b1.getId());
+                        ha.setDocId(b1.getId());
+                        ha.setPrice(item.getNewVenteHT());
+                        ha.setStock(stock22);
+                        ha.setQteReel(stock22.getQte());
+                        historiqueArticleService.save(ha);
+                    } catch (Exception e) {
+                        return ResponseEntity.internalServerError().body(e.getMessage());
                     }
                 }
             }
+
             return ResponseEntity.ok(bonLivVService.save(b1));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
