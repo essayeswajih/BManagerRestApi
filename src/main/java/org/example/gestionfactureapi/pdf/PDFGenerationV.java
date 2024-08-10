@@ -53,7 +53,7 @@ public class PDFGenerationV {
 
     public PDFGenerationV(Devis bon) {
         this.bon = bon;
-        this.numero = Integer.parseInt(bon.getRef().substring(7));
+        this.numero = Integer.parseInt(bon.getRef().substring(6));
         this.date = bon.getDateCreation();
         this.name = "Bon de commande";
         this.x=1;
@@ -69,7 +69,7 @@ public class PDFGenerationV {
         }else {
             this.bon = bonLivV.getDevis();
         }
-        this.numero = Integer.parseInt(bonLivV.getRef().substring(7));
+        this.numero = Integer.parseInt(bonLivV.getRef().substring(6));
         this.date = bonLivV.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
@@ -97,7 +97,7 @@ public class PDFGenerationV {
 
         this.date = factureV.getDateCreation();
         this.name = "Facture";
-        this.numero = Integer.parseInt(factureV.getRef().substring(7));
+        this.numero = Integer.parseInt(factureV.getRef().substring(6));
         this.x=3;
         this.timbre=1;
     }
