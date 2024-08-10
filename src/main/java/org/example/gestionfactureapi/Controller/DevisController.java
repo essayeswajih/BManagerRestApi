@@ -76,8 +76,11 @@ public class DevisController {
 
     private StringBuilder adjustNumber(Integer idSte, int i) {
         StringBuilder id = new StringBuilder(idSte.toString());
-        for(int x = id.length();x<i;i++){
-            id.append("0");
+        int length = id.length();
+        // Correct the loop condition to append zeros until length equals i
+        while (length < i) {
+            id.insert(0, "0"); // Insert zeros at the beginning
+            length++;
         }
         return id;
     }
