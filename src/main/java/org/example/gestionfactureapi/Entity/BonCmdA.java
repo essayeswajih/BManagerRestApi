@@ -36,5 +36,6 @@ public class BonCmdA {
     @Column(nullable = false)
     private Boolean trans = false;
 
+    private String ref;
 }
 

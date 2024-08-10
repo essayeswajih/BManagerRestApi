@@ -96,7 +96,7 @@ public class PDFGeneration {
                 }
 
             }
-            this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false);
+            this.bon = new BonCmdA(factureA.getId(),factureA.getBonLivAS().get(0).getFournisseur(), items,factureA.getDateCreation(),factureA.getBonLivAS().get(0).getSte(),false,factureA.getRef());
         }
 
         this.date = factureA.getDateCreation();

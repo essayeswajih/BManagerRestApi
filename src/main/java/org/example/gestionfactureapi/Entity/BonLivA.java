@@ -45,4 +45,6 @@ public class BonLivA {
     
     @Column
     private Boolean trans = false;
+
+    private String ref;
 }

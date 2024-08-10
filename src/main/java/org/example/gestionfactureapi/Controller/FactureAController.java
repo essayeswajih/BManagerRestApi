@@ -56,6 +56,8 @@ public class FactureAController {
             ste.setFen(ste.getFen()+1);
             steService.Save(f.getSte());
             f.setSte(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFen(),7).toString();
+            f.setRef(newRef);
             FactureA sv = factureAService.save(f);
             for(BonLivA bon :sv.getBonLivAS()){
                 bon.setFacture(sv);
@@ -114,6 +116,8 @@ public class FactureAController {
             Ste ste = steService.findById(f.getSte().getIdSte());
             ste.setFen(ste.getFen()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFen(),7).toString();
+            f.setRef(newRef);
             f.setSte(ste);
             FactureA sv = factureAService.save(f);
             for(Item item :sv.getItems()){
@@ -178,5 +182,12 @@ public class FactureAController {
     public ResponseEntity<?> toPdF(@RequestBody FactureA factureA) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(factureA);
         return ResponseEntity.ok("created");
+    }
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
     }
 }

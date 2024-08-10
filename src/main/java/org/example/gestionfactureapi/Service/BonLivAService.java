@@ -29,6 +29,8 @@ public class BonLivAService {
         Ste ste = steService.findById(b1.getBon().getSte().getIdSte());
         ste.setBen(ste.getBen()+1);
         steService.Save(ste);
+        String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getBen(),7).toString();
+        bonLivA.setRef(newRef);
         bonLivA.setSte(ste);
         bonLivA.setSte(b1.getBon().getSte());
         bonLivA.setDateCreation(b1.getDate());
@@ -44,5 +46,12 @@ public class BonLivAService {
 
     public BonLivA saveAndFlush(BonLivA b) {
         return bonLivARepository.saveAndFlush(b);
+    }
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
     }
 }

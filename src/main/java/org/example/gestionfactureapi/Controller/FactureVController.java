@@ -71,6 +71,8 @@ public class FactureVController {
             Ste ste = steService.findById(f.getSte().getIdSte());
             ste.setFen(ste.getFen()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFen(),7).toString();
+            f.setRef(newRef);
             f.setSte(ste);
             FactureV sv = factureVService.save(f);
             for(BonLivV bon :sv.getBonLivVS()){
@@ -144,6 +146,8 @@ public class FactureVController {
             Ste ste = steService.findById(f.getSte().getIdSte());
             ste.setFen(ste.getFen()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFen(),7).toString();
+            f.setRef(newRef);
             f.setSte(ste);
             FactureV sv = factureVService.save(f);
             for(Item item :sv.getItems()){
@@ -221,5 +225,12 @@ public class FactureVController {
     public ResponseEntity<?> toPdF(@RequestBody FactureV factureV) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(factureV);
         return ResponseEntity.ok("created");
+    }
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
     }
 }

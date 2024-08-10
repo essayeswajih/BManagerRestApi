@@ -58,6 +58,8 @@ public class BonLivVController {
             Ste ste = steService.findById(b1.getSte().getIdSte());
             ste.setBsn(ste.getBsn()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getBsn(),7).toString();
+            b1.setRef(newRef);
             b1.setSte(ste);
             BonLivV x = bonLivVService.save(b1);
             Devis devis = x.getDevis();
@@ -124,6 +126,8 @@ public class BonLivVController {
             Ste ste = steService.findById(b1.getSte().getIdSte());
             ste.setBsn(ste.getBsn()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getBsn(),7).toString();
+            b1.setRef(newRef);
             b1.setSte(ste);
             BonLivV x = bonLivVService.saveAndFlush(b1);
             String artcleNamesToAlert = "";
@@ -280,5 +284,12 @@ public class BonLivVController {
     public ResponseEntity<?> toPdF(@RequestBody BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(bonLivV);
         return ResponseEntity.ok("created");
+    }
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
     }
 }

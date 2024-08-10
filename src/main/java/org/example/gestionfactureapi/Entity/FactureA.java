@@ -46,4 +46,6 @@ public class FactureA {
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
+
+    private String ref;
 }

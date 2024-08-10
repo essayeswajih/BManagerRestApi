@@ -46,4 +46,6 @@ public class FactureV {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    private String ref;
 }

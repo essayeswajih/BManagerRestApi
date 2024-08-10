@@ -44,4 +44,6 @@ public class BonLivV {
     private FactureV facture;
 
     private Boolean trans = false;
+
+    private String ref;
 }

@@ -56,8 +56,10 @@ public class DevisController {
             ste.setDn(ste.getDn()+1);
             steService.Save(ste);
             devis.setSte(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getDn(),7).toString();
+            devis.setRef(newRef);
             List<Item> newItems = itemRepository.saveAllAndFlush(devis.getItems());
-            Devis newDevis = new Devis(null, client, newItems, devis.getDateCreation(), ste, false);
+            Devis newDevis = new Devis(null, client, newItems, devis.getDateCreation(), ste, false, devis.getRef());
             newDevis = devisService.save(newDevis);
 
             for(Item i:newItems){
@@ -71,6 +73,15 @@ public class DevisController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
+    }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
         try {

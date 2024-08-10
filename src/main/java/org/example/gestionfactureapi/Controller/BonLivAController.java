@@ -100,6 +100,8 @@ public class BonLivAController {
             Ste ste = steService.findById(b1.getSte().getIdSte());
             ste.setBen(ste.getBen()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7).toString() + adjustNumber(ste.getBen(),7).toString();
+            b1.setRef(newRef);
             b1.setSte(ste);
             var x = bonLivAService.save(b1);
             for (Item item:x.getItems()){
@@ -144,5 +146,12 @@ public class BonLivAController {
     public ResponseEntity<?> toPdF(@RequestBody BonLivA bonLivA) throws DocumentException, IOException, URISyntaxException {
         fileService.createAndSavePDF(bonLivA);
         return ResponseEntity.ok("created");
+    }
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
     }
 }

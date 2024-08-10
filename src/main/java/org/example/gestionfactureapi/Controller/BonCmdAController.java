@@ -57,6 +57,8 @@ public class BonCmdAController {
             Ste ste = steService.findById(b.getSte().getIdSte());
             ste.setBcn(ste.getBcn()+1);
             steService.Save(ste);
+            String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getBcn(),7).toString();
+            b1.setRef(newRef);
             b1.setSte(ste);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -93,6 +95,12 @@ public class BonCmdAController {
         fileService.createAndSavePDF(bon);
         return ResponseEntity.ok("created");
     }
-
+    private StringBuilder adjustNumber(Integer idSte, int i) {
+        StringBuilder id = new StringBuilder(idSte.toString());
+        for(int x = id.length();x<i;i++){
+            id.append("0");
+        }
+        return id;
+    }
 
 }

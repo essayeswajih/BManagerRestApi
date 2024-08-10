@@ -92,7 +92,7 @@ public class PDFGenerationV {
                 }
 
             }
-            this.bon = new Devis(factureV.getId(),factureV.getBonLivVS().get(0).getClient(), items,factureV.getDateCreation(),factureV.getSte(),false);
+            this.bon = new Devis(factureV.getId(),factureV.getBonLivVS().get(0).getClient(), items,factureV.getDateCreation(),factureV.getSte(),false,"");
         }
 
         this.date = factureV.getDateCreation();
