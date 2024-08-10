@@ -69,7 +69,7 @@ public class FactureVController {
         double totalTTC=0;
         try{
             Ste ste = steService.findById(f.getSte().getIdSte());
-            ste.setFen(ste.getFsn()+1);
+            ste.setFsn(ste.getFsn()+1);
             steService.Save(ste);
             String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFsn(),7).toString();
             f.setRef(newRef);
@@ -144,7 +144,7 @@ public class FactureVController {
         List<String> ListOfArticlesToAlert= new ArrayList<>();
         try{
             Ste ste = steService.findById(f.getSte().getIdSte());
-            ste.setFen(ste.getFsn()+1);
+            ste.setFsn(ste.getFsn()+1);
             steService.Save(ste);
             String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFsn(),7).toString();
             f.setRef(newRef);
