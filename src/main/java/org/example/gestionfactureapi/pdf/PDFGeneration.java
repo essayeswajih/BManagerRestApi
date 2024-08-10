@@ -57,7 +57,7 @@ public class PDFGeneration {
 
     public PDFGeneration(BonCmdA bon) {
         this.bon = bon;
-        this.numero = bon.getId();
+        this.numero = bon.getSte().getBcn();
         this.date = bon.getDateCreation();
         this.name = "Bon de commande";
         this.x=1;
@@ -73,7 +73,7 @@ public class PDFGeneration {
         }else {
             this.bon = bonLivA.getBonCmdA();
         }
-        this.numero = bonLivA.getId();
+        this.numero = bonLivA.getSte().getBen();
         this.date = bonLivA.getDateCreation();
         this.name = "Bon de livraison";
         this.x=2;
@@ -101,7 +101,7 @@ public class PDFGeneration {
 
         this.date = factureA.getDateCreation();
         this.name = "Facture";
-        this.numero = factureA.getId();
+        this.numero = factureA.getSte().getFen();
         this.x=3;
         this.timbre = 1;
     }

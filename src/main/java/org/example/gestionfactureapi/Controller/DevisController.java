@@ -53,6 +53,9 @@ public class DevisController {
 
             Client client = clientService.findById(devis.getClient().getIdClient());
             Ste ste = steService.findById(devis.getSte().getIdSte());
+            ste.setDn(ste.getDn()+1);
+            steService.Save(ste);
+            devis.setSte(ste);
             List<Item> newItems = itemRepository.saveAllAndFlush(devis.getItems());
             Devis newDevis = new Devis(null, client, newItems, devis.getDateCreation(), ste, false);
             newDevis = devisService.save(newDevis);

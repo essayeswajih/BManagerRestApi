@@ -98,6 +98,8 @@ public class BonLivAController {
     public ResponseEntity<?> saveNew(@RequestBody BonLivA b1){
         try {
             Ste ste = steService.findById(b1.getSte().getIdSte());
+            ste.setBen(ste.getBen()+1);
+            steService.Save(ste);
             b1.setSte(ste);
             var x = bonLivAService.save(b1);
             for (Item item:x.getItems()){

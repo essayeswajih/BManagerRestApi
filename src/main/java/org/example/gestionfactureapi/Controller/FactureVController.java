@@ -68,7 +68,10 @@ public class FactureVController {
         double totalTH=0;
         double totalTTC=0;
         try{
-            f.setSte(steService.findById(f.getSte().getIdSte()));
+            Ste ste = steService.findById(f.getSte().getIdSte());
+            ste.setFen(ste.getFen()+1);
+            steService.Save(ste);
+            f.setSte(ste);
             FactureV sv = factureVService.save(f);
             for(BonLivV bon :sv.getBonLivVS()){
                 bon.setFacture(sv);
@@ -138,7 +141,10 @@ public class FactureVController {
         String artcleNamesToAlert = "";
         List<String> ListOfArticlesToAlert= new ArrayList<>();
         try{
-            f.setSte(steService.findById(f.getSte().getIdSte()));
+            Ste ste = steService.findById(f.getSte().getIdSte());
+            ste.setFen(ste.getFen()+1);
+            steService.Save(ste);
+            f.setSte(ste);
             FactureV sv = factureVService.save(f);
             for(Item item :sv.getItems()){
                 Stock stock = new Stock(null,item.getArticle(),item.getQte(),sv.getSte());

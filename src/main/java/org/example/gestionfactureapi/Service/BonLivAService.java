@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BonLivAService {
     private final BonLivARepository bonLivARepository;
+    private final SteService steService;
     public List<BonLivA> findAll(){
         return bonLivARepository.findAll();
     }
@@ -25,6 +26,10 @@ public class BonLivAService {
     public BonLivA save(BonLivDTO b1){
         BonLivA bonLivA = new BonLivA();
         bonLivA.setBonCmdA(b1.getBon());
+        Ste ste = steService.findById(b1.getBon().getSte().getIdSte());
+        ste.setBen(ste.getBen()+1);
+        steService.Save(ste);
+        bonLivA.setSte(ste);
         bonLivA.setSte(b1.getBon().getSte());
         bonLivA.setDateCreation(b1.getDate());
         bonLivA.setItems(b1.getItems());

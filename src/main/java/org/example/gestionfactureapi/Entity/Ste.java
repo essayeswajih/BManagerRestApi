@@ -70,4 +70,10 @@ public class Ste {
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Devis> devis;
+    private Integer bcn = 0;
+    private Integer dn = 0;
+    private Integer ben = 0;
+    private Integer bsn = 0;
+    private Integer fen = 0;
+    private Integer fsn = 0;
 }

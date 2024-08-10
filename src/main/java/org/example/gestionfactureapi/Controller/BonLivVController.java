@@ -55,7 +55,10 @@ public class BonLivVController {
     public ResponseEntity<?> save(@RequestBody BonLivV b1){
         System.out.println(b1);
         try {
-            b1.setSte(b1.getDevis().getSte());
+            Ste ste = steService.findById(b1.getSte().getIdSte());
+            ste.setBsn(ste.getBsn()+1);
+            steService.Save(ste);
+            b1.setSte(ste);
             BonLivV x = bonLivVService.save(b1);
             Devis devis = x.getDevis();
             devis.setTrans(true);
@@ -118,7 +121,10 @@ public class BonLivVController {
     public ResponseEntity<?> saveNew(@RequestBody BonLivV b1){
         System.out.println(b1);
         try {
-            b1.setSte(steService.findById(b1.getSte().getIdSte()));
+            Ste ste = steService.findById(b1.getSte().getIdSte());
+            ste.setBsn(ste.getBsn()+1);
+            steService.Save(ste);
+            b1.setSte(ste);
             BonLivV x = bonLivVService.saveAndFlush(b1);
             String artcleNamesToAlert = "";
             List<String> ListOfArticlesToAlert= new ArrayList<>();
@@ -181,10 +187,10 @@ public class BonLivVController {
         try {
             BonLivV last = bonLivVService.findById(b1.getId());
 
-            for (Item item : b1.getItems()) {
+            for (Item item2 : last.getItems()) {
                 boolean itemExists = false;
 
-                for (Item item2 : last.getItems()) {
+                for (Item item : b1.getItems()) {
                     if (Objects.equals(item.getArticle().getIdArticle(), item2.getArticle().getIdArticle())) {
                         itemExists = true;
                         int qte = item2.getQte() - item.getQte();
@@ -224,8 +230,8 @@ public class BonLivVController {
 
                 // Handle the case where item from b1 was not found in last.getItems()
                 if (!itemExists) {
-                    int qte = item.getQte();
-                    Stock stock = new Stock(null, item.getArticle(), qte, b1.getSte());
+                    int qte = item2.getQte();
+                    Stock stock = new Stock(null, item2.getArticle(), qte, b1.getSte());
 
                     try {
                         Stock stock22 = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
@@ -244,10 +250,10 @@ public class BonLivVController {
                         ha.setDate(sqlDate);
                         ha.setInput(qte);
                         ha.setOutput(0);
-                        ha.setArticle(item.getArticle());
+                        ha.setArticle(item2.getArticle());
                         ha.setDocName("bonLivRetour" + b1.getId());
                         ha.setDocId(b1.getId());
-                        ha.setPrice(item.getNewVenteHT());
+                        ha.setPrice(item2.getNewVenteHT());
                         ha.setStock(stock22);
                         ha.setQteReel(stock22.getQte());
                         historiqueArticleService.save(ha);

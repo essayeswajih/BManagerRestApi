@@ -52,6 +52,10 @@ public class FactureAController {
         double totalHT=0;
         double totalTTC=0;
         try{
+            Ste ste = steService.findById(f.getSte().getIdSte());
+            ste.setFen(ste.getFen()+1);
+            steService.Save(f.getSte());
+            f.setSte(ste);
             FactureA sv = factureAService.save(f);
             for(BonLivA bon :sv.getBonLivAS()){
                 bon.setFacture(sv);
@@ -107,7 +111,10 @@ public class FactureAController {
         double totalHT=0;
         double totalTTC=0;
         try{
-            f.setSte(steService.findById(f.getSte().getIdSte()));
+            Ste ste = steService.findById(f.getSte().getIdSte());
+            ste.setFen(ste.getFen()+1);
+            steService.Save(ste);
+            f.setSte(ste);
             FactureA sv = factureAService.save(f);
             for(Item item :sv.getItems()){
                 Stock stock = new Stock(null,item.getArticle(),item.getQte(),sv.getSte());

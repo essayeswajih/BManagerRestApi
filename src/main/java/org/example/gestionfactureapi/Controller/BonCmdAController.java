@@ -7,6 +7,7 @@ import org.example.gestionfactureapi.DTO.BonCmdADTO;
 import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.BonCmdA;
 import org.example.gestionfactureapi.Entity.Item;
+import org.example.gestionfactureapi.Entity.Ste;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,6 @@ public class BonCmdAController {
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody BonCmdADTO b) {
-        System.out.println();
         if (b == null || b.getFournisseur() == null || b.getSte() == null || b.getItems() == null || b.getItems().isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid input data");
         }
@@ -54,7 +54,10 @@ public class BonCmdAController {
 
         try {
             b1.setFournisseur(fournisseurService.findById(b.getFournisseur().getIdFournisseur()));
-            b1.setSte(steService.findById(b.getSte().getIdSte()));
+            Ste ste = steService.findById(b.getSte().getIdSte());
+            ste.setBcn(ste.getBcn()+1);
+            steService.Save(ste);
+            b1.setSte(ste);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
