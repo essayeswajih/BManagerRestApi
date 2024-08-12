@@ -146,7 +146,7 @@ public class PDFGeneration {
 
         }
         this.netHT = this.totalHT -this.remise;
-        this.totalTTC=netHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre ;
+        this.totalTTC=totalTTC+ montTVA19 + montTVA13 + montTVA7 + this.timbre -this.remise;
         doc.add(table);
 
 
