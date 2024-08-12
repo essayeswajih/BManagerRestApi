@@ -140,7 +140,7 @@ public class PDFGenerationV {
             double venteHT2 = i.getNewVenteHT() !=null ? i.getNewVenteHT() : i.getArticle().getVenteHT();
             double totalHT = venteHT2 * qte;
             this.remise += (totalHT * remise / 100);
-            this.totalHT+=totalHT;
+            this.totalHT+=i.getTotalNet();
 
         }
         if(this.bon.getClient().isExonere() && this.x>1){
@@ -149,7 +149,7 @@ public class PDFGenerationV {
             montTVA7 = 0;
         }
         this.netHT = this.totalHT -this.remise;
-        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre -this.remise;
+        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
 
         doc.add(table);
 

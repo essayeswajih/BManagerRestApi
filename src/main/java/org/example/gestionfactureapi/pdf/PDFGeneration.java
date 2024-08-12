@@ -142,11 +142,11 @@ public class PDFGeneration {
             double remise1 = i.getRemise() == null ? 0 : i.getRemise();
             double totalHT = i.getNewAchatHT() * qte;
             this.remise += (totalHT * remise1 / 100);
-            this.totalHT+=i.getNewAchatHT();
+            this.totalHT+=i.getTotalNet();
 
         }
-        this.netHT = this.totalHT - this.remise;
-        this.totalTTC=totalTTC+ montTVA19 + montTVA13 + montTVA7 + this.timbre - this.remise;
+        this.netHT = this.totalHT -this.remise;
+        this.totalTTC=totalHT+ montTVA19 + montTVA13 + montTVA7 + this.timbre;
         doc.add(table);
 
 
