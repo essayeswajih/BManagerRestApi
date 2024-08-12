@@ -129,14 +129,14 @@ public class PDFGeneration {
             addRow(table, i);
             int tva = i.getArticle().getTva();
             if(tva==19){
-                this.baseTVA19+=i.getNewAchatHT();
-                this.montTVA19+=i.getNewAchatHT()*.19;
+                this.baseTVA19+=i.getTotalNet();
+                this.montTVA19+=i.getTotalNet()*.19;
             } else if (tva==7) {
-                this.baseTVA7+=i.getNewAchatHT();
-                this.montTVA7+=i.getNewAchatHT()*7;
+                this.baseTVA7+=i.getTotalNet();
+                this.montTVA7+=i.getTotalNet()*7;
             } else if (tva==13) {
-                this.baseTVA13+=i.getNewAchatHT();
-                this.montTVA13+=i.getNewAchatHT()*.13;
+                this.baseTVA13+=i.getTotalNet();
+                this.montTVA13+=i.getTotalNet()*.13;
             }
             int qte = i.getQte();
             double remise1 = i.getRemise() == null ? 0 : i.getRemise();
@@ -145,8 +145,8 @@ public class PDFGeneration {
             this.totalHT+=i.getNewAchatHT();
 
         }
-        this.netHT = this.totalHT -this.remise;
-        this.totalTTC=netHT + montTVA19 + montTVA13 + montTVA7 + this.timbre;
+        this.netHT = this.totalHT - this.remise;
+        this.totalTTC=totalTTC+ montTVA19 + montTVA13 + montTVA7 + this.timbre - this.remise;
         doc.add(table);
 
 
