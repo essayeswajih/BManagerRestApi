@@ -23,6 +23,8 @@ public class Item {
 
     private Double newVenteHT;
 
+    private Double newAchatHT;
+
     private Double totalNet;
 
     private Double totalTTC;
