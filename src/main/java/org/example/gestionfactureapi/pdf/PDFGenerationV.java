@@ -140,7 +140,7 @@ public class PDFGenerationV {
             double venteHT2 = i.getNewVenteHT() !=null ? i.getNewVenteHT() : i.getArticle().getVenteHT();
             double totalHT = venteHT2 * qte;
             this.remise += (totalHT * remise / 100);
-            this.totalHT+=i.getNewVenteHT();
+            this.totalHT+=totalHT;
 
         }
         if(this.bon.getClient().isExonere() && this.x>1){
