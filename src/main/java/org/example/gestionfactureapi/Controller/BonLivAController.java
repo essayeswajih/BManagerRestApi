@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -55,8 +57,10 @@ public class BonLivAController {
             var x = bonLivAService.save(b1);
             BonCmdA bb = x.getBonCmdA();
             bb.setTrans(true);
+            List<Item> newItems = new ArrayList<>();
             x.setBonCmdA(bonCmdAService.save(bb));
             for (Item item:x.getBonCmdA().getItems()){
+                newItems.add(item);
                 Stock stock = new Stock(null,item.getArticle(),item.getQte(),x.getSte());
                 try {
                     Stock s = stockService.findStockByIdArticle(stock.getArticle().getIdArticle());
@@ -88,6 +92,8 @@ public class BonLivAController {
                 }
 
             }
+            x.setItems(newItems);
+            x = bonLivAService.save(x);
             return ResponseEntity.ok(x);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
