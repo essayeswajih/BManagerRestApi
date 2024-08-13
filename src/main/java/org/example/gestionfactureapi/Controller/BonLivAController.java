@@ -1,6 +1,7 @@
 package org.example.gestionfactureapi.Controller;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.List;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.DTO.BonLivDTO;
 import org.example.gestionfactureapi.Entity.*;
@@ -14,7 +15,6 @@ import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @RestController
@@ -90,8 +90,6 @@ public class BonLivAController {
                 }
 
             }
-            x.setItems(x.getBonCmdA().getItems());
-            x = bonLivAService.save(x);
             return ResponseEntity.ok(x);
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
