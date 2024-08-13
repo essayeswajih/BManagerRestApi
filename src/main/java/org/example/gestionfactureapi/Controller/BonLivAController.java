@@ -78,7 +78,7 @@ public class BonLivAController {
                     ha.setArticle(item.getArticle());
                     ha.setDocName("bonLivAchat"+x.getBonCmdA().getId());
                     ha.setDocId(x.getId());
-                    ha.setPrice(item.getArticle().getAchatHT());
+                    ha.setPrice(item.getNewAchatHT());
                     ha.setStock(s);
                     ha.setQteReel(s.getQte());
                     historiqueArticleService.save(ha);
@@ -126,7 +126,7 @@ public class BonLivAController {
                     ha.setArticle(item.getArticle());
                     ha.setDocName("bonLivAchat"+x.getId());
                     ha.setDocId(x.getId());
-                    ha.setPrice(item.getArticle().getAchatHT());
+                    ha.setPrice(item.getNewAchatHT());
                     ha.setStock(s);
                     ha.setQteReel(s.getQte());
                     historiqueArticleService.save(ha);
