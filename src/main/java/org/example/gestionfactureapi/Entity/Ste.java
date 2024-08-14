@@ -29,46 +29,46 @@ public class Ste {
     private String formeJuridique;
     private String matriculeFiscale;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> articles;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fournisseur> fournisseurs;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Depot> depots;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Famille> famille;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Client> clients;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonCmdA> bonCmdsA;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonLivA> bonLivA;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FactureA> factures;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FactureV> facturesVente;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Devis> devis;
     private Integer bcn = 0;
     private Integer dn = 0;
