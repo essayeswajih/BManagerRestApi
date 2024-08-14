@@ -29,7 +29,7 @@ public class Ste {
     private String formeJuridique;
     private String matriculeFiscale;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
     private List<User> users;
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
