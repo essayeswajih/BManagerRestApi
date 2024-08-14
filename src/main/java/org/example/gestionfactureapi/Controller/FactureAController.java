@@ -54,7 +54,7 @@ public class FactureAController {
         try{
             Ste ste = steService.findById(f.getSte().getIdSte());
             ste.setFen(ste.getFen()+1);
-            steService.Save(f.getSte());
+            steService.Save(ste);
             f.setSte(ste);
             String newRef = adjustNumber(ste.getIdSte(),7) + adjustNumber(ste.getFen(),7).toString();
             f.setRef(newRef);
