@@ -52,7 +52,7 @@ public class Ste {
     private List<BonCmdA> bonCmdsA;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
     private List<BonLivA> bonLivA;
 
     @JsonIgnore
