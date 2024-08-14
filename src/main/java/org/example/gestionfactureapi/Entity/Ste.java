@@ -48,7 +48,7 @@ public class Ste {
     private List<Client> clients;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
     private List<BonCmdA> bonCmdsA;
 
     @JsonIgnore
