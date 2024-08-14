@@ -32,7 +32,7 @@ public class Ste {
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
     @JsonIgnore
-    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL)
     private List<Article> articles;
     @JsonIgnore
     @OneToMany(mappedBy = "ste", cascade = CascadeType.ALL, orphanRemoval = true)

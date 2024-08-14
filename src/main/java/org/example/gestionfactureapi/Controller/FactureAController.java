@@ -67,26 +67,26 @@ public class FactureAController {
                     for(Item item :bon.getItems()){
                         int tva = item.getArticle().getTva();
                         if(tva==19){
-                            baseTVA19+=item.getTotalNet()*.19;
+                            baseTVA19+=item.getNewAchatHT()*.19;
                         } else if (tva==7) {
-                            baseTVA7+=item.getTotalNet()*.7;
+                            baseTVA7+=item.getNewAchatHT()*.7;
                         } else if (tva==13) {
-                            baseTVA13+=item.getTotalNet()*.13;
+                            baseTVA13+=item.getNewAchatHT()*.13;
                         }
-                        totalHT+=item.getTotalNet();
+                        totalHT+=item.getNewAchatHT();
                     }
                 }
                 else{
                     for(Item item :bon.getBonCmdA().getItems()){
                         int tva = item.getArticle().getTva();
                         if(tva==19){
-                            baseTVA19+=item.getTotalNet()*.19;
+                            baseTVA19+=item.getNewAchatHT()*.19;
                         } else if (tva==7) {
-                            baseTVA7+=item.getTotalNet()*.7;
+                            baseTVA7+=item.getNewAchatHT()*.7;
                         } else if (tva==13) {
-                            baseTVA13+=item.getTotalNet()*.13;
+                            baseTVA13+=item.getNewAchatHT()*.13;
                         }
-                        totalHT+=item.getTotalNet();
+                        totalHT+=item.getNewAchatHT();
                     }
                 }
 
