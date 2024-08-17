@@ -26,10 +26,10 @@ public class Article {
     private String refArticle;
 
     //@Column(unique = true,nullable = false)
-    private String refFournisseur;
+    //private String refFournisseur;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(unique = true,nullable = false)
     private String designation;
     private String sousFamille;
 

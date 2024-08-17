@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -105,6 +106,11 @@ public class FactureAController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    private void change(Article article, Double newAchatHT, Integer newqte, Integer oldQte) {
+
+    }
+
     @PostMapping("saveNew")
     public ResponseEntity<?> saveNew(@RequestBody FactureA f){
         double baseTVA19=0;
@@ -129,7 +135,11 @@ public class FactureAController {
                 }else {
                     s = stockService.save(stock);
                 }
-
+                if(item.getNewAchatHT() != null){
+                    if(!Objects.equals(item.getArticle().getAchatHT(), item.getNewAchatHT())){
+                        change(item.getArticle(),item.getNewAchatHT(),item.getQte(),(s.getQte()-item.getQte()));
+                    }
+                }
                 LocalDate localDate = LocalDate.now();
                 Date sqlDate = Date.valueOf(localDate);
 
