@@ -53,6 +53,7 @@ public class Article {
 
     private String imgUrl;
 
+    private Integer seuilStock = 0;
     @ManyToOne
     @JoinColumn(name = "ste_id")
     private Ste ste;
