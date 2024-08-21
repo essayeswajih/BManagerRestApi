@@ -67,20 +67,20 @@ public class InventoryPDFGenerator {
             }
 
             // Add data rows (Assuming articleList contains the necessary data)
-            /*for (Article article : articleList) {
-                table.addCell(createCell(article.getCode(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getEmplacement(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getCategorie(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getProduit(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            for (Article article : articleList) {
+                table.addCell(createCell(article.getRefArticle(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(article.getFamille().getAdresse(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(article.getFamille().getNomFamille(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(article.getDesignation(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(createCell(article.getUnite(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf(article.getPrixHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf(article.getNb()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getMontant(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getFournisseur(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getRemarques(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getSeuilAlerteStock(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getAlerteStock(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-            }*/
+                table.addCell(createCell(String.valueOf(article.getVenteHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.valueOf("0"), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("0", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(article.getFournisseur().getIntitule(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("r", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("s", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("a", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            }
 
             document.add(table);
             document.close();
