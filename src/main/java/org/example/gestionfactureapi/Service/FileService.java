@@ -59,7 +59,7 @@ public class FileService {
         File file = new File(pdfData, "factureVente"+factureV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
-    public void createAndSavePDF(List<Article> articles) {
+    public void createAndSavePDF(List<Stock> articles) {
         InventoryPDFGenerator pdfGenerator = new InventoryPDFGenerator();
         byte[] pdfData = pdfGenerator.run(articles);
 

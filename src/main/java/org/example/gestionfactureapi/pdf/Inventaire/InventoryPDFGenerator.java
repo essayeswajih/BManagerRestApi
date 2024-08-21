@@ -3,13 +3,14 @@ package org.example.gestionfactureapi.pdf.Inventaire;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.example.gestionfactureapi.Entity.Article;
+import org.example.gestionfactureapi.Entity.Stock;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class InventoryPDFGenerator {
 
-    public byte[] run(List<Article> articleList) {
+    public byte[] run(List<Stock> stockList) {
         try {
             Document document = new Document(PageSize.A4.rotate());
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -67,19 +68,19 @@ public class InventoryPDFGenerator {
             }
 
             // Add data rows (Assuming articleList contains the necessary data)
-            for (Article article : articleList) {
-                table.addCell(createCell(article.getRefArticle(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getFamille().getAdresse(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getFamille().getNomFamille(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getDesignation(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getUnite(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf(article.getVenteHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf("0"), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell("0", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(article.getFournisseur().getIntitule(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell("r", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell("s", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell("a", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            for (Stock stock : stockList) {
+                table.addCell(createCell(stock.getArticle().getRefArticle(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getArticle().getFamille().getAdresse(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getArticle().getFamille().getNomFamille(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getArticle().getDesignation(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getArticle().getUnite(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.valueOf(stock.getArticle().getAchatHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.valueOf(stock.getQte()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.valueOf(stock.getArticle().getAchatHT()*stock.getQte()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getArticle().getFournisseur().getIntitule(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell("10", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getQte()<10?"Alert !!!":"", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.RED)));
             }
 
             document.add(table);

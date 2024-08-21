@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -76,7 +77,11 @@ public class ArticleController {
     @PostMapping("/toInventaire")
     public ResponseEntity<?> toInventaire(@RequestBody List<Article> articles){
         try {
-            fileService.createAndSavePDF(articles);
+            List<Stock> stockList =new ArrayList<>();
+            for(Article a : articles){
+                stockList.add(stockService.findStockByIdArticle(a.getIdArticle()));
+            }
+            fileService.createAndSavePDF(stockList);
             return ResponseEntity.status(HttpStatus.OK).body(articles);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
