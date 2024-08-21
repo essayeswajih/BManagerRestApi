@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.pdf.Inventaire.InventoryPDFGenerator;
 import org.example.gestionfactureapi.pdf.PDFGenerationV;
 import org.example.gestionfactureapi.Repository.FileRepository;
 import org.example.gestionfactureapi.pdf.PDFGeneration;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,17 @@ public class FileService {
         byte[] pdfData = pdfGeneration.run();
         File file = new File(pdfData, "factureVente"+factureV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
+    }
+    public void createAndSavePDF(List<Article> articles) {
+        InventoryPDFGenerator pdfGenerator = new InventoryPDFGenerator();
+        byte[] pdfData = pdfGenerator.run(articles);
+
+        if (pdfData != null) {
+            File file = new File(pdfData, "Inventory.pdf", "application/pdf");
+            fileRepository.save(file);
+        } else {
+            System.out.println("Failed to generate the PDF.");
+        }
     }
     public File findByFileName(String fileName) {
         return fileRepository.findByFileName(fileName).orElseThrow(

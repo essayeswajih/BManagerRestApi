@@ -6,10 +6,7 @@ import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.HistoriqueArticle;
 import org.example.gestionfactureapi.Entity.Stock;
 import org.example.gestionfactureapi.Repository.ItemRepository;
-import org.example.gestionfactureapi.Service.ArticleService;
-import org.example.gestionfactureapi.Service.HistoriqueArticleService;
-import org.example.gestionfactureapi.Service.ItemService;
-import org.example.gestionfactureapi.Service.StockService;
+import org.example.gestionfactureapi.Service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +21,7 @@ public class ArticleController {
     private final StockService stockService;
     private final HistoriqueArticleService historiqueArticleService;
     private final ItemRepository itemRepository;
+    private final FileService fileService;
     @GetMapping
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(articleService.findAll());
@@ -78,6 +76,7 @@ public class ArticleController {
     @PostMapping("/toInventaire")
     public ResponseEntity<?> toInventaire(@RequestBody List<Article> articles){
         try {
+            fileService.createAndSavePDF(articles);
             return ResponseEntity.status(HttpStatus.OK).body(articles);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
