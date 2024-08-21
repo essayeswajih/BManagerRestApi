@@ -75,5 +75,12 @@ public class ArticleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the article: " + e.getMessage());
         }
     }
-
+    @PostMapping("/toInventaire")
+    public ResponseEntity<?> toInventaire(@RequestBody List<Article> articles){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(articles);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }
