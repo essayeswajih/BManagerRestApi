@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.example.gestionfactureapi.Entity.*;
+import org.example.gestionfactureapi.Service.FactureVService;
 import org.example.gestionfactureapi.tools.NumberToText;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +13,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
 public class PDFGenerationV {
+
+    private FactureV facture;
     private  int x;
     private Devis bon;
     private List<BonLivV> bonLivVs;
@@ -75,6 +79,7 @@ public class PDFGenerationV {
         this.x=2;
     }
     public PDFGenerationV(FactureV factureV) {
+        this.facture = factureV;
         if(factureV.getBonLivVS() == null){
             this.bon = new Devis();
             this.bon.setId(factureV.getId());
@@ -103,7 +108,8 @@ public class PDFGenerationV {
     }
 
 
-    public byte[] run() throws DocumentException, IOException, URISyntaxException {
+    public Object run() throws DocumentException, IOException, URISyntaxException {
+        final FactureVService factureVService;
         Document doc = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(doc, byteArrayOutputStream);
@@ -130,7 +136,7 @@ public class PDFGenerationV {
                     this.montTVA19+=i.getTotalNet()*.19;
                 } else if (tva==7) {
                     this.baseTVA7+=i.getTotalNet();
-                    this.montTVA7+=i.getTotalNet()*7;
+                    this.montTVA7+=i.getTotalNet()*.7;
                 } else if (tva==13) {
                     this.baseTVA13+=i.getTotalNet();
                     this.montTVA13+=i.getTotalNet()*.13;
@@ -161,9 +167,25 @@ public class PDFGenerationV {
         addCustomRow(customTable);  // Add custom row with image and description
         customTable.setSpacingBefore(10);
         doc.add(customTable);
-
         doc.close();
-        return byteArrayOutputStream.toByteArray();
+        if(facture!=null){
+            facture.setTotalTTC(this.totalTTC);
+            facture.setTimbre(timbre);
+            facture.setTotal(totalHT);
+            facture.setBaseTVA7(baseTVA7);
+            facture.setMontTVA7(montTVA7);
+            facture.setBaseTVA13(baseTVA13);
+            facture.setMontTVA13(montTVA13);
+            facture.setBaseTVA19(baseTVA19);
+
+            HashMap<String,Object> res= new HashMap<>();
+            res.put("facture",facture);
+            res.put("byteArray",byteArrayOutputStream.toByteArray());
+            return res;
+        }else {
+            return byteArrayOutputStream.toByteArray();
+        }
+
     }
 
 
@@ -352,7 +374,7 @@ public class PDFGenerationV {
         addCell(table,String.format("%.3f",totalTVA) , normalFont);
 
         NumberToText converter = new NumberToText(String.format("%.3f",this.totalTTC));
-        String text="Arrété la présent "+this.name+" à la somme de : "+converter.toText().toUpperCase();
+        String text="Arrétéé la présente "+this.name+" à la somme de : "+converter.toText().toUpperCase();
         addCell(table,text,boldFont,3,2,0);
 
         addCellVide(table);

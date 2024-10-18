@@ -30,4 +30,8 @@ public class FactureVService {
     public List<FactureV> findAll() {
         return factureVRepository.findAll();
     }
+
+    public FactureV update(FactureV factureV) {
+        return factureVRepository.saveAndFlush(factureV);
+    }
 }

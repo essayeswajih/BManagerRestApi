@@ -236,4 +236,8 @@ public class FactureVController {
         }
         return id;
     }
+    @PostMapping("update")
+    ResponseEntity<?> update(@RequestBody FactureV factureV){
+        return ResponseEntity.ok(factureVService.update(factureV));
+    }
 }

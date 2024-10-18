@@ -25,8 +25,6 @@ public class Article {
     @Column(unique = true,nullable = false)
     private String refArticle;
 
-    //@Column(unique = true,nullable = false)
-    //private String refFournisseur;
 
     @NotNull
     @Column(unique = true,nullable = false)

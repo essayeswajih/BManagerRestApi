@@ -48,4 +48,7 @@ public class FactureV {
     private Client client;
 
     private String ref;
+
+    private Boolean payed = false;
+    private String payment ="Non payé";
 }

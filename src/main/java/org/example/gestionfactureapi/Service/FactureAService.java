@@ -31,4 +31,8 @@ public class FactureAService {
     public List<FactureA> findAll() {
         return factureARepository.findAll();
     }
+
+    public FactureA update(FactureA factureA) {
+        return factureARepository.saveAndFlush(factureA);
+    }
 }

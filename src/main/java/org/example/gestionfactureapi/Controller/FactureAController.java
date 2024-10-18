@@ -203,4 +203,8 @@ public class FactureAController {
         }
         return id;
     }
+    @PostMapping("update")
+    ResponseEntity<?> update(@RequestBody FactureA factureA){
+        return ResponseEntity.ok(factureAService.update(factureA));
+    }
 }

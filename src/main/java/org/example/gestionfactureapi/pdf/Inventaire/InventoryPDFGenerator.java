@@ -6,6 +6,9 @@ import org.example.gestionfactureapi.Entity.Article;
 import org.example.gestionfactureapi.Entity.Stock;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class InventoryPDFGenerator {
@@ -16,7 +19,10 @@ public class InventoryPDFGenerator {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
-
+            double montTotal = 0;
+            for (Stock stock : stockList) {
+                montTotal+= stock.getArticle().getAchatHT()*stock.getQte();
+            }
             // Add title
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.ORANGE);
             Paragraph title = new Paragraph("Votre inventaire", titleFont);
@@ -29,12 +35,14 @@ public class InventoryPDFGenerator {
             dateValueTable.setWidthPercentage(50);
             dateValueTable.setSpacingBefore(20f);
             dateValueTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-
+            java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String formattedDate = dateFormat.format(date);
             dateValueTable.addCell(createCell("En date du :", Element.ALIGN_LEFT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            dateValueTable.addCell(createCell("28/04/2023", Element.ALIGN_RIGHT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            dateValueTable.addCell(createCell(formattedDate, Element.ALIGN_RIGHT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
-            dateValueTable.addCell(createCell("Valeur € :", Element.ALIGN_LEFT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            dateValueTable.addCell(createCell("654,50", Element.ALIGN_RIGHT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            dateValueTable.addCell(createCell("Valeur DT :", Element.ALIGN_LEFT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            dateValueTable.addCell(createCell(String.format("%.3f",montTotal), Element.ALIGN_RIGHT, FontFactory.getFont(FontFactory.HELVETICA, 12)));
 
             document.add(dateValueTable);
 
@@ -45,7 +53,7 @@ public class InventoryPDFGenerator {
             logoTable.setSpacingBefore(0f);
             logoTable.setSpacingAfter(10f);
 
-            Paragraph logoText = new Paragraph("Tout pour LE RESTO", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLACK));
+            Paragraph logoText = new Paragraph("Tout pour "+stockList.getFirst().getSte().getName().toUpperCase(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLACK));
             logoText.setAlignment(Element.ALIGN_CENTER);
             PdfPCell logoCell = new PdfPCell(logoText);
             logoCell.setBorder(Rectangle.NO_BORDER);
@@ -56,13 +64,14 @@ public class InventoryPDFGenerator {
             document.add(logoTable);
 
             // Add inventory table
-            PdfPTable table = new PdfPTable(12);
+            PdfPTable table = new PdfPTable(9);
             table.setWidthPercentage(100);
+            table.setWidths(new int[]{3, 1, 5, 2, 1, 2, 1, 1, 1});
             table.setSpacingBefore(20f);
             table.setSpacingAfter(20f);
 
             // Table headers
-            String[] headers = {"Code", "Emplacement", "Catégorie", "Produit", "Unité", "Prix (HT)", "Nb", "Montant", "Fournisseur", "Remarques", "Seuil d'alerte stock", "Alerte stock?"};
+            String[] headers = {"Code", "local", "Designation", "Prix A(HT)", "Qte", "Montant", "RMQ", "Seuil d'alerte", "Alerte stock?"};
             for (String header : headers) {
                 table.addCell(createCell(header, Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
             }
@@ -71,16 +80,13 @@ public class InventoryPDFGenerator {
             for (Stock stock : stockList) {
                 table.addCell(createCell(stock.getArticle().getRefArticle(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(createCell(stock.getArticle().getFamille().getAdresse(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(stock.getArticle().getFamille().getNomFamille(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(createCell(stock.getArticle().getDesignation(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(stock.getArticle().getUnite(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf(stock.getArticle().getAchatHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.format("%.3f",stock.getArticle().getAchatHT()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(createCell(String.valueOf(stock.getQte()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(String.valueOf(stock.getArticle().getAchatHT()*stock.getQte()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(stock.getArticle().getFournisseur().getIntitule(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(String.format("%.3f",stock.getArticle().getAchatHT()*stock.getQte()), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
                 table.addCell(createCell("", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell("10", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
-                table.addCell(createCell(stock.getQte()<10?"Alert !!!":"", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.RED)));
+                table.addCell(createCell(stock.getArticle().getSeuilStock().toString(), Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                table.addCell(createCell(stock.getQte()<stock.getArticle().getSeuilStock()?"Alert !!!":"", Element.ALIGN_CENTER, FontFactory.getFont(FontFactory.HELVETICA, 10,BaseColor.RED)));
             }
 
             document.add(table);
@@ -97,6 +103,14 @@ public class InventoryPDFGenerator {
     private PdfPCell createCell(String content, int alignment, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(content, font));
         cell.setPadding(5);
+        cell.setHorizontalAlignment(alignment);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        return cell;
+    }
+    private PdfPCell createCell(String content, int alignment,int colSpan, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(content, font));
+        cell.setPadding(5);
+        cell.setColspan(colSpan);
         cell.setHorizontalAlignment(alignment);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         return cell;

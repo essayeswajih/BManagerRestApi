@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
-
+    private final FactureVService factureVService;
     private final FileRepository fileRepository;
 
 
@@ -37,13 +40,13 @@ public class FileService {
     }
     public void createAndSavePDF(BonLivV bonLivV) throws DocumentException, IOException, URISyntaxException {
         PDFGenerationV pdfGeneration = new PDFGenerationV(bonLivV);
-        byte[] pdfData = pdfGeneration.run();
+        byte[] pdfData = (byte[]) pdfGeneration.run();
         File file = new File(pdfData, "bonLivVente"+bonLivV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
     public void createAndSavePDF(Devis devis) throws DocumentException, IOException, URISyntaxException {
         PDFGenerationV pdfGeneration = new PDFGenerationV(devis);
-        byte[] pdfData = pdfGeneration.run();
+        byte[] pdfData = (byte[]) pdfGeneration.run();
         File file = new File(pdfData, "devisVente"+devis.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
@@ -55,19 +58,26 @@ public class FileService {
     }
     public void createAndSavePDF(FactureV factureV) throws DocumentException, IOException, URISyntaxException {
         PDFGenerationV pdfGeneration = new PDFGenerationV(factureV);
-        byte[] pdfData = pdfGeneration.run();
+        HashMap<String,Object> res;
+        res = (HashMap<String, Object>) pdfGeneration.run();
+        byte[] pdfData = (byte[]) res.get("byteArray");
+        factureVService.save((FactureV) res.get("facture"));
         File file = new File(pdfData, "factureVente"+factureV.getId()+".pdf", "application/pdf");
         fileRepository.save(file);
     }
-    public void createAndSavePDF(List<Stock> articles) {
+    public String createAndSavePDF(List<Stock> articles) throws IOException {
         InventoryPDFGenerator pdfGenerator = new InventoryPDFGenerator();
         byte[] pdfData = pdfGenerator.run(articles);
+        java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 
         if (pdfData != null) {
-            File file = new File(pdfData, "Inventory.pdf", "application/pdf");
+            String fileName = "Inventory_"+articles.getFirst().getSte().getName()+"_"+date.getTime()+"_"+"_.pdf";
+            File file = new File(pdfData, fileName, "application/pdf");
             fileRepository.save(file);
+            return fileName;
         } else {
             System.out.println("Failed to generate the PDF.");
+            throw new IOException("cant create this file");
         }
     }
     public File findByFileName(String fileName) {

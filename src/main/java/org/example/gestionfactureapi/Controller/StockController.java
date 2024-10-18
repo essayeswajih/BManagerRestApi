@@ -10,6 +10,8 @@ import org.example.gestionfactureapi.Service.StockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -84,6 +86,14 @@ public class StockController {
         try {
             Article article = articleService.findById(stock.getIdArticle());
             return ResponseEntity.ok(stockService.save(new Stock(null,article, stock.getStockInitiale(),article.getSte())));
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+    @PostMapping("saveAll")
+    public ResponseEntity<?>saveAll(@RequestBody List<Stock> stocks){
+        try {
+            return ResponseEntity.ok(stockService.saveAll(stocks));
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

@@ -48,4 +48,7 @@ public class FactureA {
     private Fournisseur fournisseur;
 
     private String ref;
+
+    private Boolean payed = false;
+    private String payment ="Non payé";
 }

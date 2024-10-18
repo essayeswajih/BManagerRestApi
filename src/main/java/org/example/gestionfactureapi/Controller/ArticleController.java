@@ -81,8 +81,8 @@ public class ArticleController {
             for(Article a : articles){
                 stockList.add(stockService.findStockByIdArticle(a.getIdArticle()));
             }
-            fileService.createAndSavePDF(stockList);
-            return ResponseEntity.status(HttpStatus.OK).body(articles);
+            String filename = fileService.createAndSavePDF(stockList);
+            return ResponseEntity.status(HttpStatus.OK).body(filename);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
